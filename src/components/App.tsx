@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 
 import {
-  CssBaseline,
-  Typography,
+  CssBaseline, Typography,
   useMediaQuery
 } from '@material-ui/core';
 import {

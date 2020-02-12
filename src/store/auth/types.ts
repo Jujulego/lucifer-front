@@ -1,12 +1,11 @@
-import User from 'data/user';
 import { SetAction } from 'utils/actions/set';
 
 import { SET_TOKEN, SET_USER } from './constants';
 
 // State
 export interface AuthState {
-  user?: User,
-  token?: string
+  token?: string,
+  user?: string,
 }
 
 // Actions

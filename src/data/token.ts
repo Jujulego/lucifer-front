@@ -7,7 +7,4 @@ interface Token extends Document {
   updatedAt: string,
 }
 
-// Aliases
-export type LoginToken = Document & { token: string };
-
 export default Token;

@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 
 import { StylesProvider } from '@material-ui/core';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import App from 'components/App';
 import * as serviceWorker from 'serviceWorker';
-import { store } from 'store';
+import { persistor, store } from 'store';
 
 import './index.css';
 
@@ -14,7 +15,9 @@ import './index.css';
 ReactDOM.render((
   <StylesProvider injectFirst>
     <Provider store={store}>
-      <App />
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>
   </StylesProvider>
 ), document.getElementById('root'));

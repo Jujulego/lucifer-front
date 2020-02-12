@@ -13,13 +13,11 @@ interface ToggleAction<A> extends Action<A> {
   kind: 'toggle'
 }
 
-type BoolAction<A = any> = TrueAction<A> | FalseAction<A> | ToggleAction<A>;
-type Kind = BoolAction['kind']
-
-export default BoolAction;
+export type BoolAction<A = any> = TrueAction<A> | FalseAction<A> | ToggleAction<A>;
+type Kinds = BoolAction['kind']
 
 // Creators
-type Names = { [name in Kind]: string };
+type Names = { [name in Kinds]: string };
 const defaultNames: Names = { true: 'true', false: 'false', toggle: 'toggle' };
 
 export function boolActionCreator<A>(type: A, names: Partial<Names> = {}) {

@@ -3,9 +3,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 
+import authReducer from './auth/reducers';
+
 // Root reducer
 const rootReducer = combineReducers({
-  test: (state = {}) => state,
+  auth: authReducer,
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

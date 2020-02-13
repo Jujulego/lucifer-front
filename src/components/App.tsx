@@ -1,13 +1,15 @@
 import React, { useMemo } from 'react';
 
 import {
-  CssBaseline, Typography,
+  CssBaseline,
   useMediaQuery
 } from '@material-ui/core';
 import {
   ThemeProvider,
   createMuiTheme
 } from '@material-ui/core/styles';
+
+import AuthPage from './AuthPage';
 
 // Component
 const App = () => {
@@ -26,7 +28,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Typography>Hello world !</Typography>
+      <AuthPage />
     </ThemeProvider>
   );
 };

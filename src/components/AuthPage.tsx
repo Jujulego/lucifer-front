@@ -1,0 +1,33 @@
+import React from 'react';
+
+import { Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+import LoginForm from './auth/LoginForm';
+
+// Style
+const useStyles = makeStyles({
+  root: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  }
+});
+
+// Render
+const AuthPage = () => {
+  // Render
+  const styles = useStyles();
+
+  return (
+    <Container
+      classes={{ root: styles.root }}
+      fixed maxWidth="sm"
+    >
+      <LoginForm />
+    </Container>
+  );
+};
+
+export default AuthPage;

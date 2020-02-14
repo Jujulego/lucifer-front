@@ -11,6 +11,9 @@ import createTheme from 'theme';
 
 import LoginForm from './auth/LoginForm';
 import SignInForm from './auth/SignInForm';
+import PrivateRoute from './auth/PrivateRoute';
+
+import Home from './Home';
 
 // Component
 const App = () => {
@@ -26,6 +29,7 @@ const App = () => {
         <Switch>
           <Route path="/login" component={LoginForm} />
           <Route path="/signin" component={SignInForm} />
+          <PrivateRoute component={Home} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

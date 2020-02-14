@@ -9,7 +9,7 @@ import { PersistConfig } from 'redux-persist/es/types';
 // Persist config
 const config: PersistConfig<AuthState> = {
   key: 'auth',
-  whitelist: ['token'],
+  whitelist: ['token', 'user'],
   storage
 };
 

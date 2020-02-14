@@ -1,9 +1,11 @@
 import React from 'react';
+import { Route, Switch } from 'react-router';
 
 import { Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import LoginForm from './auth/LoginForm';
+import SignInForm from './auth/SignInForm';
 
 // Style
 const useStyles = makeStyles({
@@ -25,7 +27,10 @@ const AuthPage = () => {
       classes={{ root: styles.root }}
       fixed maxWidth="sm"
     >
-      <LoginForm />
+      <Switch>
+        <Route path="/login" component={LoginForm} />
+        <Route path="/signin" component={SignInForm} />
+      </Switch>
     </Container>
   );
 };

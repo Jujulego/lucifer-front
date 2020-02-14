@@ -6,7 +6,7 @@ import Token from 'data/token';
 import User, { Credentials } from 'data/user';
 import { AppState } from 'store/index';
 
-import { setToken, setUser } from './actions';
+import { loginAction, logoutAction } from './actions';
 import { authHeaders } from './utils';
 
 // Types
@@ -21,8 +21,7 @@ export const login = (credentials: Credentials) =>
       const data = res.data;
 
       // Store token & user
-      dispatch(setToken(data.token));
-      dispatch(setUser(data.user));
+      dispatch(loginAction(data.token, data.user));
 
     } catch (error) {
       console.error(error);
@@ -40,8 +39,7 @@ export const logout = () =>
       await axios.delete('/api/logout', { headers: authHeaders(token)});
 
       // Remove token & user
-      dispath(setToken(undefined));
-      dispath(setUser(undefined));
+      dispath(logoutAction());
 
     } catch (error) {
       console.log(error);
@@ -53,7 +51,7 @@ export const signIn = (credentials: Credentials, shouldLogin: boolean = true) =>
     try {
       // Make sign-in request
       await axios.post<User>('/api/user', credentials);
-      if (shouldLogin) dispatch(login(credentials));
+      if (shouldLogin) await dispatch(login(credentials));
 
     } catch (error) {
       console.error(error);

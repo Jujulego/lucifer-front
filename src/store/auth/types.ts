@@ -1,6 +1,6 @@
-import { SetAction } from 'utils/actions/set';
+import { Action } from 'redux';
 
-import { SET_TOKEN, SET_USER } from './constants';
+import { LOGIN, LOGOUT } from './constants';
 
 // State
 export interface AuthState {
@@ -9,6 +9,8 @@ export interface AuthState {
 }
 
 // Actions
-export type AuthAction =
-  SetAction<typeof SET_TOKEN, AuthState['token']> |
-  SetAction<typeof SET_USER, AuthState['user']>
+interface LoginAction extends Action<typeof LOGIN> {
+  token: string, user: string
+}
+
+export type AuthAction = LoginAction | Action<typeof LOGOUT>;

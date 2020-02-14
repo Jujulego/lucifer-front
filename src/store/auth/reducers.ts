@@ -2,8 +2,8 @@ import { Reducer } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import { SET_TOKEN, SET_USER } from './constants';
-import { AuthState, AuthAction } from './types';
+import { LOGIN, LOGOUT } from './constants';
+import { AuthAction, AuthState } from './types';
 import { PersistConfig } from 'redux-persist/es/types';
 
 // Persist config
@@ -19,11 +19,13 @@ const initial: AuthState = {};
 // Reducer
 function authReducer(state = initial, action: AuthAction) {
   switch (action.type) {
-    case SET_TOKEN:
-      return { ...state, token: action.value };
+    case LOGIN:
+      return { ...state, token: action.token, user: action.user };
 
-    case SET_USER:
-      return { ...state, user: action.value };
+    case LOGOUT: {
+      const { token, user, ...others } = state;
+      return others;
+    }
 
     default:
       return state;

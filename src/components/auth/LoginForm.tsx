@@ -42,7 +42,7 @@ const LoginForm = () => {
   const styles = useStyles();
 
   return (
-    <Card component="form" onSubmit={handleSubmit(handleLogin)}>
+    <Card elevation={4} component="form" onSubmit={handleSubmit(handleLogin)}>
       <CardHeader
         classes={{ root: styles.header }}
         title="Connexion" titleTypographyProps={{ variant: "h6" }}

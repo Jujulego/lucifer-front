@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 import {
   CssBaseline,
@@ -20,7 +21,9 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthPage />
+      <BrowserRouter>
+        <AuthPage />
+      </BrowserRouter>
     </ThemeProvider>
   );
 };

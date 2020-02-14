@@ -50,7 +50,7 @@ export const signIn = (credentials: Credentials, shouldLogin: boolean = true) =>
   async (dispatch: ThunkDispatch<AppState, {}, any>) => {
     try {
       // Make sign-in request
-      await axios.post<User>('/api/user', credentials);
+      await axios.post<User>('/api/signin', credentials);
       if (shouldLogin) await dispatch(login(credentials));
 
     } catch (error) {

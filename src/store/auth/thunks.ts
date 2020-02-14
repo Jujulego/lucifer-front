@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 
-import User, { Credentials } from 'data/user';
 import Token from 'data/token';
+import User, { Credentials } from 'data/user';
+import { AppState } from 'store/index';
 
 import { setToken, setUser } from './actions';
-import { ThunkDispatch } from 'redux-thunk';
-import { AppState } from 'store/index';
+import { authHeaders } from './utils';
 
 // Types
 export type LoginToken = Pick<Token, '_id'> & { token: string, user: User['_id'] };
@@ -25,6 +26,25 @@ export const login = (credentials: Credentials) =>
 
     } catch (error) {
       console.error(error);
+    }
+  };
+
+export const logout = () =>
+  async (dispath: Dispatch, getState: () => AppState) => {
+    try {
+      // Get token
+      const token = getState().auth.token;
+      if (!token) return;
+
+      // Make logout request
+      await axios.delete('/api/logout', { headers: authHeaders(token)});
+
+      // Remove token & user
+      dispath(setToken(undefined));
+      dispath(setUser(undefined));
+
+    } catch (error) {
+      console.log(error);
     }
   };
 

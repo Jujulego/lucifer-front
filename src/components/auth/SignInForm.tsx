@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import validator from 'validator';
 
 import {
@@ -10,9 +11,10 @@ import {
   TextField
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 import { Credentials } from 'data/user';
-import { PasswordField } from 'components/basics/Fields';
+import { PasswordField, ToolbarAction } from 'components/basics';
 import { signIn } from 'store/auth/thunks';
 
 // Styles
@@ -20,6 +22,9 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   header: {
     backgroundColor: palette.primary.main,
     color: palette.getContrastText(palette.primary.main)
+  },
+  headerAction: {
+    marginBottom: -8
   },
   actions: {
     justifyContent: "center"
@@ -53,8 +58,13 @@ const SignInForm = () => {
   return (
     <Card elevation={4} component="form" onSubmit={handleSubmit(handleLogin)}>
       <CardHeader
-        classes={{ root: styles.header }}
+        classes={{ root: styles.header, action: styles.headerAction }}
         title="Inscription" titleTypographyProps={{ variant: "h6" }}
+        action={
+          <ToolbarAction tooltip="Se connecter" component={Link} to="/login">
+            <LockOpenIcon />
+          </ToolbarAction>
+        }
       />
       <CardContent>
         <Grid container direction="column" spacing={2}>

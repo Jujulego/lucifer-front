@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import {
   CssBaseline,
@@ -9,7 +9,8 @@ import { ThemeProvider } from '@material-ui/core/styles';
 
 import createTheme from 'theme';
 
-import AuthPage from './AuthPage';
+import LoginForm from './auth/LoginForm';
+import SignInForm from './auth/SignInForm';
 
 // Component
 const App = () => {
@@ -22,7 +23,10 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <AuthPage />
+        <Switch>
+          <Route path="/login" component={LoginForm} />
+          <Route path="/signin" component={SignInForm} />
+        </Switch>
       </BrowserRouter>
     </ThemeProvider>
   );

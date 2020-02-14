@@ -2,12 +2,19 @@ import React, { FormEventHandler, ReactNode } from 'react';
 
 import {
   Button,
-  Card, CardHeader, CardContent, CardActions
+  Card, CardHeader, CardContent, CardActions,
+  Container
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 // Styles
 const useStyles = makeStyles(({ palette }: Theme) => ({
+  root: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
   header: {
     backgroundColor: palette.primary.main,
     color: palette.getContrastText(palette.primary.main)
@@ -44,19 +51,21 @@ const AuthForm = (props: AuthFormProps) => {
   const styles = useStyles();
 
   return (
-    <Card elevation={4} component="form" onSubmit={onSubmit}>
-      <CardHeader
-        classes={{ root: styles.header, action: styles.headerAction }}
-        title={title} titleTypographyProps={{ variant: "h6" }}
-        action={action}
-      />
-      <CardContent>{ children }</CardContent>
-      <CardActions classes={{ root: styles.actions }}>
-        <Button type="submit" variant="contained" color="primary">
-          { submit }
-        </Button>
-      </CardActions>
-    </Card>
+    <Container classes={{ root: styles.root }} fixed maxWidth="sm">
+      <Card elevation={4} component="form" onSubmit={onSubmit}>
+        <CardHeader
+          classes={{ root: styles.header, action: styles.headerAction }}
+          title={title} titleTypographyProps={{ variant: "h6" }}
+          action={action}
+        />
+        <CardContent>{ children }</CardContent>
+        <CardActions classes={{ root: styles.actions }}>
+          <Button type="submit" variant="contained" color="primary">
+            { submit }
+          </Button>
+        </CardActions>
+      </Card>
+    </Container>
   )
 };
 

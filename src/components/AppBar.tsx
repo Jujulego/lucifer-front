@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import {
   AppBar as MuiAppBar, Toolbar,
@@ -13,6 +13,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
+import PeopleIcon from '@material-ui/icons/People';
 
 import AccountMenu from './auth/AccountMenu';
 
@@ -108,9 +109,13 @@ const AppBar = ({ children }: AppBarProps) => {
         </Toolbar>
         { small && <Divider /> }
         <List>
-          <ListItem button component={NavLink} to="/">
+          <ListItem button component={Link} to="/">
             <ListItemIcon><HomeIcon /></ListItemIcon>
             <ListItemText primary="Accueil" />
+          </ListItem>
+          <ListItem button component={Link} to="/users">
+            <ListItemIcon><PeopleIcon /></ListItemIcon>
+            <ListItemText primary="Utilisateurs" />
           </ListItem>
         </List>
       </Drawer>

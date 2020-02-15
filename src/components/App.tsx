@@ -13,6 +13,8 @@ import LoginForm from './auth/LoginForm';
 import SignInForm from './auth/SignInForm';
 import PrivateRoute from './auth/PrivateRoute';
 
+import AllUsersTable from 'containers/users/AllUsersTable';
+
 import AppBar from './AppBar';
 import Home from './Home';
 
@@ -32,7 +34,12 @@ const App = () => {
           <Route path="/signin" component={SignInForm} />
           <PrivateRoute>
             <AppBar>
-              <Home />
+              <Switch>
+                <Route path="/users">
+                  <AllUsersTable />
+                </Route>
+                <Route component={Home} />
+              </Switch>
             </AppBar>
           </PrivateRoute>
         </Switch>

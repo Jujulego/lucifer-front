@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import User from 'data/user';
 import { AppState } from 'store/index';
 
-import { getUser, getUserList } from './thunks';
+import { getUser, getAllUsers } from './thunks';
 import { UserState } from './types';
 
 // Hooks
@@ -35,7 +35,7 @@ export function useUserList(): User[] | null {
 
   useEffect(() => {
     if (shouldLoad) {
-      dispatch(getUserList());
+      dispatch(getAllUsers());
     }
   }, [dispatch, shouldLoad]);
 

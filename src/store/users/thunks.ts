@@ -29,7 +29,7 @@ export const getUser = (id: string) =>
     }
   };
 
-export const getUserList = () =>
+export const getAllUsers = () =>
   async (dispatch: Dispatch) => {
     try {
       // Set list loading

@@ -24,7 +24,7 @@ export const login = (credentials: Credentials) =>
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
 
       // Store token & user
-      dispatch(loginAction(data.token, data.user));
+      await dispatch(loginAction(data.token, data.user));
 
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -47,7 +47,7 @@ export const logout = () =>
       await axios.delete('/api/logout');
 
       // Remove token & user
-      dispath(logoutAction());
+      await dispath(logoutAction());
 
       // Remove auth header
       delete axios.defaults.headers.common['Authorization'];

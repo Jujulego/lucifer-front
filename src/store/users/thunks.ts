@@ -18,7 +18,7 @@ export const getUser = (id: string) =>
       const user = res.data;
 
       // Store data
-      dispatch(setUserAction(user));
+      await dispatch(setUserAction(user));
 
     } catch (error) {
       if (authError(error, dispatch)) return;

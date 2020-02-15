@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   IconButton,
@@ -29,7 +29,7 @@ export type EditPasswordFieldProps =
   StandardEditPasswordFieldProps;
 
 // Component
-const EditPasswordField: FC<EditPasswordFieldProps> = (props) => {
+const EditPasswordField = (props: EditPasswordFieldProps) => {
   // Props
   const {
     editable: pEditable,

@@ -1,8 +1,8 @@
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import {
-  Table as MaterialTable,
-  TableProps as MaterialTableProps
+  Table as MuiTable,
+  TableProps as MuiTableProps
 } from '@material-ui/core';
 
 import TableContext, { Order, Ordering, SelectedState } from 'contexts/TableContext';
@@ -10,7 +10,7 @@ import Document from 'data/document';
 import { Filter, toPredicate } from 'utils/filter';
 
 // Types
-export interface TableProps<T extends Document> extends MaterialTableProps {
+export interface TableProps<T extends Document> extends MuiTableProps {
   data: T[],
   blacklist?: string[],
   toolbar?: ReactNode,
@@ -95,9 +95,9 @@ const Table = <T extends Document> (props: TableProps<T>) => {
       }}
     >
       { toolbar }
-      <MaterialTable {...table}>
+      <MuiTable {...table}>
         { children }
-      </MaterialTable>
+      </MuiTable>
     </TableContext.Provider>
   );
 };

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   IconButton,
@@ -24,7 +24,7 @@ export type PasswordFieldProps =
   StandardPasswordFieldProps;
 
 // Component
-const PasswordField: FC<PasswordFieldProps> = (props) => {
+const PasswordField = (props: PasswordFieldProps) => {
   // Props
   const { InputProps = {}, ...field } = props;
 

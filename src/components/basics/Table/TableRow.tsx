@@ -3,15 +3,15 @@ import { Theme, useMediaQuery } from '@material-ui/core';
 
 import {
   Checkbox,
-  TableCell, TableRow as MaterialTableRow,
-  TableRowProps as MaterialTableRowProps
+  TableCell, TableRow as MuiTableRow,
+  TableRowProps as MuiTableRowProps
 } from '@material-ui/core';
 
 import { useTableContext } from 'contexts/TableContext';
 import Document from 'data/document';
 
 // Types
-export interface TableRowProps<T extends Document> extends Omit<MaterialTableRowProps, 'selected' | 'onClick'> {
+export interface TableRowProps<T extends Document> extends Omit<MuiTableRowProps, 'selected' | 'onClick'> {
   doc?: T,
   children?: ReactNode
 }
@@ -41,7 +41,7 @@ const TableRow = <T extends Document> (props: TableRowProps<T>) => {
   const indeterminate = !doc && ctx.selectedCount > 0 && !ctx.selectedAll;
 
   return (
-    <MaterialTableRow
+    <MuiTableRow
       {...row} selected={selectable && doc && selected}
       onClick={(!selectable || !doc) ? undefined : handleChange}
     >
@@ -56,7 +56,7 @@ const TableRow = <T extends Document> (props: TableRowProps<T>) => {
         </TableCell>
       ) }
       { children }
-    </MaterialTableRow>
+    </MuiTableRow>
   )
 };
 

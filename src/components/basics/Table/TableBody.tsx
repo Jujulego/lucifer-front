@@ -1,8 +1,8 @@
 import React, { ReactNode, useMemo } from 'react';
 
 import {
-  TableBody as MaterialTableBody,
-  TableBodyProps as MaterialTableBodyProps
+  TableBody as MuiTableBody,
+  TableBodyProps as MuiTableBodyProps
 } from '@material-ui/core';
 
 import { Order, useTableContext } from 'contexts/TableContext';
@@ -10,7 +10,7 @@ import Document from 'data/document';
 import { Comparator, OrderByField, desc, stableSort } from 'utils/sort';
 
 // Types
-export interface TableBodyProps<T extends Document> extends MaterialTableBodyProps {
+export interface TableBodyProps<T extends Document> extends MuiTableBodyProps {
   children: (doc: T) => ReactNode
 }
 
@@ -35,9 +35,9 @@ const TableBody = <T extends Document> (props: TableBodyProps<T>) => {
 
   // Render
   return (
-    <MaterialTableBody {...body}>
+    <MuiTableBody {...body}>
       { sorted.map(children) }
-    </MaterialTableBody>
+    </MuiTableBody>
   )
 };
 

@@ -14,6 +14,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 
+import AccountMenu from './auth/AccountMenu';
+
 // Styles
 const useStyles = makeStyles(({ breakpoints, spacing, zIndex }: Theme) => ({
   root: {
@@ -83,6 +85,7 @@ const AppBar = ({ children }: AppBarProps) => {
             </IconButton>
           ) }
           <Typography classes={{ root: styles.title }} variant="h6">Lucifer</Typography>
+          <AccountMenu />
         </Toolbar>
       </MuiAppBar>
       <Drawer

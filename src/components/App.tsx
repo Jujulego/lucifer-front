@@ -13,6 +13,7 @@ import LoginForm from './auth/LoginForm';
 import SignInForm from './auth/SignInForm';
 import PrivateRoute from './auth/PrivateRoute';
 
+import AppBar from './AppBar';
 import Home from './Home';
 
 // Component
@@ -29,7 +30,11 @@ const App = () => {
         <Switch>
           <Route path="/login" component={LoginForm} />
           <Route path="/signin" component={SignInForm} />
-          <PrivateRoute component={Home} />
+          <PrivateRoute>
+            <AppBar>
+              <Home />
+            </AppBar>
+          </PrivateRoute>
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

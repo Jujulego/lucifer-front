@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { persistStore } from 'redux-persist';
@@ -19,4 +20,12 @@ export const store = createStore(rootReducer,
   )
 );
 
-export const persistor = persistStore(store);
+export const persistor = persistStore(store, null,
+  () => {
+    const state = store.getState();
+
+    if (state.auth.token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${state.auth.token}`;
+    }
+  }
+);

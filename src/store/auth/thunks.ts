@@ -7,7 +7,7 @@ import User, { Credentials } from 'data/user';
 import { AppState } from 'store/index';
 
 import { loginAction, logoutAction } from './actions';
-import { authHeaders } from './utils';
+import { authError } from './utils';
 
 // Types
 export type LoginToken = Pick<Token, '_id'> & { token: string, user: User['_id'] };
@@ -19,6 +19,9 @@ export const login = (credentials: Credentials) =>
       // Make login request
       const res = await axios.post<LoginToken>('/api/login', credentials);
       const data = res.data;
+
+      // Set auth header
+      axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
 
       // Store token & user
       dispatch(loginAction(data.token, data.user));
@@ -36,12 +39,16 @@ export const logout = () =>
       if (!token) return;
 
       // Make logout request
-      await axios.delete('/api/logout', { headers: authHeaders(token)});
+      await axios.delete('/api/logout');
 
       // Remove token & user
       dispath(logoutAction());
 
+      // Remove auth header
+      delete axios.defaults.headers.common['Authorization'];
+
     } catch (error) {
+      if (authError(error, dispath)) return;
       console.log(error);
     }
   };

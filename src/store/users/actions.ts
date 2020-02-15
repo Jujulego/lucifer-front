@@ -1,6 +1,9 @@
 import User from 'data/user';
 
-import { ADD_USER, SET_USER, DEL_USER } from './constants';
+import {
+  ADD_USER, DEL_USER, SET_USER,
+  LOADING_LIST, SET_LIST
+} from './constants';
 import { UsersAction } from './types';
 
 // Actions
@@ -14,4 +17,9 @@ export const setUserAction = (user: User): UsersAction => ({
 
 export const delUserAction = (id: string): UsersAction => ({
   type: DEL_USER, id
+});
+
+export const loadingUserListAction = (): UsersAction => ({ type: LOADING_LIST });
+export const setUserListAction = (users: User[]): UsersAction => ({
+  type: SET_LIST, users
 });

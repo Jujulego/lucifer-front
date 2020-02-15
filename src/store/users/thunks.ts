@@ -11,7 +11,7 @@ export const getUser = (id: string) =>
   async (dispatch: Dispatch) => {
     try {
       // Add user
-      dispatch(addUserAction(id));
+      await dispatch(addUserAction(id));
 
       // Request for user data
       const res = await axios.get<User>(`/api/user/${id}`);

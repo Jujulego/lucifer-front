@@ -1,19 +1,18 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { Typography } from '@material-ui/core';
 
-import { AppState } from 'store';
+import { useMe } from 'store/auth/hooks';
 
 // Component
 const Home = () => {
   // Redux
-  const user = useSelector((state: AppState) => state.auth.user);
+  const me = useMe();
 
   // Render
   return (
     <>
-      <Typography>Bonjour { user }</Typography>
+      <Typography>Bonjour { me && me.email }</Typography>
     </>
   )
 };

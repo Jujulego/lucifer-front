@@ -4,8 +4,8 @@ interface Document {
 }
 
 // Aliases
-export interface AnyDocument extends Document {
-  [name: string]: any
+export type AnyDocument = Document & {
+  [extra in string | number | symbol]: any;
 }
 
 export default Document;

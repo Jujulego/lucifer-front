@@ -1,10 +1,12 @@
-import { Reducer } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { PersistConfig } from 'redux-persist/es/types';
+
+import { GLOBAL_RESET } from 'store/constants';
+import { GlobalAction } from 'store/types';
 
 import { LOGIN, LOGOUT, SET_ERROR } from './constants';
 import { AuthAction, AuthState } from './types';
-import { PersistConfig } from 'redux-persist/es/types';
 
 // Persist config
 const config: PersistConfig<AuthState> = {
@@ -17,8 +19,13 @@ const config: PersistConfig<AuthState> = {
 const initial: AuthState = {};
 
 // Reducer
-function authReducer(state = initial, action: AuthAction) {
+const authReducer = persistReducer(config, (state = initial, action: AuthAction | GlobalAction) => {
   switch (action.type) {
+    case GLOBAL_RESET: {
+      const { error, ...others } = state;
+      return others;
+    }
+
     case LOGIN: {
       const { error, ...others } = state;
       return { ...others, token: action.token, user: action.user };
@@ -35,6 +42,6 @@ function authReducer(state = initial, action: AuthAction) {
     default:
       return state;
   }
-}
+});
 
-export default persistReducer(config, authReducer as Reducer<AuthState>);
+export default authReducer;

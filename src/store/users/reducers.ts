@@ -1,3 +1,6 @@
+import { GLOBAL_RESET } from 'store/constants';
+import { GlobalAction } from 'store/types';
+
 import { ADD_USER, DEL_USER, SET_USER } from './constants';
 import { UsersAction, UsersState, UserState } from './types';
 
@@ -22,8 +25,11 @@ const userReducer = (state = initialUser, action: UsersAction) => {
   }
 };
 
-const usersReducer = (state = initial, action: UsersAction) => {
+const usersReducer = (state = initial, action: UsersAction | GlobalAction) => {
   switch (action.type) {
+    case GLOBAL_RESET:
+      return initial;
+
     case ADD_USER:
     case SET_USER: {
       const { [action.id]: user } = state;

@@ -1,23 +1,17 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 
 import axios from 'axios';
 
-import authReducer from './auth/reducers';
-import usersReducer from './users/reducers';
+import appReducer from './reducers';
 
-// Root reducer
-const rootReducer = combineReducers({
-  auth: authReducer,
-  users: usersReducer
-});
-
-export type AppState = ReturnType<typeof rootReducer>;
+// Types
+export type AppState = ReturnType<typeof appReducer>;
 
 // Store
-export const store = createStore(rootReducer,
+export const store = createStore(appReducer,
   composeWithDevTools({})(
     applyMiddleware(thunk)
   )

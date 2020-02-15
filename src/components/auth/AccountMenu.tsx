@@ -2,11 +2,16 @@ import React, { MouseEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import {
+  Avatar,
+  Divider,
   IconButton,
-  Menu, MenuItem
+  Menu, MenuItem, ListItem, ListItemAvatar, ListItemIcon, ListItemText
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import LockIcon from '@material-ui/icons/Lock';
+import PersonIcon from '@material-ui/icons/Person';
 
+import { useMe } from 'store/auth/hooks';
 import { logout } from 'store/auth/thunks';
 
 // Component
@@ -16,6 +21,9 @@ const AccountMenu = () => {
 
   // Redux
   const dispatch = useDispatch();
+
+  // Data
+  const me = useMe();
 
   // Handlers
   const handleOpen = (event: MouseEvent<HTMLElement>) => {
@@ -40,11 +48,20 @@ const AccountMenu = () => {
       <Menu
         keepMounted
         anchorEl={anchor}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        transformOrigin={{ vertical: "bottom", horizontal: "left" }}
         open={anchor != null} onClose={handleClose}
       >
-        <MenuItem onClick={handleLogout}>Déconnexion</MenuItem>
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar><PersonIcon /></Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={me?.email} secondary={me?._id} />
+        </ListItem>
+        <Divider />
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon><LockIcon /></ListItemIcon>
+          <ListItemText primary="Déconnexion" />
+        </MenuItem>
       </Menu>
     </>
   )

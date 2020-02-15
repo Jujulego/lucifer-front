@@ -1,6 +1,6 @@
 import React, { FormEventHandler, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect } from 'react-router';
+import { Redirect, useLocation } from 'react-router';
 
 import {
   Button,
@@ -32,6 +32,10 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
 }));
 
 // Types
+interface LocationState {
+  from: string
+}
+
 export interface AuthFormProps {
   title: string,
   submit: string,
@@ -51,6 +55,9 @@ const AuthForm = (props: AuthFormProps) => {
     onSubmit
   } = props;
 
+  // Router
+  const location = useLocation<LocationState>();
+
   // Redux
   const isLoggedIn = useSelector((state: AppState) => state.auth.token != null);
 
@@ -58,7 +65,12 @@ const AuthForm = (props: AuthFormProps) => {
   const styles = useStyles();
 
   if (isLoggedIn) {
-    return <Redirect to="/" />;
+    let target = "/";
+    if (location.state && location.state.from) {
+      target = location.state.from;
+    }
+
+    return <Redirect to={target} />;
   }
 
   return (

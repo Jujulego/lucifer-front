@@ -1,9 +1,12 @@
 import { Action } from 'redux';
 
-import { LOGIN, LOGOUT } from './constants';
+import { SetAction } from 'utils/actions/set';
+
+import { LOGIN, LOGOUT, SET_ERROR } from './constants';
 
 // State
 export interface AuthState {
+  error?: string,
   token?: string,
   user?: string,
 }
@@ -13,4 +16,5 @@ interface LoginAction extends Action<typeof LOGIN> {
   token: string, user: string
 }
 
-export type AuthAction = LoginAction | Action<typeof LOGOUT>;
+export type AuthAction = LoginAction | Action<typeof LOGOUT> |
+  SetAction<typeof SET_ERROR, AuthState['error']>;

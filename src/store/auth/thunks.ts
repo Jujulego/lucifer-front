@@ -6,7 +6,7 @@ import Token from 'data/token';
 import User, { Credentials } from 'data/user';
 import { AppState } from 'store/index';
 
-import { loginAction, logoutAction } from './actions';
+import { loginAction, logoutAction, setError } from './actions';
 import { authError } from './utils';
 
 // Types
@@ -27,6 +27,11 @@ export const login = (credentials: Credentials) =>
       dispatch(loginAction(data.token, data.user));
 
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        dispatch(setError(error.response.data.error));
+        return;
+      }
+
       console.error(error);
     }
   };

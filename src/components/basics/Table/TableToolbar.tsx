@@ -12,8 +12,8 @@ import { useTableContext } from 'contexts/TableContext';
 import { StyledProps } from 'utils/style';
 
 // Types
-type Classes = 'root' | 'selected' | 'title';
-export interface ToolbarProps extends Omit<MuiToolbarProps, 'classes'>, StyledProps<Classes> {
+export type TableToolbarClassKey = 'root' | 'selected' | 'title';
+export interface ToolbarProps extends Omit<MuiToolbarProps, 'classes'>, StyledProps<TableToolbarClassKey> {
   title: string,
   children?: ReactNode
 }

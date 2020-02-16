@@ -14,6 +14,7 @@ import SignInForm from './auth/SignInForm';
 import PrivateRoute from './auth/PrivateRoute';
 
 import AllUsersTable from 'containers/users/AllUsersTable';
+import UserPage from './users/UserPage';
 
 import AppBar from './AppBar';
 import Home from './Home';
@@ -35,9 +36,8 @@ const App = () => {
           <PrivateRoute>
             <AppBar>
               <Switch>
-                <Route path="/users">
-                  <AllUsersTable />
-                </Route>
+                <Route path="/users"><AllUsersTable /></Route>
+                <Route path="/user/:id">{ ({ match }) => <UserPage id={match!.params.id} /> }</Route>
                 <Route component={Home} />
               </Switch>
             </AppBar>

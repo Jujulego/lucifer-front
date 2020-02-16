@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import moment from 'moment';
 
 import {
+  Link,
   Paper,
   TableHead, TableCell, TableContainer
 } from '@material-ui/core';
@@ -61,7 +63,9 @@ const UsersTable = (props: UsersTableProps) => {
           <TableBody>
             { (user: User) => (
               <TableRow key={user._id} doc={user}>
-                <TableCell>{ user.email }</TableCell>
+                <TableCell>
+                  <Link component={RouterLink} to={`/user/${user._id}`}>{ user.email }</Link>
+                </TableCell>
                 <TableCell><RelativeDate date={lastConnection(user)} mode="from" /></TableCell>
               </TableRow>
             ) }

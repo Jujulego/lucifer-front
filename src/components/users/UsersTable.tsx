@@ -8,6 +8,7 @@ import {
 import RefreshIcon from '@material-ui/icons/Refresh';
 
 import {
+  RelativeDate,
   ToolbarAction,
   Table, TableToolbar, TableBody, TableRow, TableSortCell,
   TableProps
@@ -61,7 +62,7 @@ const UsersTable = (props: UsersTableProps) => {
             { (user: User) => (
               <TableRow key={user._id} doc={user}>
                 <TableCell>{ user.email }</TableCell>
-                <TableCell>{ lastConnection(user).fromNow() }</TableCell>
+                <TableCell><RelativeDate date={lastConnection(user)} mode="from" /></TableCell>
               </TableRow>
             ) }
           </TableBody>

@@ -24,9 +24,9 @@ export type ToolbarActionTypeMap<
 export type ToolbarActionProps<
   D extends ElementType = ToolbarActionTypeMap['defaultComponent'],
   P = {}
-> = OverrideProps<ToolbarActionTypeMap<P, D>, D>
+> = OverrideProps<ToolbarActionTypeMap<P, D>, D>;
 
-// Components
+// Component
 const ToolbarAction: ExtendButtonBase<ToolbarActionTypeMap> = (props: ToolbarActionProps) => {
   // Props
   const { children, tooltip, tooltipProps, ...button } = props;

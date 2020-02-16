@@ -1,6 +1,6 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import {
   Avatar,
@@ -21,11 +21,19 @@ const AccountMenu = () => {
   // State
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
+  // Router
+  const location = useLocation();
+
   // Redux
   const dispatch = useDispatch();
 
-  // Data
+  // API
   const me = useMe();
+
+  // Effects
+  useEffect(() => {
+    setAnchor(null);
+  }, [location]);
 
   // Handlers
   const handleOpen = (event: MouseEvent<HTMLElement>) => {

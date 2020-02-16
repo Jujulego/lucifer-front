@@ -36,7 +36,7 @@ const UsersTable = (props: UsersTableProps) => {
   // Render
   const lastConnection = (user: User) => {
     return moment.max(
-      user.tokens.map(token => moment(token.updatedAt))
+      user.tokens.map(token => moment(token.createdAt))
     );
   };
 

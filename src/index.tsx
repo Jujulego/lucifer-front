@@ -5,6 +5,7 @@ import { StylesProvider } from '@material-ui/core';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
+import "./configs";
 import App from 'components/App';
 import * as serviceWorker from 'serviceWorker';
 import { persistor, store } from 'store';

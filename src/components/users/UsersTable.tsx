@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import moment from 'moment';
 
 import {
   Paper,
@@ -32,6 +33,12 @@ const UsersTable = (props: UsersTableProps) => {
   }, [onLoad]);
 
   // Render
+  const lastConnection = (user: User) => {
+    return moment.max(
+      user.tokens.map(token => moment(token.updatedAt))
+    );
+  };
+
   return (
     <Paper>
       <TableContainer>
@@ -47,12 +54,14 @@ const UsersTable = (props: UsersTableProps) => {
           <TableHead>
             <TableRow>
               <TableSortCell<User> field="email">Email</TableSortCell>
+              <TableSortCell field={lastConnection}>Dernière connexion</TableSortCell>
             </TableRow>
           </TableHead>
           <TableBody>
             { (user: User) => (
               <TableRow key={user._id} doc={user}>
                 <TableCell>{ user.email }</TableCell>
+                <TableCell>{ lastConnection(user).fromNow() }</TableCell>
               </TableRow>
             ) }
           </TableBody>

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -12,11 +13,20 @@ import { persistor, store } from 'store';
 
 import './index.css';
 
+// Handlers
+function handleBeforeLift() {
+  const state = store.getState();
+
+  if (state.auth.token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${state.auth.token}`;
+  }
+}
+
 // Application
 ReactDOM.render((
   <StylesProvider injectFirst>
     <Provider store={store}>
-      <PersistGate persistor={persistor}>
+      <PersistGate persistor={persistor} onBeforeLift={handleBeforeLift}>
         <App />
       </PersistGate>
     </Provider>

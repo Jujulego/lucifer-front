@@ -3,8 +3,6 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 
-import axios from 'axios';
-
 import appReducer from './reducers';
 
 // Types
@@ -17,12 +15,4 @@ export const store = createStore(appReducer,
   )
 );
 
-export const persistor = persistStore(store, null,
-  () => {
-    const state = store.getState();
-
-    if (state.auth.token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${state.auth.token}`;
-    }
-  }
-);
+export const persistor = persistStore(store);

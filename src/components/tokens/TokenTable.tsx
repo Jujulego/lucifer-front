@@ -12,9 +12,9 @@ import { AppState } from 'store';
 import { ip2int } from 'utils/ip';
 
 import {
-  Table, TableToolbar, TableBody, TableRow, TableSortCell,
+  Table, TableToolbar, TableBody, TableRow, TableSortCell, TablePagination,
   TableProps
-} from 'components/basics/Table';
+} from 'components/basics';
 
 // Types
 export type TokenTableProps = Omit<TableProps<Token>, 'toolbar' | 'blacklist'>;
@@ -27,14 +27,14 @@ const TokenTable = (props: TokenTableProps) => {
   // Render
   const ip = (token: Token) => ip2int(token.from);
 
-  const toolbar = (
-    <TableToolbar title="Tokens" />
-  );
-
   return (
     <Paper>
       <TableContainer>
-        <Table {...props} blacklist={[currentToken]} toolbar={toolbar}>
+        <Table {...props}
+          blacklist={[currentToken]}
+          toolbar={<TableToolbar title="Tokens" />}
+          pagination={<TablePagination component="div" rowsPerPageOptions={[5, 10, 20]} />}
+        >
           <TableHead>
             <TableRow>
               <TableSortCell field={ip}>Adresse</TableSortCell>

@@ -7,6 +7,9 @@ export * from './TableBody';
 export { default as TableFilterAction } from './TableFilterAction';
 export * from './TableFilterAction';
 
+export { default as TablePagination } from './TablePagination';
+export * from './TablePagination';
+
 export { default as TableRow } from './TableRow';
 export * from './TableRow';
 

@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import TableContext, { Order, Ordering, SelectedState } from 'contexts/TableContext';
+import TableContext, { Order, Ordering, Paginator, SelectedState } from 'contexts/TableContext';
 import Document from 'data/document';
 import { Filter, toPredicate } from 'utils/filter';
 import { StyledProps } from 'utils/style';
@@ -15,7 +15,7 @@ import { StyledProps } from 'utils/style';
 // Styles
 const useStyles = makeStyles({
   root: {
-    '& > :last-child > tr:last-child': {
+    '&:last-child > :last-child > tr:last-child': {
       '& > td, & > th': {
         borderBottom: 'none'
       }
@@ -29,6 +29,7 @@ export interface TableProps<T extends Document> extends MuiTableProps, StyledPro
   data: T[],
   blacklist?: string[],
   toolbar?: ReactNode,
+  pagination?: ReactNode,
   children?: ReactNode
 }
 
@@ -37,15 +38,16 @@ const Table = <T extends Document> (props: TableProps<T>) => {
   // Props
   const {
     data, blacklist = [],
-    toolbar, classes,
+    toolbar, pagination, classes,
     children,
     ...table
   } = props;
 
   // State
-  const [filter, setFilter]     = useState<Filter<T>>({});
-  const [ordering, setOrdering] = useState<Ordering<T>>({ order: 'asc' });
-  const [selected, setSelected] = useState<SelectedState>({});
+  const [filter, setFilter]       = useState<Filter<T>>({});
+  const [ordering, setOrdering]   = useState<Ordering<T>>({ order: 'asc' });
+  const [selected, setSelected]   = useState<SelectedState>({});
+  const [paginator, setPaginator] = useState<Paginator | undefined>(undefined);
 
   // Effects
   useEffect(() => {
@@ -105,16 +107,19 @@ const Table = <T extends Document> (props: TableProps<T>) => {
         selected, selectedCount,
         selectableCount: filtered.length - blacklistCount,
         selectedAll: selectedCount > 0 && selectedAll,
+        paginator,
         onSelect,
         onSelectAll,
         onFilter: setFilter,
-        onOrderBy
+        onOrderBy,
+        onPaginate: setPaginator
       }}
     >
       { toolbar }
       <MuiTable {...table} classes={{ ...classes, root: styles.root }}>
         { children }
       </MuiTable>
+      { pagination }
     </TableContext.Provider>
   );
 };

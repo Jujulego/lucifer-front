@@ -13,6 +13,10 @@ export interface Ordering<T extends Document> {
   order: Order
 }
 
+export interface Paginator {
+  page: number, rowsPerPage: number
+}
+
 interface BaseTableContextProps<T extends Document> {
   blacklist: string[],
   documents: T[],
@@ -24,9 +28,12 @@ interface BaseTableContextProps<T extends Document> {
   selectedCount: number,
   selected: SelectedState,
 
+  paginator?: Paginator,
+
   onSelect: (id: string) => void,
   onSelectAll: () => void,
-  onFilter: (filter: Filter<T>) => void
+  onFilter: (filter: Filter<T>) => void,
+  onPaginate: (paginator: Paginator) => void
 }
 
 export type TableContextProps<T extends Document> = BaseTableContextProps<T> & {
@@ -51,7 +58,8 @@ const tableDefaults: TableContextDefaults = {
   onSelect: () => {},
   onSelectAll: () => {},
   onFilter: () => {},
-  onOrderBy: () => {}
+  onOrderBy: () => {},
+  onPaginate: () => {}
 };
 
 // Context

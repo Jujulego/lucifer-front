@@ -25,7 +25,7 @@ const TableBody = <T extends Document> (props: TableBodyProps<T>) => {
   const { children, ...body } = props;
 
   // Contexts
-  const { filtered, ordering } = useTableContext<T>();
+  const { filtered, ordering, paginator } = useTableContext<T>();
 
   // Memos
   const sorted = useMemo<T[]>(() => {
@@ -33,12 +33,19 @@ const TableBody = <T extends Document> (props: TableBodyProps<T>) => {
     return stableSort(filtered, getSorting(ordering.field, ordering.order));
   }, [filtered, ordering]);
 
+  const paginated = useMemo<T[]>(() => {
+    if (!paginator) return sorted;
+
+    const { page, rowsPerPage } = paginator;
+    return sorted.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+  }, [paginator, sorted]);
+
   // Render
   if (sorted.length === 0) return null;
 
   return (
     <MuiTableBody {...body}>
-      { sorted.map(children) }
+      { paginated.map(children) }
     </MuiTableBody>
   )
 };

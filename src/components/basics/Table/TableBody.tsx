@@ -4,25 +4,13 @@ import {
   TableBody as MuiTableBody,
   TableBodyProps as MuiTableBodyProps
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
 import { Order, useTableContext } from 'contexts/TableContext';
 import Document from 'data/document';
 import { Comparator, OrderByField, desc, stableSort } from 'utils/sort';
-import { StyledProps } from 'utils/style';
-
-// Styles
-const useStyles = makeStyles({
-  root: {
-    '&:last-child > tr:last-child > td': {
-      borderBottom: 'none'
-    }
-  }
-});
 
 // Types
-export type TableBodyClassKey = 'root';
-export interface TableBodyProps<T extends Document> extends Omit<MuiTableBodyProps, 'classes'>, StyledProps<TableBodyClassKey> {
+export interface TableBodyProps<T extends Document> extends Omit<MuiTableBodyProps, 'classes'> {
   children: (doc: T) => ReactNode
 }
 
@@ -46,10 +34,10 @@ const TableBody = <T extends Document> (props: TableBodyProps<T>) => {
   }, [filtered, ordering]);
 
   // Render
-  const styles = useStyles(props);
+  if (sorted.length === 0) return null;
 
   return (
-    <MuiTableBody {...body} classes={{ root: styles.root }}>
+    <MuiTableBody {...body}>
       { sorted.map(children) }
     </MuiTableBody>
   )

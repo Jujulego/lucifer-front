@@ -2,15 +2,30 @@ import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import {
   Table as MuiTable,
-  TableProps as MuiTableProps
+  TableProps as MuiTableProps,
+  TableClassKey as MuiTableClassKey
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import TableContext, { Order, Ordering, SelectedState } from 'contexts/TableContext';
 import Document from 'data/document';
 import { Filter, toPredicate } from 'utils/filter';
+import { StyledProps } from 'utils/style';
+
+// Styles
+const useStyles = makeStyles({
+  root: {
+    '& > :last-child > tr:last-child': {
+      '& > td, & > th': {
+        borderBottom: 'none'
+      }
+    }
+  }
+});
 
 // Types
-export interface TableProps<T extends Document> extends MuiTableProps {
+export type TableClassKey = 'root' | MuiTableClassKey;
+export interface TableProps<T extends Document> extends MuiTableProps, StyledProps<TableClassKey> {
   data: T[],
   blacklist?: string[],
   toolbar?: ReactNode,
@@ -22,7 +37,7 @@ const Table = <T extends Document> (props: TableProps<T>) => {
   // Props
   const {
     data, blacklist = [],
-    toolbar,
+    toolbar, classes,
     children,
     ...table
   } = props;
@@ -54,6 +69,7 @@ const Table = <T extends Document> (props: TableProps<T>) => {
   );
 
   // Render
+  const styles = useStyles(props);
   const selectedAll = selectedCount >= (filtered.length - blacklistCount);
 
   const onOrderBy = (field: keyof T) => {
@@ -95,7 +111,7 @@ const Table = <T extends Document> (props: TableProps<T>) => {
       }}
     >
       { toolbar }
-      <MuiTable {...table}>
+      <MuiTable {...table} classes={{ ...classes, root: styles.root }}>
         { children }
       </MuiTable>
     </TableContext.Provider>

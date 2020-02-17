@@ -1,5 +1,6 @@
 import { createMuiTheme } from '@material-ui/core';
 import { amber, blue } from '@material-ui/core/colors';
+import { frFR } from '@material-ui/core/locale';
 
 // Themes
 function createTheme(dark: boolean = false) {
@@ -9,7 +10,7 @@ function createTheme(dark: boolean = false) {
       secondary: blue,
       type: dark ? 'dark' : 'light',
     }
-  })
+  }, frFR);
 }
 
 export default createTheme;

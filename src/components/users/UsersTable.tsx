@@ -19,14 +19,15 @@ import User from 'data/user';
 
 // Types
 export interface UsersTableProps extends Omit<TableProps<User>, 'toolbar'> {
-  onLoad: () => void
+  onLoad: () => void,
+  onReload?: () => void
 }
 
 // Component
 const UsersTable = (props: UsersTableProps) => {
   // Props
   const {
-    onLoad,
+    onLoad, onReload,
     ...table
   } = props;
 
@@ -42,18 +43,20 @@ const UsersTable = (props: UsersTableProps) => {
     );
   };
 
+  const toolbar = (
+    <TableToolbar title="Utilisateurs">
+      { onReload && (
+        <ToolbarAction tooltip="Rafraîchir" onClick={() => onReload()}>
+          <RefreshIcon />
+        </ToolbarAction>
+      ) }
+    </TableToolbar>
+  );
+
   return (
     <Paper>
       <TableContainer>
-        <Table {...table}
-          toolbar={
-            <TableToolbar title="Utilisateurs">
-              <ToolbarAction tooltip="Rafraîchir" onClick={() => onLoad()}>
-                <RefreshIcon />
-              </ToolbarAction>
-            </TableToolbar>
-          }
-        >
+        <Table {...table} toolbar={toolbar}>
           <TableHead>
             <TableRow>
               <TableSortCell<User> field="email">Email</TableSortCell>

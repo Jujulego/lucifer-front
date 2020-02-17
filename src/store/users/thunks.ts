@@ -4,10 +4,7 @@ import { Dispatch } from 'redux';
 import User, { Credentials } from 'data/user';
 import { authError } from 'store/auth/utils';
 
-import {
-  addUserAction, setUserAction,
-  loadingUserListAction, setUserListAction
-} from 'store/users/actions';
+import { addUserAction, setUserAction } from 'store/users/actions';
 
 // Types
 export type UserUpdate = Partial<Omit<User, '_id' | 'tokens'> & Credentials>
@@ -41,25 +38,6 @@ export const updateUser = (id: string, update: UserUpdate) =>
 
       // Store data
       await dispatch(setUserAction(user));
-
-    } catch (error) {
-      if (authError(error, dispatch)) return;
-      console.error(error);
-    }
-  };
-
-export const getAllUsers = () =>
-  async (dispatch: Dispatch) => {
-    try {
-      // Set list loading
-      await dispatch(loadingUserListAction());
-
-      // Request for user list
-      const res = await axios.get<User[]>('/api/users');
-      const users = res.data;
-
-      // Store data
-      await dispatch(setUserListAction(users))
 
     } catch (error) {
       if (authError(error, dispatch)) return;

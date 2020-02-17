@@ -1,5 +1,6 @@
-import React from 'react';
 import moment from 'moment';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 import {
   Paper,
@@ -7,18 +8,22 @@ import {
 } from '@material-ui/core';
 
 import Token from 'data/token';
+import { AppState } from 'store';
+import { ip2int } from 'utils/ip';
 
 import {
   Table, TableToolbar, TableBody, TableRow, TableSortCell,
   TableProps
 } from 'components/basics/Table';
-import { ip2int } from 'utils/ip';
 
 // Types
-export type TokenTableProps = Omit<TableProps<Token>, 'toolbar'>;
+export type TokenTableProps = Omit<TableProps<Token>, 'toolbar' | 'blacklist'>;
 
 // Component
 const TokenTable = (props: TokenTableProps) => {
+  // Redux
+  const currentToken = useSelector((state: AppState) => state.auth.tokenId!);
+
   // Render
   const ip = (token: Token) => ip2int(token.from);
 
@@ -29,7 +34,7 @@ const TokenTable = (props: TokenTableProps) => {
   return (
     <Paper>
       <TableContainer>
-        <Table {...props} toolbar={toolbar}>
+        <Table {...props} blacklist={[currentToken]} toolbar={toolbar}>
           <TableHead>
             <TableRow>
               <TableSortCell field={ip}>Adresse</TableSortCell>

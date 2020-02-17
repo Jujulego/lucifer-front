@@ -11,7 +11,7 @@ import { AuthAction, AuthState } from './types';
 // Persist config
 const config: PersistConfig<AuthState> = {
   key: 'auth',
-  whitelist: ['token', 'user'],
+  whitelist: ['token', 'tokenId', 'user'],
   storage
 };
 
@@ -28,11 +28,15 @@ const authReducer = persistReducer(config, (state = initial, action: AuthAction 
 
     case LOGIN: {
       const { error, ...others } = state;
-      return { ...others, token: action.token, user: action.user };
+      return {
+        ...others,
+        token: action.token, tokenId: action.tokenId,
+        user: action.user
+      };
     }
 
     case LOGOUT: {
-      const { token, user, error, ...others } = state;
+      const { token, tokenId, user, error, ...others } = state;
       return others;
     }
 

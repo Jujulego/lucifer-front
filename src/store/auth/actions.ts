@@ -4,8 +4,8 @@ import { LOGIN, LOGOUT, SET_ERROR } from './constants';
 import { AuthAction } from './types';
 
 // Actions
-export const loginAction = (token: string, user: string): AuthAction => ({
-  type: LOGIN, token, user
+export const loginAction = (token: string, tokenId: string, user: string): AuthAction => ({
+  type: LOGIN, token, tokenId, user
 });
 
 export const logoutAction = (): AuthAction => ({

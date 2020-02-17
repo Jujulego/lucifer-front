@@ -7,13 +7,14 @@ import { LOGIN, LOGOUT, SET_ERROR } from './constants';
 // State
 export interface AuthState {
   error?: string,
-  token?: string,
+
+  token?: string, tokenId?: string,
   user?: string,
 }
 
 // Actions
 interface LoginAction extends Action<typeof LOGIN> {
-  token: string, user: string
+  token: string, tokenId: string, user: string
 }
 
 export type AuthAction = LoginAction | Action<typeof LOGOUT> |

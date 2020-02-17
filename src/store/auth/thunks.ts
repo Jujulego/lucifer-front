@@ -4,7 +4,8 @@ import { ThunkDispatch } from 'redux-thunk';
 
 import Token from 'data/token';
 import User, { Credentials } from 'data/user';
-import { AppState } from 'store/index';
+import { AppState } from 'store';
+import { globalReset } from 'store/actions';
 
 import { loginAction, logoutAction, setError } from './actions';
 import { authError } from './utils';
@@ -24,7 +25,7 @@ export const login = (credentials: Credentials) =>
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
 
       // Store token & user
-      await dispatch(loginAction(data.token, data.user));
+      await dispatch(loginAction(data.token, data._id, data.user));
 
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -48,6 +49,7 @@ export const logout = () =>
 
       // Remove token & user
       await dispath(logoutAction());
+      await dispath(globalReset());
 
       // Remove auth header
       delete axios.defaults.headers.common['Authorization'];

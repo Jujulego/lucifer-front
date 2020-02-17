@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ElementType, useEffect, useState } from 'react';
+import React, { ChangeEvent, ComponentType, ElementType, useEffect, useState } from 'react';
 
 import {
   TablePagination as MuiTablePagination,
@@ -6,10 +6,14 @@ import {
 } from '@material-ui/core';
 
 import { useTableContext } from 'contexts/TableContext';
+import { TablePaginationBaseProps } from '@material-ui/core/TablePagination/TablePagination';
 
 // Types
 type DefinedProps = 'count' | 'rowsPerPage' | 'page' | 'onChangePage' | 'onChangeRowsPerPage';
-export type TablePaginationProps = Omit<MuiTablePaginationProps, DefinedProps>;
+type DefaultElement = ComponentType<TablePaginationBaseProps>;
+
+export type TablePaginationProps<D extends ElementType = DefaultElement>
+  = Omit<MuiTablePaginationProps<D>, DefinedProps>;
 
 // Constants
 const DEFAULT_RPPO = [10, 25, 50, 100];
@@ -26,7 +30,7 @@ function getFirst(rppo: TablePaginationProps['rowsPerPageOptions'] = DEFAULT_RPP
 }
 
 // Component
-const TablePagination = (props: { component: ElementType } & TablePaginationProps) => {
+const TablePagination = <D extends ElementType = DefaultElement> (props: { component: D } & TablePaginationProps<D>) => {
     // Props
     const {
       rowsPerPageOptions = DEFAULT_RPPO

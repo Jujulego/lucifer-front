@@ -9,22 +9,23 @@ import {
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
+import User from 'data/user';
+
 import {
   RelativeDate,
   ToolbarAction,
   Table, TableToolbar, TableBody, TableRow, TableSortCell,
   TableProps
 } from 'components/basics';
-import User from 'data/user';
 
 // Types
-export interface UsersTableProps extends Omit<TableProps<User>, 'toolbar'> {
+export interface UserTableProps extends Omit<TableProps<User>, 'toolbar'> {
   onLoad: () => void,
   onReload?: () => void
 }
 
 // Component
-const UsersTable = (props: UsersTableProps) => {
+const UserTable = (props: UserTableProps) => {
   // Props
   const {
     onLoad, onReload,
@@ -79,4 +80,4 @@ const UsersTable = (props: UsersTableProps) => {
   );
 };
 
-export default UsersTable;
+export default UserTable;

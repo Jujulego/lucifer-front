@@ -13,7 +13,7 @@ import LoginForm from './auth/LoginForm';
 import SignInForm from './auth/SignInForm';
 import PrivateRoute from './auth/PrivateRoute';
 
-import AllUsersTable from 'containers/users/AllUsersTable';
+import AllUserTable from 'containers/users/AllUserTable';
 import UserPage from './users/UserPage';
 
 import AppBar from './AppBar';
@@ -36,7 +36,7 @@ const App = () => {
           <PrivateRoute>
             <AppBar>
               <Switch>
-                <Route path="/users"><AllUsersTable /></Route>
+                <Route path="/users"><AllUserTable /></Route>
                 <Route path="/user/:id">{ ({ match }) => <UserPage id={match!.params.id} /> }</Route>
                 <Route component={Home} />
               </Switch>

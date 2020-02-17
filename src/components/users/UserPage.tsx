@@ -7,6 +7,7 @@ import { useUser } from 'store/users/hooks';
 import { updateUser, UserUpdate } from 'store/users/thunks';
 
 import CredentialsCard from './CredentialsCard';
+import TokenTable from 'components/tokens/TokenTable';
 
 // Types
 interface UserPageProps {
@@ -36,6 +37,9 @@ const UserPage = (props: UserPageProps) => {
     <Grid container spacing={2}>
       <Grid item xs lg={5}>
         <CredentialsCard user={user} onUpdate={handleUpdate} />
+      </Grid>
+      <Grid item xs lg={7}>
+        <TokenTable data={user.tokens} />
       </Grid>
     </Grid>
   )

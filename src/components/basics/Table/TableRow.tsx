@@ -50,7 +50,9 @@ const TableRow = <T extends Document> (props: TableRowProps<T>) => {
           { selectable && (
             <Checkbox
               checked={selected} indeterminate={indeterminate}
-              onChange={handleChange} onClick={handleClick}
+              disabled={ctx.selectableCount === 0}
+              onChange={handleChange}
+              onClick={handleClick}
             />
           ) }
         </TableCell>

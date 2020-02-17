@@ -20,6 +20,7 @@ interface BaseTableContextProps<T extends Document> {
   ordering: Ordering<T>,
 
   selectedAll: boolean,
+  selectableCount: number,
   selectedCount: number,
   selected: SelectedState,
 
@@ -44,7 +45,7 @@ const tableDefaults: TableContextDefaults = {
   ordering: { order: 'asc' },
 
   selectedAll: false,
-  selectedCount: 0,
+  selectableCount: 0, selectedCount: 0,
   selected: {},
 
   onSelect: () => {},

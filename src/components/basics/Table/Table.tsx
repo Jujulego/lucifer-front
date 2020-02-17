@@ -103,6 +103,7 @@ const Table = <T extends Document> (props: TableProps<T>) => {
         blacklist, documents: data, filtered,
         filter, ordering,
         selected, selectedCount,
+        selectableCount: filtered.length - blacklistCount,
         selectedAll: selectedCount > 0 && selectedAll,
         onSelect,
         onSelectAll,

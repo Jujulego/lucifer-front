@@ -4,6 +4,7 @@ import Document from './document';
 interface Token extends Document {
   from: string;
   createdAt: string;
+  tags: string[];
 }
 
 export default Token;

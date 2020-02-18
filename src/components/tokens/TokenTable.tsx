@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import {
+  Chip,
   Paper,
   TableHead, TableCell, TableContainer
 } from '@material-ui/core';
@@ -71,6 +72,7 @@ const TokenTable = (props: TokenTableProps) => {
             <TableRow>
               <TableSortCell field={ip}>Adresse</TableSortCell>
               <TableSortCell<Token> field="createdAt">Date</TableSortCell>
+              <TableCell>Tags</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -78,6 +80,14 @@ const TokenTable = (props: TokenTableProps) => {
               <TableRow key={token._id} doc={token}>
                 <TableCell>{ token.from }</TableCell>
                 <TableCell>{ moment.utc(token.createdAt).local().format('LLLL') }</TableCell>
+                <TableCell>
+                  { token.tags.map((tag, i) => (
+                    <Chip
+                      key={i} label={tag}
+                      color="secondary" size="small" variant="outlined"
+                    />
+                  )) }
+                </TableCell>
               </TableRow>
             ) }
           </TableBody>

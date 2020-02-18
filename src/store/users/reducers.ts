@@ -16,7 +16,7 @@ const initial: UsersState = {};
 const userReducer = (state = initialUser, action: UsersAction): UserState => {
   switch (action.type) {
     case ADD_USER:
-      return { ...state, user: null, loading: true };
+      return { ...state, loading: true };
 
     case SET_USER:
       return { ...state, user: action.user, loading: false };

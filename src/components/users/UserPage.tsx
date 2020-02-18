@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Grid } from '@material-ui/core';
 
 import { useUser } from 'store/users/hooks';
-import { updateUser, deleteUserToken, UserUpdate } from 'store/users/thunks';
+import { getUser, updateUser, deleteUserToken, UserUpdate } from 'store/users/thunks';
 
 import CredentialsCard from './CredentialsCard';
 import TokenTable from 'components/tokens/TokenTable';
@@ -26,6 +26,10 @@ const UserPage = (props: UserPageProps) => {
   const user = useUser(id);
 
   // Handlers
+  const handleRefresh = useCallback(() => {
+    dispatch(getUser(id));
+  }, [dispatch, id]);
+
   const handleUpdate = (update: UserUpdate) => {
     dispatch(updateUser(id, update));
   };
@@ -33,6 +37,9 @@ const UserPage = (props: UserPageProps) => {
   const handleDeleteToken = (tokenId: string) => {
     dispatch(deleteUserToken(id, tokenId));
   };
+
+  // Effects
+  useEffect(() => handleRefresh(), [handleRefresh]);
 
   // Render
   if (!user) return null;
@@ -43,7 +50,11 @@ const UserPage = (props: UserPageProps) => {
         <CredentialsCard user={user} onUpdate={handleUpdate} />
       </Grid>
       <Grid item xs lg={7}>
-        <TokenTable data={user.tokens} onDelete={handleDeleteToken} />
+        <TokenTable
+          data={user.tokens}
+          onRefresh={handleRefresh}
+          onDelete={handleDeleteToken}
+        />
       </Grid>
     </Grid>
   )

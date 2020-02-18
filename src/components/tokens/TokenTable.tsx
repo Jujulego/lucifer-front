@@ -7,6 +7,7 @@ import {
   TableHead, TableCell, TableContainer
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 import Token from 'data/token';
 import { AppState } from 'store';
@@ -14,19 +15,23 @@ import { ip2int } from 'utils/ip';
 
 import {
   Table, TableBody, TableRow, TableSortCell, TablePagination,
-  TableToolbar, TableSelectedAction,
+  TableToolbar, ToolbarAction, TableSelectedAction,
   TableProps
 } from 'components/basics';
 
 // Types
 export type TokenTableProps = Omit<TableProps<Token>, 'toolbar' | 'blacklist'> & {
+  onRefresh?: () => void,
   onDelete?: (id: Token['_id']) => void
 };
 
 // Component
 const TokenTable = (props: TokenTableProps) => {
   // Props
-  const { onDelete, ...table } = props;
+  const {
+    onRefresh, onDelete,
+    ...table
+  } = props;
 
   // Redux
   const currentToken = useSelector((state: AppState) => state.auth.tokenId!);
@@ -45,6 +50,11 @@ const TokenTable = (props: TokenTableProps) => {
         <TableSelectedAction tooltip="Supprimer" onActivate={handleDelete}>
           <DeleteIcon />
         </TableSelectedAction>
+      ) }
+      { onRefresh && (
+        <ToolbarAction tooltip="Rafraîchir" onClick={() => onRefresh()}>
+          <RefreshIcon />
+        </ToolbarAction>
       ) }
     </TableToolbar>
   );

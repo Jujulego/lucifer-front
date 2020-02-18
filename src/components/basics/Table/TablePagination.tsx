@@ -2,18 +2,30 @@ import React, { ChangeEvent, ComponentType, ElementType, useEffect, useState } f
 
 import {
   TablePagination as MuiTablePagination,
-  TablePaginationProps as MuiTablePaginationProps
+  TablePaginationClassKey as MuiTablePaginationClassKey,
+  TablePaginationTypeMap as MuiTablePaginationTypeMap
 } from '@material-ui/core';
 
 import { useTableContext } from 'contexts/TableContext';
 import { TablePaginationBaseProps } from '@material-ui/core/TablePagination/TablePagination';
+import { OverrideProps } from '@material-ui/core/OverridableComponent';
 
 // Types
 type DefinedProps = 'count' | 'rowsPerPage' | 'page' | 'onChangePage' | 'onChangeRowsPerPage';
 type DefaultElement = ComponentType<TablePaginationBaseProps>;
 
-export type TablePaginationProps<D extends ElementType = DefaultElement>
-  = Omit<MuiTablePaginationProps<D>, DefinedProps>;
+export type TablePaginationClassKey = MuiTablePaginationClassKey;
+
+export interface TablePaginationTypeMap<P, D extends ElementType> {
+  props: P & Omit<MuiTablePaginationTypeMap<P, D>['props'], DefinedProps>;
+  defaultComponent: D;
+  classKey: TablePaginationClassKey;
+}
+
+export type TablePaginationProps<
+  D extends ElementType = ComponentType<TablePaginationBaseProps>,
+  P = {}
+> = OverrideProps<TablePaginationTypeMap<P, D>, D>;
 
 // Constants
 const DEFAULT_RPPO = [10, 25, 50, 100];

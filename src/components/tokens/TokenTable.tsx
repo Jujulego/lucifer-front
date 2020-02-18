@@ -7,6 +7,7 @@ import {
   Paper,
   TableHead, TableCell, TableContainer
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
@@ -26,6 +27,14 @@ export type TokenTableProps = Omit<TableProps<Token>, 'toolbar' | 'blacklist'> &
   onDelete?: (id: Token['_id']) => void
 };
 
+// Styles
+const useStyles = makeStyles({
+  chipCell: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  }
+});
+
 // Component
 const TokenTable = (props: TokenTableProps) => {
   // Props
@@ -43,7 +52,10 @@ const TokenTable = (props: TokenTableProps) => {
   });
 
   // Render
+  const styles = useStyles();
+
   const ip = (token: Token) => ip2int(token.from);
+  const date = (token: Token) => moment.utc(token.createdAt);
 
   const toolbar = (
     <TableToolbar title="Tokens">
@@ -66,12 +78,14 @@ const TokenTable = (props: TokenTableProps) => {
         <Table {...table}
           blacklist={[currentToken]}
           toolbar={toolbar}
-          pagination={<TablePagination component="div" rowsPerPageOptions={[5, 10, 20]} />}
+          pagination={
+            <TablePagination component="div" rowsPerPageOptions={[5, 10, 20]} />
+          }
         >
           <TableHead>
             <TableRow>
               <TableSortCell field={ip}>Adresse</TableSortCell>
-              <TableSortCell<Token> field="createdAt">Date</TableSortCell>
+              <TableSortCell field={date}>Date</TableSortCell>
               <TableCell>Tags</TableCell>
             </TableRow>
           </TableHead>
@@ -79,8 +93,8 @@ const TokenTable = (props: TokenTableProps) => {
             { (token: Token) => (
               <TableRow key={token._id} doc={token}>
                 <TableCell>{ token.from }</TableCell>
-                <TableCell>{ moment.utc(token.createdAt).local().format('LLLL') }</TableCell>
-                <TableCell>
+                <TableCell>{ date(token).local().format('LLLL') }</TableCell>
+                <TableCell classes={{ root: styles.chipCell }}>
                   { token.tags.map((tag, i) => (
                     <Chip
                       key={i} label={tag}

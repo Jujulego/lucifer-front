@@ -45,6 +45,22 @@ export const updateUser = (id: string, update: UserUpdate) =>
     }
   };
 
+export const deleteUserToken = (id: string, tokenId: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      // Request for update
+      const res = await axios.delete<User>(`/api/user/${id}/token/${tokenId}`);
+      const user = res.data;
+
+      // Store data
+      await dispatch(setUserAction(user));
+
+    } catch (error) {
+      if (authError(error, dispatch)) return;
+      console.error(error);
+    }
+  };
+
 export const deleteUser = (id: string) =>
   async (dispatch: Dispatch) => {
     try {

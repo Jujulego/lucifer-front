@@ -1,6 +1,6 @@
 // Interface
 interface Document {
-  "_id": string
+  "_id": string;
 }
 
 // Aliases

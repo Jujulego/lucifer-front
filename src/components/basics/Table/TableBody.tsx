@@ -30,6 +30,7 @@ const TableBody = <T extends Document> (props: TableBodyProps<T>) => {
   // Memos
   const sorted = useMemo<T[]>(() => {
     if (ordering.field === undefined) return filtered;
+
     return stableSort(filtered, getSorting(ordering.field, ordering.order));
   }, [filtered, ordering]);
 
@@ -41,7 +42,7 @@ const TableBody = <T extends Document> (props: TableBodyProps<T>) => {
   }, [paginator, sorted]);
 
   // Render
-  if (sorted.length === 0) return null;
+  if (paginated.length === 0) return null;
 
   return (
     <MuiTableBody {...body}>

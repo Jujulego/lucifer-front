@@ -3,8 +3,9 @@ import Token from './token';
 
 // Interface
 interface User extends Document {
-  email: string,
-  tokens: Token[]
+  email: string;
+  tokens: Token[];
+  lastConnexion?: string;
 }
 
 // Aliases

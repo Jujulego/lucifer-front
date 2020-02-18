@@ -44,11 +44,7 @@ const UserTable = (props: UserTableProps) => {
   const handleDelete = onDelete && ((users: User[]) => { users.forEach(user => onDelete(user._id)); });
 
   // Render
-  const lastConnection = (user: User) => {
-    return moment.max(
-      user.tokens.map(token => moment(token.createdAt))
-    );
-  };
+  const lastConnection = (user: User) => moment(user.lastConnexion);
 
   const toolbar = (
     <TableToolbar title="Utilisateurs">
@@ -81,7 +77,11 @@ const UserTable = (props: UserTableProps) => {
                 <TableCell>
                   <Link component={RouterLink} to={`/user/${user._id}`}>{ user.email }</Link>
                 </TableCell>
-                <TableCell><RelativeDate date={lastConnection(user)} mode="from" /></TableCell>
+                <TableCell>
+                  { user.lastConnexion && (
+                    <RelativeDate date={lastConnection(user)} mode="from" />
+                  ) }
+                </TableCell>
               </TableRow>
             ) }
           </TableBody>

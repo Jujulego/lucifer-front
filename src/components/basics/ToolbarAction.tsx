@@ -1,25 +1,33 @@
 import React, { ElementType } from 'react';
 
 import {
-  IconButton, IconButtonClassKey, IconButtonProps, IconButtonTypeMap,
+  ExtendButtonBaseTypeMap,
+  IconButton, IconButtonClassKey, IconButtonTypeMap,
   Tooltip, TooltipProps
 } from '@material-ui/core';
 
-import { StyledProps } from 'utils/style';
+import { OverrideProps } from '@material-ui/core/OverridableComponent';
 
 // Types
-type DefaultElement = IconButtonTypeMap['defaultComponent'];
-
 export type ToolbarActionClassKey = Exclude<IconButtonClassKey, 'colorPrimary' | 'colorSecondary'>;
-export type ToolbarActionDefaultElement = DefaultElement;
-export type ToolbarActionProps<D extends ElementType = DefaultElement>
-  = Omit<IconButtonProps<D>, 'color' | 'classes'> & StyledProps<ToolbarActionClassKey> & {
+
+export type ToolbarActionTypeMap<
+  P = {}, D extends ElementType = IconButtonTypeMap['defaultComponent']
+> = ExtendButtonBaseTypeMap<{
+  props: P & Omit<IconButtonTypeMap<P, D>['props'], 'color'> & {
     tooltip: string,
     tooltipProps?: Omit<TooltipProps, 'title'>
   };
+  defaultComponent: D;
+  classKey: ToolbarActionClassKey;
+}>;
+
+export type ToolbarActionProps<
+  D extends ElementType = IconButtonTypeMap['defaultComponent'], P = {}
+> = OverrideProps<ToolbarActionTypeMap<P, D>, D>;
 
 // Component
-const ToolbarAction = <D extends ElementType = DefaultElement> (props: { component?: D } & ToolbarActionProps<D>) => {
+const ToolbarAction = <D extends ElementType = IconButtonTypeMap['defaultComponent']> (props: { component?: D } & ToolbarActionProps<D>) => {
   // Props
   const { children, tooltip, tooltipProps, ...button } = props;
 
@@ -27,7 +35,7 @@ const ToolbarAction = <D extends ElementType = DefaultElement> (props: { compone
   return (
     <Tooltip {...tooltipProps} title={tooltip}>
       <IconButton {...button} color="inherit">
-        {children}
+        { children }
       </IconButton>
     </Tooltip>
   );

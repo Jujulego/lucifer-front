@@ -1,22 +1,32 @@
 import React, { ElementType, useMemo } from 'react';
 
+import { ExtendButtonBaseTypeMap } from '@material-ui/core';
+import { OverrideProps } from '@material-ui/core/OverridableComponent';
+
 import { Badge } from '@material-ui/core';
 import { FilterList as FilterIcon } from '@material-ui/icons';
 
 import { useTableContext } from 'contexts/TableContext';
 
-import { ToolbarAction, ToolbarActionDefaultElement, ToolbarActionProps } from 'components/basics/index';
+import { ToolbarAction, ToolbarActionClassKey, ToolbarActionTypeMap } from 'components/basics/index';
 
 // Types
-type DefaultElement = ToolbarActionDefaultElement;
-
-export type TableFilterActionProps<D extends ElementType = DefaultElement>
-  = Omit<ToolbarActionProps<D>, 'tooltip'> & {
+export type TableFilterActionTypeMap<
+  P = {}, D extends ElementType = ToolbarActionTypeMap['defaultComponent']
+> = ExtendButtonBaseTypeMap<{
+  props: P & Omit<ToolbarActionTypeMap<P, D>['props'], 'tooltip'> & {
     tooltip?: string
   };
+  defaultComponent: D;
+  classKey: ToolbarActionClassKey;
+}>;
+
+export type TableFilterActionProps<
+  D extends ElementType = ToolbarActionTypeMap['defaultComponent'], P = {}
+> = OverrideProps<TableFilterActionTypeMap<P, D>, D>;
 
 // Component
-const TableFilterAction = <D extends ElementType = DefaultElement> (props: { component?: D } & TableFilterActionProps<D>) => {
+const TableFilterAction = <D extends ElementType = ToolbarActionTypeMap['defaultComponent']> (props: { component?: D } & TableFilterActionProps<D>) => {
   // Props
   const { tooltip = "Filtres", ...action } = props;
 

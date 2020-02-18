@@ -6,13 +6,15 @@ import {
   Paper,
   TableHead, TableCell, TableContainer
 } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import Token from 'data/token';
 import { AppState } from 'store';
 import { ip2int } from 'utils/ip';
 
 import {
-  Table, TableToolbar, TableBody, TableRow, TableSortCell, TablePagination,
+  Table, TableBody, TableRow, TableSortCell, TablePagination,
+  TableToolbar, TableSelectedAction,
   TableProps
 } from 'components/basics';
 
@@ -24,15 +26,28 @@ const TokenTable = (props: TokenTableProps) => {
   // Redux
   const currentToken = useSelector((state: AppState) => state.auth.tokenId!);
 
+  // Handlers
+  const handleDelete = (tokens: Token[]) => {
+    console.log(tokens);
+  };
+
   // Render
   const ip = (token: Token) => ip2int(token.from);
+
+  const toolbar = (
+    <TableToolbar title="Tokens">
+      <TableSelectedAction tooltip="Supprimer" onActivate={handleDelete}>
+        <DeleteIcon />
+      </TableSelectedAction>
+    </TableToolbar>
+  );
 
   return (
     <Paper>
       <TableContainer>
         <Table {...props}
           blacklist={[currentToken]}
-          toolbar={<TableToolbar title="Tokens" />}
+          toolbar={toolbar}
           pagination={<TablePagination component="div" rowsPerPageOptions={[5, 10, 20]} />}
         >
           <TableHead>

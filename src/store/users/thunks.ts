@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import User, { Credentials } from 'data/user';
 import { authError } from 'store/auth/utils';
 
-import { addUserAction, setUserAction } from 'store/users/actions';
+import { addUserAction, setUserAction, delUserAction } from 'store/users/actions';
 
 // Types
 export type UserUpdate = Partial<Omit<User, '_id' | 'tokens'> & Credentials>
@@ -38,6 +38,21 @@ export const updateUser = (id: string, update: UserUpdate) =>
 
       // Store data
       await dispatch(setUserAction(user));
+
+    } catch (error) {
+      if (authError(error, dispatch)) return;
+      console.error(error);
+    }
+  };
+
+export const deleteUser = (id: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      // Request for update
+      await axios.delete<User>(`/api/user/${id}`);
+
+      // Store data
+      await dispatch(delUserAction(id));
 
     } catch (error) {
       if (authError(error, dispatch)) return;

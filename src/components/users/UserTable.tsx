@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import moment from 'moment';
 
@@ -7,10 +7,11 @@ import {
   Paper,
   TableHead, TableCell, TableContainer
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import User from 'data/user';
+import User, { Credentials } from 'data/user';
 
 import {
   RelativeDate,
@@ -19,11 +20,14 @@ import {
   TableProps
 } from 'components/basics';
 
+import AddUserDialog from './AddUserDialog';
+
 // Types
 export interface UserTableProps extends Omit<TableProps<User>, 'toolbar'> {
-  onLoad: () => void,
-  onReload?: () => void,
-  onDelete?: (id: User['_id']) => void
+  onLoad: () => void;
+  onReload?: () => void;
+  onAdd?: (cred: Credentials) => void;
+  onDelete?: (id: User['_id']) => void;
 }
 
 // Component
@@ -31,14 +35,15 @@ const UserTable = (props: UserTableProps) => {
   // Props
   const {
     onLoad, onReload,
-    onDelete,
+    onAdd, onDelete,
     ...table
   } = props;
 
+  // State
+  const [adding, setAdding] = useState(false);
+
   // Effects
-  useEffect(() => {
-    onLoad();
-  }, [onLoad]);
+  useEffect(() => { onLoad(); }, [onLoad]);
 
   // Handlers
   const handleDelete = onDelete && ((users: User[]) => { users.forEach(user => onDelete(user._id)); });
@@ -52,6 +57,17 @@ const UserTable = (props: UserTableProps) => {
         <TableSelectedAction tooltip="Supprimer" onActivate={handleDelete}>
           <DeleteIcon />
         </TableSelectedAction>
+      ) }
+      { onAdd && (
+        <>
+          <ToolbarAction tooltip="Ajouter" onClick={() => setAdding(true)}>
+            <AddIcon />
+          </ToolbarAction>
+          <AddUserDialog
+            open={adding} onClose={() => setAdding(false)}
+            onAdd={onAdd}
+          />
+        </>
       ) }
       { onReload && (
         <ToolbarAction tooltip="Rafraîchir" onClick={() => onReload()}>

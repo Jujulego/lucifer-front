@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import UserTable, { UserTableProps } from 'components/users/UserTable';
-import User from 'data/user';
+import User, { Credentials } from 'data/user';
 
 import useAPI from 'utils/hooks/useAPI';
 import { deleteUser } from 'store/users/thunks';
@@ -16,9 +16,15 @@ const AllUserTable = (props: AllUserTableProps) => {
   const dispatch = useDispatch();
 
   // API
+  const { send: add } = useAPI.post<Credentials, any>(`/api/user/`);
   const { data, reload } = useAPI.get<User[]>('/api/users', { load: false });
 
   // Handlers
+  const handleAdd = async (cred: Credentials) => {
+    await add(cred);
+    reload();
+  };
+
   const handleDelete = (id: string) => {
     dispatch(deleteUser(id));
     reload();
@@ -29,7 +35,7 @@ const AllUserTable = (props: AllUserTableProps) => {
     <UserTable
       {...props} data={data || []}
       onLoad={reload} onReload={reload}
-      onDelete={handleDelete}
+      onAdd={handleAdd} onDelete={handleDelete}
     />
   );
 };

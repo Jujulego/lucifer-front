@@ -13,8 +13,8 @@ export type APIReturn<T> = APIState<T> & {
   reload: () => void,
 }
 
-export type APIDataReturn<T> = APIState<T> & {
-  send: (data: any) => void,
+export type APIDataReturn<T, D> = APIState<T> & {
+  send: (data: D) => Promise<T>,
 }
 
 // Hooks
@@ -47,32 +47,27 @@ function useRequest<T = any>(generator: APIRequestGenerator<T>, load: boolean = 
   };
 }
 
-function useDataRequest<T = any>(generator: APIDataRequestGenerator<T>): APIDataReturn<T> {
+function useDataRequest<D = any, T = any>(generator: APIDataRequestGenerator<T>): APIDataReturn<T, D> {
   // State
-  const [data, setData] = useState<any>(null);
-  const [state, setState] = useState<APIState<T>>({ loading: true });
+  const [state, setState] = useState<APIState<T>>({ loading: false });
 
-  // Effect
-  useEffect(() => {
-    if (data === null) return;
+  // Callback
+  const send = useCallback((data: D) => {
     setState(old => ({ ...old, loading: true }));
 
     // Create cancel token
     const source = axios.CancelToken.source();
 
     // Make request
-    generator(data, source)
+    return generator(data, source)
       .then((res) => {
         setState({ data: res.data, loading: false });
+        return res.data;
       });
-
-    // Cancel
-    return () => { source.cancel(); };
-  }, [generator, data]);
+  }, [generator]);
 
   return {
-    ...state,
-    send: useCallback((data: any) => setData(data), [setData])
+    ...state, send
   };
 }
 
@@ -134,7 +129,7 @@ export function useAPIOptions<T> (url: string, config?: APIRequestConfig): APIRe
   return useRequest(generator, config?.load);
 }
 
-export function useAPIPost<T> (url: string, config?: APIDataRequestConfig): APIDataReturn<T> {
+export function useAPIPost<D, T> (url: string, config?: APIDataRequestConfig): APIDataReturn<T, D> {
   const rconfig = config?.config;
 
   // Callbacks
@@ -146,7 +141,7 @@ export function useAPIPost<T> (url: string, config?: APIDataRequestConfig): APID
   return useDataRequest(generator);
 }
 
-export function useAPIPut<T> (url: string, config?: APIDataRequestConfig): APIDataReturn<T> {
+export function useAPIPut<D, T> (url: string, config?: APIDataRequestConfig): APIDataReturn<T, D> {
   const rconfig = config?.config;
 
   // Callbacks
@@ -158,7 +153,7 @@ export function useAPIPut<T> (url: string, config?: APIDataRequestConfig): APIDa
   return useDataRequest(generator);
 }
 
-export function useAPIPatch<T> (url: string, config?: APIDataRequestConfig): APIDataReturn<T> {
+export function useAPIPatch<D, T> (url: string, config?: APIDataRequestConfig): APIDataReturn<T, D> {
   const rconfig = config?.config;
 
   // Callbacks

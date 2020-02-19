@@ -16,24 +16,24 @@ const AllUserTable = (props: AllUserTableProps) => {
   const dispatch = useDispatch();
 
   // API
-  const { send: add } = useAPI.post<Credentials, any>(`/api/user/`);
-  const { data, reload } = useAPI.get<User[]>('/api/users', { load: false });
+  const { send: add } = useAPI.post<Credentials, User>(`/api/user/`);
+  const { data = [], reload, update } = useAPI.get<User[]>('/api/users', { load: false });
 
   // Handlers
   const handleAdd = async (cred: Credentials) => {
-    await add(cred);
-    reload();
+    const user = await add(cred);
+    update([...data, user]);
   };
 
   const handleDelete = (id: string) => {
     dispatch(deleteUser(id));
-    reload();
+    update(data.filter(doc => doc._id !== id));
   };
 
   // Render
   return (
     <UserTable
-      {...props} data={data || []}
+      {...props} data={data}
       onLoad={reload} onReload={reload}
       onAdd={handleAdd} onDelete={handleDelete}
     />

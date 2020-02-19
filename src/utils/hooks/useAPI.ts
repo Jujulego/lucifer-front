@@ -10,7 +10,8 @@ export type APIDataRequestGenerator<T> = (data: any, source: CancelTokenSource) 
 
 export type APIState<T> = { data?: T, loading: boolean };
 export type APIReturn<T> = APIState<T> & {
-  reload: () => void,
+  update: (data: T) => void;
+  reload: () => void;
 }
 
 export type APIDataReturn<T, D> = APIState<T> & {
@@ -43,6 +44,7 @@ function useRequest<T = any>(generator: APIRequestGenerator<T>, load: boolean = 
 
   return {
     ...state,
+    update: useCallback((data: T) => setState(old => ({ ...old, data })), [setState]),
     reload: useCallback(() => setReload(old => old + 1), [setReload])
   };
 }

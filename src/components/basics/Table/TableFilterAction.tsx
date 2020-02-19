@@ -47,12 +47,13 @@ const TableFilterAction = <D extends ElementType = ToolbarActionTypeMap['default
   const {
     tooltip = "Filtres",
     dialog: DialogComponent,
+    disabled,
     onClick,
     ...action
   } = props;
 
   // Contexts
-  const { filter } = useTableContext();
+  const { filtered, filter } = useTableContext();
 
   // State
   const [open, setOpen] = useState(false);
@@ -72,7 +73,11 @@ const TableFilterAction = <D extends ElementType = ToolbarActionTypeMap['default
   // Render
   return (
     <>
-      <ToolbarAction {...action} onClick={handleClick} tooltip={tooltip}>
+      <ToolbarAction {...action}
+        disabled={filtered.length === 0 || disabled}
+        tooltip={tooltip}
+        onClick={handleClick}
+      >
         <Badge badgeContent={count} color="primary">
           <FilterIcon />
         </Badge>

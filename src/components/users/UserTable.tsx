@@ -16,7 +16,7 @@ import User, { Credentials } from 'data/user';
 import {
   RelativeDate,
   Table, TableBody, TableRow, TableSortCell,
-  TableToolbar, TableSelectedAction, ToolbarAction,
+  TableToolbar, TableAction,
   TableProps
 } from 'components/basics';
 
@@ -54,15 +54,15 @@ const UserTable = (props: UserTableProps) => {
   const toolbar = (
     <TableToolbar title="Utilisateurs">
       { handleDelete && (
-        <TableSelectedAction tooltip="Supprimer" onActivate={handleDelete}>
+        <TableAction when="some" tooltip="Supprimer" onActivate={handleDelete}>
           <DeleteIcon />
-        </TableSelectedAction>
+        </TableAction>
       ) }
       { onAdd && (
         <>
-          <ToolbarAction tooltip="Ajouter" onClick={() => setAdding(true)}>
+          <TableAction when="nothing" tooltip="Ajouter" onClick={() => setAdding(true)}>
             <AddIcon />
-          </ToolbarAction>
+          </TableAction>
           <AddUserDialog
             open={adding} onClose={() => setAdding(false)}
             onAdd={onAdd}
@@ -70,9 +70,9 @@ const UserTable = (props: UserTableProps) => {
         </>
       ) }
       { onReload && (
-        <ToolbarAction tooltip="Rafraîchir" onClick={() => onReload()}>
+        <TableAction tooltip="Rafraîchir" onClick={() => onReload()}>
           <RefreshIcon />
-        </ToolbarAction>
+        </TableAction>
       ) }
     </TableToolbar>
   );

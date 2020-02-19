@@ -11,25 +11,28 @@ import {
 } from 'components/basics/index';
 
 // Types
-export type TableSelectedActionTypeMap<
+type When = "always" | "some" | "nothing"; // selected
+
+export type TableActionTypeMap<
   T extends Document, P = {}, D extends ElementType = ToolbarActionTypeMap['defaultComponent']
 > = ExtendButtonBaseTypeMap<{
   props: P & ToolbarActionTypeMap<P, D>['props'] & {
+    when?: When,
     onActivate?: (documents: T[]) => void
   };
   defaultComponent: D;
   classKey: ToolbarActionClassKey;
 }>;
 
-export type TableSelectedActionProps<
+export type TableActionProps<
   T extends Document, D extends ElementType = ToolbarActionTypeMap['defaultComponent'], P = {}
-> = OverrideProps<TableSelectedActionTypeMap<T, P, D>, D>;
+> = OverrideProps<TableActionTypeMap<T, P, D>, D>;
 
 // Component
-const TableSelectedAction = <T extends Document, D extends ElementType = ToolbarActionTypeMap['defaultComponent']> (props: { component?: D } & TableSelectedActionProps<T, D>) => {
+const TableAction = <T extends Document, D extends ElementType = ToolbarActionTypeMap['defaultComponent']> (props: { component?: D } & TableActionProps<T, D>) => {
   // Props
   const {
-    children, tooltip,
+    children, tooltip, when = "always",
     onActivate, onClick,
     ...action
   } = props;
@@ -49,7 +52,9 @@ const TableSelectedAction = <T extends Document, D extends ElementType = Toolbar
     }) : onClick;
 
   // Render
-  if (selectedCount === 0) return null;
+  if (when === "some" && selectedCount === 0) return null;
+  if (when === "nothing" && selectedCount !== 0) return null;
+
   return (
     <ToolbarAction tooltip={tooltip} {...action} onClick={handleClick}>
       { children }
@@ -57,4 +62,4 @@ const TableSelectedAction = <T extends Document, D extends ElementType = Toolbar
   );
 };
 
-export default TableSelectedAction;
+export default TableAction;

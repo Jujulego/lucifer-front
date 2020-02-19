@@ -7,8 +7,8 @@ export * from './TableBody';
 export { default as TableFilterAction } from './TableFilterAction';
 export * from './TableFilterAction';
 
-export { default as TableSelectedAction } from './TableSelectedAction';
-export * from './TableSelectedAction';
+export { default as TableAction } from './TableAction';
+export * from './TableAction';
 
 export { default as TablePagination } from './TablePagination';
 export * from './TablePagination';

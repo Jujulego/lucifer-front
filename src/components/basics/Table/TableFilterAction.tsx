@@ -7,10 +7,11 @@ import { Badge } from '@material-ui/core';
 import { FilterList as FilterIcon } from '@material-ui/icons';
 
 import { useTableContext } from 'contexts/TableContext';
-import Document from 'data/document';
+import Document, { AnyDocument } from 'data/document';
 import { Filter } from 'utils/filter';
 
-import { ToolbarAction, ToolbarActionClassKey, ToolbarActionTypeMap } from 'components/basics/index';
+import { ToolbarActionClassKey, ToolbarActionTypeMap } from 'components/basics/ToolbarAction';
+import TableAction, { TableActionProps } from './TableAction';
 
 // Types
 export interface TableFilterDialogProps {
@@ -22,6 +23,7 @@ export type TableFilterActionTypeMap<
   P = {}, D extends ElementType = ToolbarActionTypeMap['defaultComponent']
 > = ExtendButtonBaseTypeMap<{
   props: P & Omit<ToolbarActionTypeMap<P, D>['props'], 'tooltip'> & {
+    when?: TableActionProps<AnyDocument>;
     tooltip?: string;
     dialog?: ComponentType<TableFilterDialogProps>;
   };
@@ -73,7 +75,7 @@ const TableFilterAction = <D extends ElementType = ToolbarActionTypeMap['default
   // Render
   return (
     <>
-      <ToolbarAction {...action}
+      <TableAction {...action}
         disabled={filtered.length === 0 || disabled}
         tooltip={tooltip}
         onClick={handleClick}
@@ -81,7 +83,7 @@ const TableFilterAction = <D extends ElementType = ToolbarActionTypeMap['default
         <Badge badgeContent={count} color="primary">
           <FilterIcon />
         </Badge>
-      </ToolbarAction>
+      </TableAction>
       { DialogComponent && (
         <DialogComponent open={open} onClose={() => { setOpen(false); }} />
       ) }

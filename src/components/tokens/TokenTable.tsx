@@ -18,7 +18,7 @@ import { ip2int } from 'utils/ip';
 
 import {
   Table, TableBody, TableRow, TableSortCell, TablePagination,
-  TableToolbar, ToolbarAction, TableSelectedAction, TableFilterAction,
+  TableToolbar, TableAction, TableFilterAction,
   TableProps
 } from 'components/basics';
 
@@ -69,20 +69,20 @@ const TokenTable = (props: TokenTableProps) => {
   const toolbar = (
     <TableToolbar title="Tokens">
       { handleDelete && (
-        <TableSelectedAction tooltip="Supprimer" onActivate={handleDelete}>
+        <TableAction when="some" tooltip="Supprimer" onActivate={handleDelete}>
           <DeleteIcon />
-        </TableSelectedAction>
+        </TableAction>
       ) }
       { handleAdd && (
-        <ToolbarAction tooltip="Générer" onClick={handleAdd}>
+        <TableAction when="nothing" tooltip="Générer" onClick={handleAdd}>
           <AddIcon />
-        </ToolbarAction>
+        </TableAction>
       ) }
       <TableFilterAction dialog={TokenFilterDialog} />
       { onRefresh && (
-        <ToolbarAction tooltip="Rafraîchir" onClick={() => onRefresh()}>
+        <TableAction tooltip="Rafraîchir" onClick={() => onRefresh()}>
           <RefreshIcon />
-        </ToolbarAction>
+        </TableAction>
       ) }
     </TableToolbar>
   );

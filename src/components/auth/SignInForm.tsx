@@ -8,8 +8,10 @@ import { Grid, TextField } from '@material-ui/core';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 import { Credentials } from 'data/user';
-import { PasswordField, ToolbarAction } from 'components/basics';
+import { AppDispatch } from 'store';
 import { signIn } from 'store/auth/thunks';
+
+import { PasswordField, ToolbarAction } from 'components/basics';
 
 import AuthForm from './AuthForm'
 
@@ -19,7 +21,7 @@ type FormState = Credentials & { confirm: string };
 // Component
 const SignInForm = () => {
   // Redux
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   // Form
   const { register, getValues, handleSubmit, errors } = useForm<FormState>();

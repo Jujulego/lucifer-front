@@ -8,16 +8,17 @@ import { Grid, TextField } from '@material-ui/core';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import { Credentials } from 'data/user';
-import { PasswordField, ToolbarAction } from 'components/basics';
-import { AppState } from 'store';
+import { AppDispatch, AppState } from 'store';
 import { login } from 'store/auth/thunks';
+
+import { PasswordField, ToolbarAction } from 'components/basics';
 
 import AuthForm from './AuthForm';
 
 // Component
 const LoginForm = () => {
   // Redux
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const error = useSelector((state: AppState) => state.auth.error);
 
   // Form

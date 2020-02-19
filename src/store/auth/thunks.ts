@@ -1,10 +1,8 @@
 import axios from 'axios';
-import { Dispatch } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
 
 import Token from 'data/token';
 import User, { Credentials } from 'data/user';
-import { AppState } from 'store';
+import { AppState, AppDispatch, AppThunk } from 'store';
 import { globalReset } from 'store/actions';
 
 import { loginAction, logoutAction, setError } from './actions';
@@ -14,8 +12,8 @@ import { authError } from './utils';
 export type LoginToken = Pick<Token, '_id'> & { token: string, user: User['_id'] };
 
 // Thunks
-export const login = (credentials: Credentials) =>
-  async (dispatch: Dispatch) => {
+export const login = (credentials: Credentials): AppThunk =>
+  async (dispatch: AppDispatch) => {
     try {
       // Make login request
       const res = await axios.post<LoginToken>('/api/login', credentials);
@@ -38,8 +36,8 @@ export const login = (credentials: Credentials) =>
     }
   };
 
-export const logout = () =>
-  async (dispath: Dispatch, getState: () => AppState) => {
+export const logout = (): AppThunk =>
+  async (dispath: AppDispatch, getState: () => AppState) => {
     try {
       // Get token
       const token = getState().auth.token;
@@ -62,8 +60,8 @@ export const logout = () =>
     }
   };
 
-export const signIn = (credentials: Credentials, shouldLogin: boolean = true) =>
-  async (dispatch: ThunkDispatch<AppState, {}, any>) => {
+export const signIn = (credentials: Credentials, shouldLogin: boolean = true): AppThunk =>
+  async (dispatch: AppDispatch) => {
     try {
       // Make sign-in request
       await axios.post<User>('/api/signin', credentials);

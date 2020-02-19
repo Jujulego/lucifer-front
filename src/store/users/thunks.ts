@@ -2,8 +2,8 @@ import axios from 'axios';
 import { omit } from 'lodash';
 
 import { FullToken } from 'data/token';
+import { AppDispatch, AppThunk } from 'store';
 import User, { Credentials } from 'data/user';
-import { AppDispatch, AppThunk } from 'store/types';
 import { authError } from 'store/auth/utils';
 
 import {

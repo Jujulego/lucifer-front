@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 
 import { FullToken } from 'data/token';
-import { AppDispatch } from 'store/types';
+import { AppDispatch } from 'store';
 import { useUser } from 'store/users/hooks';
 import {
   createUserToken, getUser, updateUser, deleteUserToken,

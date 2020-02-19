@@ -1,11 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import UserTable, { UserTableProps } from 'components/users/UserTable';
 import User, { Credentials } from 'data/user';
-
-import useAPI from 'utils/hooks/useAPI';
+import { AppDispatch } from 'store';
 import { deleteUser } from 'store/users/thunks';
+import useAPI from 'utils/hooks/useAPI';
+
+import UserTable, { UserTableProps } from 'components/users/UserTable';
 
 // Type
 export type AllUserTableProps = Omit<UserTableProps, 'data' | 'onLoad' | 'onReload'>;
@@ -13,7 +14,7 @@ export type AllUserTableProps = Omit<UserTableProps, 'data' | 'onLoad' | 'onRelo
 // Component
 const AllUserTable = (props: AllUserTableProps) => {
   // Redux
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   // API
   const { send: add } = useAPI.post<Credentials, User>('/api/user/');

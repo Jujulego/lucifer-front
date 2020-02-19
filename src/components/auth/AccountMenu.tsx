@@ -13,6 +13,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 
+import { AppDispatch } from 'store';
 import { useMe } from 'store/auth/hooks';
 import { logout } from 'store/auth/thunks';
 
@@ -25,7 +26,7 @@ const AccountMenu = () => {
   const location = useLocation();
 
   // Redux
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   // API
   const me = useMe();

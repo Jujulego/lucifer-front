@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 import { Dispatch } from 'redux';
 
 import User, { Credentials } from 'data/user';
@@ -14,14 +14,14 @@ export const getUser = (id: string) =>
   async (dispatch: Dispatch) => {
     try {
       // Add user
-      await dispatch(addUserAction(id));
+      dispatch(addUserAction(id));
 
       // Request for user data
       const res = await axios.get<User>(`/api/user/${id}`);
       const user = res.data;
 
       // Store data
-      await dispatch(setUserAction(user));
+      dispatch(setUserAction(user));
 
     } catch (error) {
       if (authError(error, dispatch)) return;
@@ -38,7 +38,7 @@ export const updateUser = (id: string, update: UserUpdate) =>
       const user = res.data;
 
       // Store data
-      await dispatch(setUserAction(user));
+      dispatch(setUserAction(user));
 
     } catch (error) {
       if (authError(error, dispatch)) return;
@@ -55,7 +55,7 @@ export const deleteUserToken = (id: string, tokenId: string) =>
       const user = res.data;
 
       // Store data
-      await dispatch(setUserAction(user));
+      dispatch(setUserAction(user));
 
     } catch (error) {
       if (authError(error, dispatch)) return;
@@ -71,7 +71,7 @@ export const deleteUser = (id: string) =>
       await axios.delete<User>(`/api/user/${id}`);
 
       // Store data
-      await dispatch(delUserAction(id));
+      dispatch(delUserAction(id));
 
     } catch (error) {
       if (authError(error, dispatch)) return;

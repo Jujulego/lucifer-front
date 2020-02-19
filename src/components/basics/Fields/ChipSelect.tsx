@@ -5,6 +5,7 @@ import {
   FormControl, InputLabel, Select, FormHelperText,
   FormControlProps, SelectProps, ChipProps,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 // Types
 interface ChipSelectBaseProps {
@@ -20,6 +21,18 @@ export type ChipSelectProps =
   Omit<FormControlProps, keyof ChipSelectBaseProps> &
   ChipSelectBaseProps
 
+// Styles
+const useStyles = makeStyles({
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  chip: {
+    marginLeft: 2,
+    marginRight: 2
+  }
+});
+
 // Component
 const ChipSelect = (props: ChipSelectProps) => {
   // Props
@@ -33,6 +46,8 @@ const ChipSelect = (props: ChipSelectProps) => {
   } = props;
 
   // Render
+  const styles = useStyles();
+
   return (
     <FormControl {...control}>
       { label && <InputLabel>{ label }</InputLabel> }
@@ -40,9 +55,9 @@ const ChipSelect = (props: ChipSelectProps) => {
         multiple
         value={value} onChange={onChange}
         renderValue={selected => (
-          <div>
+          <div className={styles.chips}>
             { (selected as string[]).map(value => (
-              <Chip {...ChipProps} key={value} label={value} />
+              <Chip {...ChipProps} className={styles.chip} key={value} label={value} />
             )) }
           </div>
         )}

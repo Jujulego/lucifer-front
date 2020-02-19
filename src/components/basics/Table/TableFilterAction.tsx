@@ -10,8 +10,7 @@ import { useTableContext } from 'contexts/TableContext';
 import Document, { AnyDocument } from 'data/document';
 import { Filter } from 'utils/filter';
 
-import { ToolbarActionClassKey, ToolbarActionTypeMap } from 'components/basics/ToolbarAction';
-import TableAction, { TableActionProps } from './TableAction';
+import TableAction, { TableActionClassKey, TableActionTypeMap } from './TableAction';
 
 // Types
 export interface TableFilterDialogProps {
@@ -20,20 +19,21 @@ export interface TableFilterDialogProps {
 }
 
 export type TableFilterActionTypeMap<
-  P = {}, D extends ElementType = ToolbarActionTypeMap['defaultComponent']
+  T extends Document = AnyDocument,
+  P = {}, D extends ElementType = TableActionTypeMap<T>['defaultComponent']
 > = ExtendButtonBaseTypeMap<{
-  props: P & Omit<ToolbarActionTypeMap<P, D>['props'], 'tooltip'> & {
-    when?: TableActionProps<AnyDocument>;
+  props: P & Omit<TableActionTypeMap<T, P, D>['props'], 'tooltip'> & {
     tooltip?: string;
     dialog?: ComponentType<TableFilterDialogProps>;
   };
   defaultComponent: D;
-  classKey: ToolbarActionClassKey;
+  classKey: TableActionClassKey;
 }>;
 
 export type TableFilterActionProps<
-  D extends ElementType = ToolbarActionTypeMap['defaultComponent'], P = {}
-> = OverrideProps<TableFilterActionTypeMap<P, D>, D>;
+  T extends Document = AnyDocument,
+  D extends ElementType = TableActionTypeMap<T>['defaultComponent'], P = {}
+> = OverrideProps<TableFilterActionTypeMap<T, P, D>, D>;
 
 // Utils
 const removeEmptyFields = <T extends Document> (filter: Filter<T>) => (key: keyof Filter<T>): boolean => {
@@ -44,7 +44,7 @@ const removeEmptyFields = <T extends Document> (filter: Filter<T>) => (key: keyo
 };
 
 // Component
-const TableFilterAction = <D extends ElementType = ToolbarActionTypeMap['defaultComponent']> (props: { component?: D } & TableFilterActionProps<D>) => {
+const TableFilterAction = <T extends Document = AnyDocument, D extends ElementType = TableActionTypeMap<T>['defaultComponent']> (props: { component?: D } & TableFilterActionProps<T, D>) => {
   // Props
   const {
     tooltip = "Filtres",
@@ -55,14 +55,14 @@ const TableFilterAction = <D extends ElementType = ToolbarActionTypeMap['default
   } = props;
 
   // Contexts
-  const { filtered, filter } = useTableContext();
+  const { filtered, filter } = useTableContext<T>();
 
   // State
   const [open, setOpen] = useState(false);
 
   // Memos
   const count = useMemo(
-    () => Object.keys(filter).filter(removeEmptyFields(filter)).length,
+    () => Object.tsKeys(filter).filter(removeEmptyFields(filter)).length,
     [filter]
   );
 

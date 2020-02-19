@@ -1,1 +1,2 @@
-import "./moment";
+import './global';
+import './moment';

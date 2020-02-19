@@ -13,15 +13,17 @@ import {
 // Types
 type When = "always" | "some" | "nothing"; // selected
 
+export type TableActionClassKey = ToolbarActionClassKey;
 export type TableActionTypeMap<
-  T extends Document, P = {}, D extends ElementType = ToolbarActionTypeMap['defaultComponent']
+  T extends Document,
+  P = {}, D extends ElementType = ToolbarActionTypeMap['defaultComponent']
 > = ExtendButtonBaseTypeMap<{
   props: P & ToolbarActionTypeMap<P, D>['props'] & {
     when?: When,
     onActivate?: (documents: T[]) => void
   };
   defaultComponent: D;
-  classKey: ToolbarActionClassKey;
+  classKey: TableActionClassKey;
 }>;
 
 export type TableActionProps<

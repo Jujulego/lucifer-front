@@ -34,6 +34,7 @@ export const login = (credentials: Credentials) =>
       }
 
       console.error(error);
+      throw error;
     }
   };
 
@@ -57,6 +58,7 @@ export const logout = () =>
     } catch (error) {
       if (authError(error, dispath)) return;
       console.log(error);
+      throw error;
     }
   };
 
@@ -69,5 +71,6 @@ export const signIn = (credentials: Credentials, shouldLogin: boolean = true) =>
 
     } catch (error) {
       console.error(error);
+      throw error;
     }
   };

@@ -26,6 +26,7 @@ export const getUser = (id: string) =>
     } catch (error) {
       if (authError(error, dispatch)) return;
       console.error(error);
+      throw error;
     }
   };
 
@@ -42,6 +43,7 @@ export const updateUser = (id: string, update: UserUpdate) =>
     } catch (error) {
       if (authError(error, dispatch)) return;
       console.error(error);
+      throw error;
     }
   };
 
@@ -58,6 +60,7 @@ export const deleteUserToken = (id: string, tokenId: string) =>
     } catch (error) {
       if (authError(error, dispatch)) return;
       console.error(error);
+      throw error;
     }
   };
 
@@ -73,5 +76,6 @@ export const deleteUser = (id: string) =>
     } catch (error) {
       if (authError(error, dispatch)) return;
       console.error(error);
+      throw error;
     }
   };

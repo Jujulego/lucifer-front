@@ -24,7 +24,7 @@ const TokenFilterDialog = (props: TokenFilterDialogProps) => {
   const { documents, filter, onFilter } = useTableContext<Token>();
 
   // Form
-  const { control, handleSubmit } = useForm<Filter<Token>>();
+  const { control, handleSubmit, reset } = useForm<Filter<Token>>();
 
   // Memo
   const tags = useMemo(() => Array.from(
@@ -40,11 +40,22 @@ const TokenFilterDialog = (props: TokenFilterDialogProps) => {
     onClose();
   };
 
+  const handleReset = () => {
+    reset(filter);
+    onClose();
+  };
+
   // Render
   return (
     <Dialog
       open={open} onClose={onClose}
       maxWidth="xs" fullWidth
+
+      PaperProps={{
+        component: "form",
+        onReset: handleReset,
+        onSubmit: handleSubmit(handleFilter),
+      }}
     >
       <DialogTitle>Filtres actifs</DialogTitle>
       <DialogContent>
@@ -59,8 +70,8 @@ const TokenFilterDialog = (props: TokenFilterDialogProps) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => { onClose(); }} color="secondary">Annuler</Button>
-        <Button onClick={handleSubmit(handleFilter)} color="primary">Filtrer</Button>
+        <Button type="reset" color="secondary">Annuler</Button>
+        <Button type="submit" color="primary">Filtrer</Button>
       </DialogActions>
     </Dialog>
   );

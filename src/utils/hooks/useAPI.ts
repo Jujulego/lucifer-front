@@ -14,8 +14,9 @@ export type APIReturn<T> = APIState<T> & {
   reload: () => void;
 }
 
+export type APIPromise<T> = Promise<T> & { cancel: () => void };
 export type APIDataReturn<T, D> = APIState<T> & {
-  send: (data: D) => Promise<T>,
+  send: (data: D) => APIPromise<T>,
 }
 
 // Hooks
@@ -61,11 +62,14 @@ function useDataRequest<D = any, T = any>(generator: APIDataRequestGenerator<T>)
     const source = axios.CancelToken.source();
 
     // Make request
-    return generator(data, source)
+    const promise: any = generator(data, source)
       .then((res) => {
         setState({ data: res.data, loading: false });
         return res.data;
       });
+
+    promise.cancel = () => source.cancel();
+    return promise as APIPromise<T>;
   }, [generator]);
 
   return {

@@ -16,8 +16,8 @@ const AllUserTable = (props: AllUserTableProps) => {
   const dispatch = useDispatch();
 
   // API
-  const { send: add } = useAPI.post<Credentials, User>(`/api/user/`);
-  const { data = [], reload, update } = useAPI.get<User[]>('/api/users', { load: false });
+  const { send: add } = useAPI.post<Credentials, User>('/api/user/');
+  const { data = [], reload, update } = useAPI.get<User[]>('/api/users', {}, { load: false });
 
   // Handlers
   const handleAdd = async (cred: Credentials) => {

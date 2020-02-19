@@ -4,13 +4,14 @@ import { useCallback, useEffect, useState } from 'react';
 import useChanged from './useChanged';
 
 // Types
+type Updator<R> = (data?: R) => R;
 export type APIState<R> = { data?: R, loading: boolean };
 export type APIPromise<R> = Promise<R> & { cancel: () => void };
 
 export type APIGetRequestConfig = Omit<AxiosRequestConfig, 'cancelToken'> & { load?: boolean };
 export type APIGetRequestGenerator<P extends object, R> = (source: CancelTokenSource) => Promise<AxiosResponse<R>>;
 export type APIGetReturn<R> = APIState<R> & {
-  update: (data: R) => void;
+  update: (data: R | Updator<R>) => void;
   reload: () => void;
 }
 
@@ -51,7 +52,11 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
 
   return {
     ...state,
-    update: useCallback((data: R) => setState(old => ({ ...old, data })), [setState]),
+    update: useCallback((data: R | Updator<R>) => {
+      const updator: Updator<R> = (typeof data === "function") ? data as Updator<R> : (() => data);
+
+      setState(old => ({ ...old, data: updator(old.data) }))
+    }, [setState]),
     reload: useCallback(() => setReload(old => old + 1), [setReload])
   };
 }

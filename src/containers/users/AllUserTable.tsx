@@ -22,12 +22,12 @@ const AllUserTable = (props: AllUserTableProps) => {
   // Handlers
   const handleAdd = async (cred: Credentials) => {
     const user = await add(cred);
-    update([...data, user]);
+    update((data = []) => [...data, user]);
   };
 
   const handleDelete = (id: string) => {
     dispatch(deleteUser(id));
-    update(data.filter(doc => doc._id !== id));
+    update((data = []) => data.filter(doc => doc._id !== id));
   };
 
   // Render

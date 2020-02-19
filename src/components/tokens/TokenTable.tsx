@@ -17,9 +17,11 @@ import { ip2int } from 'utils/ip';
 
 import {
   Table, TableBody, TableRow, TableSortCell, TablePagination,
-  TableToolbar, ToolbarAction, TableSelectedAction,
+  TableToolbar, ToolbarAction, TableSelectedAction, TableFilterAction,
   TableProps
 } from 'components/basics';
+
+import TokenFilterDialog from './TokenFilterDialog';
 
 // Types
 export type TokenTableProps = Omit<TableProps<Token>, 'toolbar' | 'blacklist'> & {
@@ -64,6 +66,7 @@ const TokenTable = (props: TokenTableProps) => {
           <DeleteIcon />
         </TableSelectedAction>
       ) }
+      <TableFilterAction dialog={TokenFilterDialog} />
       { onRefresh && (
         <ToolbarAction tooltip="Rafraîchir" onClick={() => onRefresh()}>
           <RefreshIcon />

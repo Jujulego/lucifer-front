@@ -8,10 +8,11 @@ import {
   TableHead, TableCell, TableContainer
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import Token from 'data/token';
+import Token, { FullToken } from 'data/token';
 import { AppState } from 'store';
 import { ip2int } from 'utils/ip';
 
@@ -26,6 +27,7 @@ import TokenFilterDialog from './TokenFilterDialog';
 // Types
 export type TokenTableProps = Omit<TableProps<Token>, 'toolbar' | 'blacklist'> & {
   onRefresh?: () => void,
+  onAdd?: () => Promise<FullToken | null>;
   onDelete?: (id: Token['_id']) => void
 };
 
@@ -41,7 +43,7 @@ const useStyles = makeStyles({
 const TokenTable = (props: TokenTableProps) => {
   // Props
   const {
-    onRefresh, onDelete,
+    onRefresh, onAdd, onDelete,
     ...table
   } = props;
 
@@ -49,6 +51,11 @@ const TokenTable = (props: TokenTableProps) => {
   const currentToken = useSelector((state: AppState) => state.auth.tokenId!);
 
   // Handlers
+  const handleAdd = onAdd && (async () => {
+    const token = await onAdd();
+    console.log(token);
+  });
+
   const handleDelete = onDelete && ((tokens: Token[]) => {
     tokens.forEach(token => onDelete(token._id));
   });
@@ -65,6 +72,11 @@ const TokenTable = (props: TokenTableProps) => {
         <TableSelectedAction tooltip="Supprimer" onActivate={handleDelete}>
           <DeleteIcon />
         </TableSelectedAction>
+      ) }
+      { handleAdd && (
+        <ToolbarAction tooltip="Générer" onClick={handleAdd}>
+          <AddIcon />
+        </ToolbarAction>
       ) }
       <TableFilterAction dialog={TokenFilterDialog} />
       { onRefresh && (

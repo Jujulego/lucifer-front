@@ -7,4 +7,7 @@ interface Token extends Document {
   tags: string[];
 }
 
+// Aliases
+export type FullToken = Token & { token: string };
+
 export default Token;

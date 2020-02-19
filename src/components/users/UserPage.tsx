@@ -3,11 +3,17 @@ import { useDispatch } from 'react-redux';
 
 import { Grid } from '@material-ui/core';
 
+import { FullToken } from 'data/token';
+import { AppDispatch } from 'store/types';
 import { useUser } from 'store/users/hooks';
-import { getUser, updateUser, deleteUserToken, UserUpdate } from 'store/users/thunks';
+import {
+  createUserToken, getUser, updateUser, deleteUserToken,
+  UserUpdate
+} from 'store/users/thunks';
+
+import TokenTable from 'components/tokens/TokenTable';
 
 import CredentialsCard from './CredentialsCard';
-import TokenTable from 'components/tokens/TokenTable';
 
 // Types
 interface UserPageProps {
@@ -20,7 +26,7 @@ const UserPage = (props: UserPageProps) => {
   const { id } = props;
 
   // Redux
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   // API
   const user = useUser(id);
@@ -32,6 +38,10 @@ const UserPage = (props: UserPageProps) => {
 
   const handleUpdate = (update: UserUpdate) => {
     dispatch(updateUser(id, update));
+  };
+
+  const handleAddToken = async (): Promise<FullToken | null> => {
+    return await dispatch(createUserToken(id));
   };
 
   const handleDeleteToken = (tokenId: string) => {
@@ -53,6 +63,7 @@ const UserPage = (props: UserPageProps) => {
         <TokenTable
           data={user.tokens}
           onRefresh={handleRefresh}
+          onAdd={handleAddToken}
           onDelete={handleDeleteToken}
         />
       </Grid>

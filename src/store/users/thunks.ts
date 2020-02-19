@@ -1,17 +1,41 @@
 import axios from 'axios';
-import { Dispatch } from 'redux';
+import { omit } from 'lodash';
 
+import { FullToken } from 'data/token';
 import User, { Credentials } from 'data/user';
+import { AppDispatch, AppThunk } from 'store/types';
 import { authError } from 'store/auth/utils';
 
-import { addUserAction, setUserAction, delUserAction } from 'store/users/actions';
+import {
+  addUserAction, addUserTokenAction,
+  setUserAction,
+  delUserAction
+} from './actions';
 
 // Types
 export type UserUpdate = Partial<Omit<User, '_id' | 'tokens'> & Credentials>
 
 // Thunks
-export const getUser = (id: string) =>
-  async (dispatch: Dispatch) => {
+export const createUserToken = (id: string, tags: string[] = []): AppThunk<Promise<FullToken | null>> =>
+  async (dispatch: AppDispatch): Promise<FullToken | null> => {
+    try {
+      // Request for new token
+      const res = await axios.post<FullToken>(`/api/user/${id}/token`, { tags });
+      const token = res.data;
+
+      // Store data
+      dispatch(addUserTokenAction(id, omit(token, 'token')));
+      return token;
+
+    } catch (error) {
+      if (authError(error, dispatch)) return null;
+      console.error(error);
+      throw error;
+    }
+  };
+
+export const getUser = (id: string): AppThunk =>
+  async (dispatch: AppDispatch) => {
     try {
       // Add user
       dispatch(addUserAction(id));
@@ -30,8 +54,8 @@ export const getUser = (id: string) =>
     }
   };
 
-export const updateUser = (id: string, update: UserUpdate) =>
-  async (dispatch: Dispatch) => {
+export const updateUser = (id: string, update: UserUpdate): AppThunk =>
+  async (dispatch: AppDispatch) => {
     try {
       // Request for update
       const res = await axios.put<User>(`/api/user/${id}`, update);
@@ -47,8 +71,8 @@ export const updateUser = (id: string, update: UserUpdate) =>
     }
   };
 
-export const deleteUserToken = (id: string, tokenId: string) =>
-  async (dispatch: Dispatch) => {
+export const deleteUserToken = (id: string, tokenId: string): AppThunk =>
+  async (dispatch: AppDispatch) => {
     try {
       // Request for update
       const res = await axios.delete<User>(`/api/user/${id}/token/${tokenId}`);
@@ -64,8 +88,8 @@ export const deleteUserToken = (id: string, tokenId: string) =>
     }
   };
 
-export const deleteUser = (id: string) =>
-  async (dispatch: Dispatch) => {
+export const deleteUser = (id: string): AppThunk =>
+  async (dispatch: AppDispatch) => {
     try {
       // Request for update
       await axios.delete<User>(`/api/user/${id}`);

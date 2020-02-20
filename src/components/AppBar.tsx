@@ -92,6 +92,7 @@ const AppBar = ({ children }: AppBarProps) => {
       <Drawer
         classes={{ root: styles.drawer, paper: styles.drawerPaper }}
         variant={small ? "temporary" : "permanent"}
+        PaperProps={{ elevation: 3 }}
         open={open} onClose={handleClose}
       >
         <Toolbar disableGutters={!small}>

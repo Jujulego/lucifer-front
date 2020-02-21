@@ -3,14 +3,14 @@ import React from 'react';
 import {
   Button,
   Dialog, DialogTitle, DialogContent, DialogActions,
-  Paper, Grid,
+  Paper,
   Typography, Theme
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { background } from 'utils/colors';
 
-import { CopyButton } from 'components/basics';
+import { CopyFab } from 'components/basics';
 
 // Types
 export interface NewTokenDialogProps {
@@ -22,12 +22,16 @@ export interface NewTokenDialogProps {
 // Styles
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   paper: {
-    marginRight: spacing(1),
     padding: spacing(1),
     backgroundColor: background(palette, 2),
   },
   token: {
-    wordWrap: 'break-word'
+    wordBreak: 'break-all'
+  },
+  fab: {
+    float: 'right',
+    marginLeft: spacing(1),
+    marginBottom: spacing(1)
   }
 }));
 
@@ -49,16 +53,10 @@ const NewTokenDialog = (props: NewTokenDialogProps) => {
     >
       <DialogTitle>Nouveau token</DialogTitle>
       <DialogContent>
-        <Grid container wrap="nowrap">
-          <Grid item xs zeroMinWidth>
-            <Paper elevation={0} classes={{ root: styles.paper }}>
-              <Typography classes={{ root: styles.token }}>{ token }</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs="auto">
-            <CopyButton text={token} />
-          </Grid>
-        </Grid>
+        <Paper elevation={0} classes={{ root: styles.paper }}>
+          <CopyFab text={token} classes={{ root: styles.fab }} size="small" color="secondary" />
+          <Typography classes={{ root: styles.token }}>{ token }</Typography>
+        </Paper>
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={() => onClose()}>Fermer</Button>

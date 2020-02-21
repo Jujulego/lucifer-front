@@ -1,12 +1,13 @@
 import React from 'react';
 
 import {
-  Button,
-  Dialog, DialogTitle, DialogContent, DialogActions,
+  IconButton,
+  Dialog, DialogTitle, DialogContent,
   Paper,
   Typography, Theme
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { background } from 'utils/colors';
 
@@ -21,7 +22,19 @@ export interface NewTokenDialogProps {
 
 // Styles
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
+  title: {
+    display: 'flex',
+
+    '& > h2': {
+      flexGrow: 1,
+    }
+  },
+  closeBtn: {
+    marginTop: -8,
+    marginBottom: -8,
+  },
   paper: {
+    marginBottom: spacing(2),
     padding: spacing(1),
     backgroundColor: background(palette, 2),
   },
@@ -51,16 +64,18 @@ const NewTokenDialog = (props: NewTokenDialogProps) => {
       open={open} onClose={() => onClose()}
       maxWidth="xs" fullWidth
     >
-      <DialogTitle>Nouveau token</DialogTitle>
+      <DialogTitle disableTypography classes={{ root: styles.title }}>
+        <Typography component="h2" variant="h6">Nouveau token</Typography>
+        <IconButton classes={{ root: styles.closeBtn }} edge="end" onClick={() => onClose()}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
       <DialogContent>
         <Paper elevation={0} classes={{ root: styles.paper }}>
           <CopyFab text={token} classes={{ root: styles.fab }} size="small" color="secondary" />
           <Typography classes={{ root: styles.token }}>{ token }</Typography>
         </Paper>
       </DialogContent>
-      <DialogActions>
-        <Button color="primary" onClick={() => onClose()}>Fermer</Button>
-      </DialogActions>
     </Dialog>
   );
 };

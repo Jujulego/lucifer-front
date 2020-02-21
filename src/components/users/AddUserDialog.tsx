@@ -62,7 +62,7 @@ const AddUserDialog = (props: AddUserDialogProps) => {
         <Grid container direction="column" spacing={2}>
           <Grid item xs>
             <TextField
-              label="Email" fullWidth variant="outlined" required
+              label="Email" fullWidth required
               name="email" inputRef={
                 register({
                   required: true,
@@ -74,7 +74,7 @@ const AddUserDialog = (props: AddUserDialogProps) => {
           </Grid>
           <Grid item xs>
             <PasswordField
-              label="Mot de passe" fullWidth variant="outlined" required
+              label="Mot de passe" fullWidth required
               name="password" inputRef={
                 register({
                   required: true,
@@ -86,7 +86,7 @@ const AddUserDialog = (props: AddUserDialogProps) => {
           </Grid>
           <Grid item xs>
             <PasswordField
-              label="Confirmation" fullWidth variant="outlined" required
+              label="Confirmation" fullWidth required
               name="confirm" inputRef={
                 register({
                   required: true,

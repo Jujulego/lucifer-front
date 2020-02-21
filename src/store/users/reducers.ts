@@ -31,8 +31,12 @@ const userReducer = (state = initialUser, action: UsersAction): UserState => {
       };
     }
 
-    case SET_USER:
+    case SET_USER: {
+      const { user } = state;
+      if (user && user.__v > action.user.__v) return state;
+
       return { ...state, user: action.user, loading: false };
+    }
 
     default:
       return state;

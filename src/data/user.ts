@@ -6,6 +6,8 @@ interface User extends Document {
   email: string;
   tokens: Token[];
   lastConnexion?: string;
+
+  readonly __v: number;
 }
 
 // Aliases

@@ -15,6 +15,7 @@ import UserPage from './users/UserPage';
 
 import AppBar from './AppBar';
 import Breadcrumbs from './Breadcrumbs';
+import ErrorSnackbar from './ErrorSnackbar';
 import Home from './Home';
 
 // Component
@@ -43,6 +44,7 @@ const App = () => {
           </PrivateRoute>
         </Switch>
       </BrowserRouter>
+      <ErrorSnackbar />
     </ThemeProvider>
   );
 };

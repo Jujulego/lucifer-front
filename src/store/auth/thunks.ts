@@ -7,6 +7,7 @@ import { globalReset } from 'store/actions';
 
 import { loginAction, logoutAction, setError } from './actions';
 import { authError } from './utils';
+import { httpError } from 'store/errors/utils';
 
 // Types
 export type LoginToken = Pick<Token, '_id'> & { token: string, user: User['_id'] };
@@ -31,13 +32,13 @@ export const login = (credentials: Credentials): AppThunk =>
         return;
       }
 
-      console.error(error);
+      if (httpError(error, dispatch)) return;
       throw error;
     }
   };
 
 export const logout = (): AppThunk =>
-  async (dispath: AppDispatch, getState: () => AppState) => {
+  async (dispatch: AppDispatch, getState: () => AppState) => {
     try {
       // Get token
       const token = getState().auth.token;
@@ -47,15 +48,15 @@ export const logout = (): AppThunk =>
       await axios.delete('/api/logout');
 
       // Remove token & user
-      dispath(logoutAction());
-      dispath(globalReset());
+      dispatch(logoutAction());
+      dispatch(globalReset());
 
       // Remove auth header
       delete axios.defaults.headers.common['Authorization'];
 
     } catch (error) {
-      if (authError(error, dispath)) return;
-      console.log(error);
+      if (authError(error, dispatch)) return;
+      if (httpError(error, dispatch)) return;
       throw error;
     }
   };
@@ -68,7 +69,7 @@ export const signIn = (credentials: Credentials, shouldLogin: boolean = true): A
       if (shouldLogin) await dispatch(login(credentials));
 
     } catch (error) {
-      console.error(error);
+      if (httpError(error, dispatch)) return;
       throw error;
     }
   };

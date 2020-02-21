@@ -91,7 +91,7 @@ const UserTable = (props: UserTableProps) => {
             { (user: User) => (
               <TableRow key={user._id} doc={user}>
                 <TableCell>
-                  <Link component={RouterLink} to={`/user/${user._id}`}>{ user.email }</Link>
+                  <Link component={RouterLink} to={`/users/${user._id}`}>{ user.email }</Link>
                 </TableCell>
                 <TableCell>
                   { user.lastConnexion && (

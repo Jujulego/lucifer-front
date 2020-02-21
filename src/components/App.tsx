@@ -1,10 +1,7 @@
 import React, { useMemo } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import {
-  CssBaseline,
-  useMediaQuery
-} from '@material-ui/core';
+import { CssBaseline, useMediaQuery } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 import createTheme from 'theme';
@@ -17,6 +14,7 @@ import AllUserTable from 'containers/users/AllUserTable';
 import UserPage from './users/UserPage';
 
 import AppBar from './AppBar';
+import Breadcrumbs from './Breadcrumbs';
 import Home from './Home';
 
 // Component
@@ -35,9 +33,10 @@ const App = () => {
           <Route path="/signin" component={SignInForm} />
           <PrivateRoute>
             <AppBar>
+              <Breadcrumbs />
               <Switch>
+                <Route path="/users/:id">{ ({ match }) => <UserPage id={match!.params.id} /> }</Route>
                 <Route path="/users"><AllUserTable /></Route>
-                <Route path="/user/:id">{ ({ match }) => <UserPage id={match!.params.id} /> }</Route>
                 <Route component={Home} />
               </Switch>
             </AppBar>

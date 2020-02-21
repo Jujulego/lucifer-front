@@ -16,7 +16,7 @@ export const login = (credentials: Credentials): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Make login request
-      const res = await axios.post<LoginToken>('/api/login', credentials);
+      const res = await axios.post<LoginToken>('/api/login', { ...credentials, tags: ['Front'] });
       const data = res.data;
 
       // Set auth header

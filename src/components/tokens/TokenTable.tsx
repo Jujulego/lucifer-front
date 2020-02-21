@@ -49,7 +49,7 @@ const TokenTable = (props: TokenTableProps) => {
   } = props;
 
   // State
-  const [newToken, setNewToken] = useState("testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest");
+  const [newToken, setNewToken] = useState("");
 
   // Redux
   const currentToken = useSelector((state: AppState) => state.auth.tokenId!);

@@ -56,10 +56,10 @@ const UserPage = (props: UserPageProps) => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs lg={5}>
+      <Grid item xs={12} md={4}>
         <CredentialsCard user={user} onUpdate={handleUpdate} />
       </Grid>
-      <Grid item xs lg={7}>
+      <Grid item xs={12} md={8}>
         <TokenTable
           data={user.tokens}
           onRefresh={handleRefresh}

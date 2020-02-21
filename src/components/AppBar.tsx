@@ -69,7 +69,7 @@ const AppBar = ({ children }: AppBarProps) => {
   const handleClose = () => { setOpen(false); };
 
   // Render
-  const small = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down('sm'));
+  const small = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down('md'));
   const styles = useStyles();
 
   return (
@@ -109,7 +109,7 @@ const AppBar = ({ children }: AppBarProps) => {
           ) }
         </Toolbar>
         { small && <Divider /> }
-        <List>
+        <List component="nav">
           <ListItem button component={Link} to="/">
             <ListItemIcon><HomeIcon /></ListItemIcon>
             <ListItemText primary="Accueil" />

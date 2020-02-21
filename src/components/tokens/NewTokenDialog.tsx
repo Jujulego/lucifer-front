@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import copy from 'copy-to-clipboard';
+import React from 'react';
 
 import {
-  Button, IconButton, Tooltip,
+  Button,
   Dialog, DialogTitle, DialogContent, DialogActions,
   Paper, Grid,
   Typography, Theme
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import { background } from 'utils/colors';
+
+import { CopyButton } from 'components/basics';
 
 // Types
 export interface NewTokenDialogProps {
@@ -39,17 +39,6 @@ const NewTokenDialog = (props: NewTokenDialogProps) => {
     open, onClose
   } = props;
 
-  // State
-  const [tooltip, setTooltip] = useState(false);
-
-  // Handlers
-  const handleCopy = async () => {
-    if (copy(token, { format: 'text/plain' })) {
-      setTooltip(true);
-      setTimeout(() => setTooltip(false), 1500);
-    }
-  };
-
   // Render
   const styles = useStyles();
 
@@ -67,15 +56,7 @@ const NewTokenDialog = (props: NewTokenDialogProps) => {
             </Paper>
           </Grid>
           <Grid item xs="auto">
-            <Tooltip
-              title="Copié"
-              open={tooltip} onOpen={() => setTooltip(true)} onClose={() => setTooltip(false)}
-              disableFocusListener disableHoverListener disableTouchListener
-            >
-              <IconButton edge="end" onClick={handleCopy}>
-                <FileCopyIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
+            <CopyButton text={token} />
           </Grid>
         </Grid>
       </DialogContent>

@@ -1,12 +1,16 @@
 import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { AppDispatch } from 'store';
+import { httpError } from 'store/errors/utils';
 
 import useChanged from './useChanged';
 
 // Types
 type Updator<R> = (data?: R) => R;
 export type APIState<R> = { data?: R, loading: boolean };
-export type APIPromise<R> = Promise<R> & { cancel: () => void };
+export type APIPromise<R> = Promise<R | undefined> & { cancel: () => void };
 
 export type APIGetRequestConfig = Omit<AxiosRequestConfig, 'cancelToken'> & { load?: boolean };
 export type APIGetRequestGenerator<P extends object, R> = (source: CancelTokenSource) => Promise<AxiosResponse<R>>;
@@ -28,6 +32,9 @@ export type APIPostReturn<D, P extends object, R> = APIState<R> & {
 
 // Base hooks
 function useGetRequest<R, P extends object = object>(generator: APIGetRequestGenerator<P, R>, load: boolean = true): APIGetReturn<R> {
+  // Redux
+  const dispatch = useDispatch<AppDispatch>();
+
   // State
   const [reload, setReload] = useState(load ? 1 : 0);
   const [state, setState] = useState<APIState<R>>({ loading: true });
@@ -44,11 +51,15 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
     generator(source)
       .then((res) => {
         setState({ data: res.data, loading: false });
+      })
+      .catch((error) => {
+        if (httpError(error, dispatch)) return;
+        throw error;
       });
 
     // Cancel
     return () => { source.cancel(); };
-  }, [generator, reload]);
+  }, [dispatch, generator, reload]);
 
   return {
     ...state,
@@ -62,6 +73,9 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
 }
 
 function useDeleteRequest<R = any, P extends object = object>(generator: APIDeleteRequestGenerator<P, R>): APIDeleteReturn<P, R> {
+  // Redux
+  const dispatch = useDispatch<AppDispatch>();
+
   // State
   const [state, setState] = useState<APIState<R>>({ loading: false });
 
@@ -86,14 +100,18 @@ function useDeleteRequest<R = any, P extends object = object>(generator: APIDele
 
     // Make request
     const promise: any = generator(source, url, params)
-      .then((res) => {
+      .then((res): R => {
         setState({ data: res.data, loading: false });
         return res.data;
+      })
+      .catch((error): undefined => {
+        if (httpError(error, dispatch)) return undefined;
+        throw error;
       });
 
     promise.cancel = () => source.cancel();
     return promise as APIPromise<R>;
-  }, [generator]);
+  }, [dispatch, generator]);
 
   return {
     ...state, send
@@ -101,6 +119,9 @@ function useDeleteRequest<R = any, P extends object = object>(generator: APIDele
 }
 
 function usePostRequest<D, R = any, P extends object = object>(generator: APIPostRequestGenerator<D, P, R>): APIPostReturn<D, P, R> {
+  // Redux
+  const dispatch = useDispatch<AppDispatch>();
+
   // State
   const [state, setState] = useState<APIState<R>>({ loading: false });
 
@@ -113,14 +134,18 @@ function usePostRequest<D, R = any, P extends object = object>(generator: APIPos
 
     // Make request
     const promise: any = generator(data, source)
-      .then((res) => {
+      .then((res): R => {
         setState({ data: res.data, loading: false });
         return res.data;
+      })
+      .catch((error): undefined => {
+        if (httpError(error, dispatch)) return undefined;
+        throw error;
       });
 
     promise.cancel = () => source.cancel();
     return promise as APIPromise<R>;
-  }, [generator]);
+  }, [dispatch, generator]);
 
   return {
     ...state, send

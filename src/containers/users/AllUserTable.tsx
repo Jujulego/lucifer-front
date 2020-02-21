@@ -23,7 +23,7 @@ const AllUserTable = (props: AllUserTableProps) => {
   // Handlers
   const handleAdd = async (cred: Credentials) => {
     const user = await add(cred);
-    update((data = []) => [...data, user]);
+    if (user) update((data = []) => [...data, user]);
   };
 
   const handleDelete = (id: string) => {

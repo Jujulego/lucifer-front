@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
@@ -22,6 +22,7 @@ import {
   TableProps
 } from 'components/basics';
 
+import NewTokenDialog from './NewTokenDialog';
 import TokenFilterDialog from './TokenFilterDialog';
 
 // Types
@@ -47,13 +48,19 @@ const TokenTable = (props: TokenTableProps) => {
     ...table
   } = props;
 
+  // State
+  const [newToken, setNewToken] = useState("testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest");
+
   // Redux
   const currentToken = useSelector((state: AppState) => state.auth.tokenId!);
 
   // Handlers
   const handleAdd = onAdd && (async () => {
     const token = await onAdd();
-    console.log(token);
+
+    if (token) {
+      setNewToken(token.token);
+    }
   });
 
   const handleDelete = onDelete && ((tokens: Token[]) => {
@@ -74,9 +81,15 @@ const TokenTable = (props: TokenTableProps) => {
         </TableAction>
       ) }
       { handleAdd && (
-        <TableAction when="nothing" tooltip="Générer" onClick={handleAdd}>
-          <AddIcon />
-        </TableAction>
+        <>
+          <TableAction when="nothing" tooltip="Générer" onClick={handleAdd}>
+            <AddIcon />
+          </TableAction>
+          <NewTokenDialog
+            token={newToken}
+            open={!!newToken} onClose={() => setNewToken("")}
+          />
+        </>
       ) }
       <TableFilterAction dialog={TokenFilterDialog} />
       { onRefresh && (

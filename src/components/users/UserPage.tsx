@@ -44,8 +44,8 @@ const UserPage = (props: UserPageProps) => {
     return await dispatch(createUserToken(id));
   };
 
-  const handleDeleteToken = (tokenId: string) => {
-    dispatch(deleteUserToken(id, tokenId));
+  const handleDeleteToken = async (tokenId: string) => {
+    await dispatch(deleteUserToken(id, tokenId));
   };
 
   // Effects

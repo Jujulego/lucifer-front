@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import moment from 'moment';
 
-import {
-  Link,
-  Paper,
-  TableHead, TableCell, TableContainer
-} from '@material-ui/core';
+import { Link, Paper, TableCell, TableContainer, TableHead } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -15,10 +11,15 @@ import User, { Credentials } from 'data/user';
 
 import {
   RelativeDate,
-  Table, TableBody, TableRow, TableSortCell,
-  TableToolbar, TableAction,
-  TableProps
+  Table,
+  TableAction,
+  TableBody,
+  TableProps,
+  TableRow,
+  TableSortCell,
+  TableToolbar
 } from 'components/basics';
+import RestrictedAccess, { Lvl } from 'components/auth/RestrictedAccess';
 
 import AddUserDialog from './AddUserDialog';
 
@@ -54,12 +55,14 @@ const UserTable = (props: UserTableProps) => {
   const toolbar = (
     <TableToolbar title="Utilisateurs">
       { handleDelete && (
-        <TableAction when="some" tooltip="Supprimer" onActivate={handleDelete}>
-          <DeleteIcon />
-        </TableAction>
+        <RestrictedAccess name="users" level={Lvl.DELETE}>
+          <TableAction when="some" tooltip="Supprimer" onActivate={handleDelete}>
+            <DeleteIcon />
+          </TableAction>
+        </RestrictedAccess>
       ) }
       { onAdd && (
-        <>
+        <RestrictedAccess name="users" level={Lvl.CREATE}>
           <TableAction when="nothing" tooltip="Ajouter" onClick={() => setAdding(true)}>
             <AddIcon />
           </TableAction>
@@ -67,7 +70,7 @@ const UserTable = (props: UserTableProps) => {
             open={adding} onClose={() => setAdding(false)}
             onAdd={onAdd}
           />
-        </>
+        </RestrictedAccess>
       ) }
       { onReload && (
         <TableAction tooltip="Rafraîchir" onClick={() => onReload()}>

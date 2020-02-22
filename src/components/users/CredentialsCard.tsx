@@ -1,5 +1,6 @@
 import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import validator from 'validator';
 
 import {
   Button,
@@ -12,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { EditPasswordField } from 'components/basics/Fields';
 import User, { Credentials } from 'data/user';
-import validator from 'validator';
+import { usePermision, Lvl } from 'store/users/hooks';
 
 // Types
 export interface CredentialsCardProps extends CardProps {
@@ -40,6 +41,9 @@ const CredentialsCard = (props: CredentialsCardProps) => {
 
   // Form
   const { control, register, errors, handleSubmit, reset } = useForm<Credentials>();
+
+  // User
+  const canUpdate = usePermision("users", Lvl.UPDATE);
 
   // Handlers
   const handleReset = useCallback((event?: FormEvent<HTMLDivElement>) => {
@@ -88,7 +92,7 @@ const CredentialsCard = (props: CredentialsCardProps) => {
                 })
               }
 
-              label="Adresse email" fullWidth
+              label="Adresse email" fullWidth disabled={!canUpdate}
               error={!!errors.email} helperText={errors.email?.message}
             />
           </Grid>
@@ -100,7 +104,7 @@ const CredentialsCard = (props: CredentialsCardProps) => {
                 minLength: { value: 8, message: "8 caractères minimum"}
               }}
 
-              label="Mot de passe" fullWidth
+              label="Mot de passe" fullWidth disabled={!canUpdate}
               error={!!errors.password} helperText={errors.password?.message}
               editable={editing} onChangeEditable={setEditing}
             />
@@ -108,8 +112,12 @@ const CredentialsCard = (props: CredentialsCardProps) => {
         </Grid>
       </CardContent>
       <CardActions classes={{ root: styles.actions }}>
-        <Button type="reset" color="secondary">Annuler</Button>
-        <Button type="submit" color="primary">Modifier</Button>
+        { canUpdate && (
+          <>
+            <Button type="reset" color="secondary">Annuler</Button>
+            <Button type="submit" color="primary">Modifier</Button>
+          </>
+        ) }
       </CardActions>
     </Card>
   )

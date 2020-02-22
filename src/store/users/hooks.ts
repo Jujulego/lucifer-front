@@ -5,6 +5,7 @@ import User from 'data/user';
 import { AppDispatch, AppState } from 'store';
 
 import { getUser } from './thunks';
+import { isAllowed, PermissionLevel, PermissionName } from 'data/permission';
 
 // Hooks
 export function useUser(id: string | undefined): User | null {
@@ -31,3 +32,11 @@ export function useLoggedUser(): User | null {
   const id = useSelector((state: AppState) => state.auth.user);
   return useUser(id);
 }
+
+export function usePermision(name: PermissionName, level: PermissionLevel): boolean {
+  // User
+  const user = useLoggedUser();
+  return user ? isAllowed(user, name, level) : false;
+}
+
+export { PermissionLevel as Lvl };

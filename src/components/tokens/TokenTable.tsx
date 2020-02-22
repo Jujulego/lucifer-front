@@ -22,6 +22,8 @@ import {
   TableProps
 } from 'components/basics';
 
+import RestrictedAccess, { Lvl } from 'components/auth/RestrictedAccess';
+
 import NewTokenDialog from './NewTokenDialog';
 import TokenFilterDialog from './TokenFilterDialog';
 
@@ -76,12 +78,14 @@ const TokenTable = (props: TokenTableProps) => {
   const toolbar = (
     <TableToolbar title="Tokens">
       { handleDelete && (
-        <TableAction when="some" tooltip="Supprimer" onActivate={handleDelete}>
-          <DeleteIcon />
-        </TableAction>
+        <RestrictedAccess name="users" level={Lvl.UPDATE}>
+          <TableAction when="some" tooltip="Supprimer" onActivate={handleDelete}>
+            <DeleteIcon />
+          </TableAction>
+        </RestrictedAccess>
       ) }
       { handleAdd && (
-        <>
+        <RestrictedAccess name="users" level={Lvl.UPDATE}>
           <TableAction when="nothing" tooltip="Générer" onClick={handleAdd}>
             <AddIcon />
           </TableAction>
@@ -89,7 +93,7 @@ const TokenTable = (props: TokenTableProps) => {
             token={newToken}
             open={!!newToken} onClose={() => setNewToken("")}
           />
-        </>
+        </RestrictedAccess>
       ) }
       <TableFilterAction dialog={TokenFilterDialog} />
       { onRefresh && (

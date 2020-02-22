@@ -11,6 +11,7 @@ import {
   UserUpdate
 } from 'store/users/thunks';
 
+import RestrictedAccess, { Lvl } from 'components/auth/RestrictedAccess';
 import TokenTable from 'components/tokens/TokenTable';
 
 import CredentialsCard from './CredentialsCard';
@@ -28,7 +29,7 @@ const UserPage = (props: UserPageProps) => {
   // Redux
   const dispatch = useDispatch<AppDispatch>();
 
-  // API
+  // Users
   const user = useUser(id);
 
   // Handlers
@@ -55,19 +56,21 @@ const UserPage = (props: UserPageProps) => {
   if (!user) return null;
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={4}>
-        <CredentialsCard user={user} onUpdate={handleUpdate} />
+    <RestrictedAccess name="users" level={Lvl.READ}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+          <CredentialsCard user={user} onUpdate={handleUpdate} />
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <TokenTable
+            data={user.tokens}
+            onRefresh={handleRefresh}
+            onAdd={handleAddToken}
+            onDelete={handleDeleteToken}
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={12} md={8}>
-        <TokenTable
-          data={user.tokens}
-          onRefresh={handleRefresh}
-          onAdd={handleAddToken}
-          onDelete={handleDeleteToken}
-        />
-      </Grid>
-    </Grid>
+    </RestrictedAccess>
   )
 };
 

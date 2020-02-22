@@ -1,8 +1,9 @@
 import Document from './document';
+import { PermissionHolder } from './permission';
 import Token from './token';
 
 // Interface
-interface User extends Document {
+interface User extends Document, PermissionHolder {
   email: string;
   tokens: Token[];
   lastConnexion?: string;

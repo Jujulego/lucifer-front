@@ -7,7 +7,7 @@ import { Badge } from '@material-ui/core';
 import { FilterList as FilterIcon } from '@material-ui/icons';
 
 import { useTableContext } from 'contexts/TableContext';
-import Document, { AnyDocument } from 'data/document';
+import { BaseDocument, AnyDocument } from 'data/document';
 import { Filter } from 'utils/filter';
 
 import TableAction, { TableActionClassKey, TableActionTypeMap } from './TableAction';
@@ -19,7 +19,7 @@ export interface TableFilterDialogProps {
 }
 
 export type TableFilterActionTypeMap<
-  T extends Document = AnyDocument,
+  T extends BaseDocument = AnyDocument,
   P = {}, D extends ElementType = TableActionTypeMap<T>['defaultComponent']
 > = ExtendButtonBaseTypeMap<{
   props: P & Omit<TableActionTypeMap<T, P, D>['props'], 'tooltip'> & {
@@ -31,12 +31,12 @@ export type TableFilterActionTypeMap<
 }>;
 
 export type TableFilterActionProps<
-  T extends Document = AnyDocument,
+  T extends BaseDocument = AnyDocument,
   D extends ElementType = TableActionTypeMap<T>['defaultComponent'], P = {}
 > = OverrideProps<TableFilterActionTypeMap<T, P, D>, D>;
 
 // Utils
-const removeEmptyFields = <T extends Document> (filter: Filter<T>) => (key: keyof Filter<T>): boolean => {
+const removeEmptyFields = <T extends BaseDocument> (filter: Filter<T>) => (key: keyof Filter<T>): boolean => {
   const value = filter[key];
   if (Array.isArray(value)) return value.length !== 0;
 
@@ -44,7 +44,7 @@ const removeEmptyFields = <T extends Document> (filter: Filter<T>) => (key: keyo
 };
 
 // Component
-const TableFilterAction = <T extends Document = AnyDocument, D extends ElementType = TableActionTypeMap<T>['defaultComponent']> (props: { component?: D } & TableFilterActionProps<T, D>) => {
+const TableFilterAction = <T extends BaseDocument = AnyDocument, D extends ElementType = TableActionTypeMap<T>['defaultComponent']> (props: { component?: D } & TableFilterActionProps<T, D>) => {
   // Props
   const {
     tooltip = "Filtres",

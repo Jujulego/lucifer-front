@@ -1,4 +1,4 @@
-import Document from './document';
+import { SubDocument } from './document';
 
 // Enums
 export enum PermissionName {
@@ -14,7 +14,7 @@ export enum PermissionLevel {
 }
 
 // Interface
-interface Permission extends Document {
+interface Permission extends SubDocument {
   // Attributes
   name: PermissionName;
   level: PermissionLevel;

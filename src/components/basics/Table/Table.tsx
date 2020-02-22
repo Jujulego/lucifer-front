@@ -8,7 +8,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import TableContext, { Order, Ordering, Paginator, SelectedState } from 'contexts/TableContext';
-import Document from 'data/document';
+import { BaseDocument } from 'data/document';
 import { Filter, toPredicate } from 'utils/filter';
 import { StyledProps } from 'utils/style';
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 
 // Types
 export type TableClassKey = 'root' | MuiTableClassKey;
-export interface TableProps<T extends Document> extends MuiTableProps, StyledProps<TableClassKey> {
+export interface TableProps<T extends BaseDocument> extends MuiTableProps, StyledProps<TableClassKey> {
   data: T[],
   blacklist?: string[],
   toolbar?: ReactNode,
@@ -34,7 +34,7 @@ export interface TableProps<T extends Document> extends MuiTableProps, StyledPro
 }
 
 // Component
-const Table = <T extends Document> (props: TableProps<T>) => {
+const Table = <T extends BaseDocument> (props: TableProps<T>) => {
   // Props
   const {
     data, blacklist = [],

@@ -1,7 +1,7 @@
-import Document from './document';
+import { SubDocument } from './document';
 
 // Interface
-interface Token extends Document {
+interface Token extends SubDocument {
   from: string;
   createdAt: string;
   tags: string[];

@@ -4,7 +4,7 @@ import { ExtendButtonBaseTypeMap } from '@material-ui/core';
 import { OverrideProps } from '@material-ui/core/OverridableComponent';
 
 import { useTableContext } from 'contexts/TableContext';
-import Document from 'data/document';
+import { BaseDocument } from 'data/document';
 
 import {
   ToolbarAction, ToolbarActionTypeMap, ToolbarActionClassKey
@@ -15,7 +15,7 @@ type When = "always" | "some" | "nothing"; // selected
 
 export type TableActionClassKey = ToolbarActionClassKey;
 export type TableActionTypeMap<
-  T extends Document,
+  T extends BaseDocument,
   P = {}, D extends ElementType = ToolbarActionTypeMap['defaultComponent']
 > = ExtendButtonBaseTypeMap<{
   props: P & ToolbarActionTypeMap<P, D>['props'] & {
@@ -27,11 +27,12 @@ export type TableActionTypeMap<
 }>;
 
 export type TableActionProps<
-  T extends Document, D extends ElementType = ToolbarActionTypeMap['defaultComponent'], P = {}
+  T extends BaseDocument,
+  D extends ElementType = ToolbarActionTypeMap['defaultComponent'], P = {}
 > = OverrideProps<TableActionTypeMap<T, P, D>, D>;
 
 // Component
-const TableAction = <T extends Document, D extends ElementType = ToolbarActionTypeMap['defaultComponent']> (props: { component?: D } & TableActionProps<T, D>) => {
+const TableAction = <T extends BaseDocument, D extends ElementType = ToolbarActionTypeMap['defaultComponent']> (props: { component?: D } & TableActionProps<T, D>) => {
   // Props
   const {
     children, tooltip, when = "always",

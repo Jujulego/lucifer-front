@@ -1,12 +1,13 @@
 import React, { ReactNode } from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+
 
 import {
   Toolbar as MuiToolbar,
   ToolbarProps as MuiToolbarProps,
   Typography
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { useTableContext } from 'contexts/TableContext';
 import { StyledProps } from 'utils/style';

@@ -7,8 +7,6 @@ interface User extends Document, PermissionHolder {
   email: string;
   tokens: Token[];
   lastConnexion?: string;
-
-  readonly __v: number;
 }
 
 // Aliases

@@ -8,16 +8,16 @@ import {
 } from '@material-ui/core';
 
 import { useTableContext } from 'contexts/TableContext';
-import Document from 'data/document';
+import { BaseDocument } from 'data/document';
 
 // Types
-export interface TableRowProps<T extends Document> extends Omit<MuiTableRowProps, 'selected' | 'onClick'> {
+export interface TableRowProps<T extends BaseDocument> extends Omit<MuiTableRowProps, 'selected' | 'onClick'> {
   doc?: T,
   children?: ReactNode
 }
 
 // Component
-const TableRow = <T extends Document> (props: TableRowProps<T>) => {
+const TableRow = <T extends BaseDocument> (props: TableRowProps<T>) => {
   // Props
   const {
     doc, children,

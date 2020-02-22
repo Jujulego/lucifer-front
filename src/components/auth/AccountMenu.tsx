@@ -14,8 +14,8 @@ import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 
 import { AppDispatch } from 'store';
-import { useMe } from 'store/auth/hooks';
 import { logout } from 'store/auth/thunks';
+import { useLoggedUser } from 'store/users/hooks';
 
 // Component
 const AccountMenu = () => {
@@ -29,7 +29,7 @@ const AccountMenu = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   // API
-  const me = useMe();
+  const user = useLoggedUser();
 
   // Effects
   useEffect(() => {
@@ -66,10 +66,10 @@ const AccountMenu = () => {
           <ListItemAvatar>
             <Avatar><PersonIcon /></Avatar>
           </ListItemAvatar>
-          <ListItemText primary={me?.email} secondary={me?._id} />
+          <ListItemText primary={user?.email} secondary={user?._id} />
         </ListItem>
         <Divider />
-        <MenuItem component={Link} to={`/users/${me?._id}`} disabled={!me}>
+        <MenuItem component={Link} to={`/users/${user?._id}`} disabled={!user}>
           <ListItemIcon><EditIcon /></ListItemIcon>
           <ListItemText primary="Profil" />
         </MenuItem>

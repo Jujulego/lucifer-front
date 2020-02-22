@@ -3,7 +3,7 @@ import { omit } from 'lodash';
 
 import { FullToken } from 'data/token';
 import User, { Credentials } from 'data/user';
-import { AppDispatch, AppThunk } from 'store';
+import { AppDispatch, AppState, AppThunk } from 'store';
 import { authError } from 'store/auth/utils';
 import { httpError } from 'store/errors/utils';
 
@@ -36,8 +36,11 @@ export const createUserToken = (id: string, tags: string[] = []): AppThunk<Promi
   };
 
 export const getUser = (id: string): AppThunk =>
-  async (dispatch: AppDispatch) => {
+  async (dispatch: AppDispatch, getState: () => AppState) => {
     try {
+      // Dont load if already loading
+      if (getState().users[id]?.loading) return;
+
       // Add user
       dispatch(addUserAction(id));
 

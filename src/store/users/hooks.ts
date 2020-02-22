@@ -5,22 +5,29 @@ import User from 'data/user';
 import { AppDispatch, AppState } from 'store';
 
 import { getUser } from './thunks';
-import { UserState } from './types';
 
 // Hooks
 export function useUser(id: string | undefined): User | null {
   // Redux
   const dispatch = useDispatch<AppDispatch>();
-  const state = useSelector<AppState, UserState | null>((state: AppState) => id !== undefined ? state.users[id] : null);
+  const state = useSelector((state: AppState) =>
+    id ? state.users[id] : null
+  );
 
   // Load user if needed
-  const shouldLoad = !state || (!state.loading && !state.user);
-
   useEffect(() => {
-    if (id && shouldLoad) {
-      dispatch(getUser(id));
-    }
-  }, [dispatch, id, shouldLoad]);
+    if (!id) return;
+    if (state?.user || state?.loading) return;
 
+    dispatch(getUser(id));
+  }, [dispatch, id, state]);
+
+  // Return user
   return state ? state.user : null;
+}
+
+export function useLoggedUser(): User | null {
+  // Redux
+  const id = useSelector((state: AppState) => state.auth.user);
+  return useUser(id);
 }

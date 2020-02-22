@@ -2,17 +2,17 @@ import React from 'react';
 
 import { Typography } from '@material-ui/core';
 
-import { useMe } from 'store/auth/hooks';
+import { useLoggedUser } from 'store/users/hooks';
 
 // Component
 const Home = () => {
   // Redux
-  const me = useMe();
+  const user = useLoggedUser();
 
   // Render
   return (
     <>
-      <Typography>Bonjour { me && me.email }</Typography>
+      <Typography>Bonjour { user && user.email }</Typography>
     </>
   )
 };

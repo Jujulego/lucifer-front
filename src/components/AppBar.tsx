@@ -18,7 +18,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import AccountMenu from './auth/AccountMenu';
 
 // Styles
-const useStyles = makeStyles(({ breakpoints, spacing, zIndex }: Theme) => ({
+const useStyles = makeStyles(({ breakpoints, palette, spacing, zIndex }: Theme) => ({
   root: {
     display: 'flex'
   },
@@ -41,9 +41,13 @@ const useStyles = makeStyles(({ breakpoints, spacing, zIndex }: Theme) => ({
   },
   content: {
     maxHeight: '100vh',
-    overflow: 'auto',
     flexGrow: 1,
+
     padding: spacing(3),
+    overflow: 'auto',
+
+    backgroundColor: palette.background.default,
+
     [breakpoints.down('sm')]: {
       padding: spacing(1)
     }

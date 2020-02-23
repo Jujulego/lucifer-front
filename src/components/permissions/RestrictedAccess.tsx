@@ -1,5 +1,5 @@
 import React, { ReactNode, useContext, useMemo } from 'react';
-import { Redirect, useLocation } from 'react-router';
+import { Redirect } from 'react-router';
 
 import AccessContext from 'contexts/AccessContext';
 import { PermissionName, PermissionLevel } from 'data/permission';
@@ -21,9 +21,6 @@ const RestrictedAccess = (props: RestrictedAccessProps) => {
     children
   } = props;
 
-  // Router
-  const location = useLocation();
-
   // Context
   const { overrides } = useContext(AccessContext);
 
@@ -36,7 +33,7 @@ const RestrictedAccess = (props: RestrictedAccessProps) => {
   // Render
   if (!usePermision(name, level) && !override) {
     if (redirect) {
-      return <Redirect to={{ pathname: "/", state: { from: location }}} />;
+      return <Redirect to="/forbidden" />;
     }
 
     return null;

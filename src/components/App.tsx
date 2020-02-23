@@ -7,9 +7,11 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import createTheme from 'theme';
 
 import LoginForm from './auth/LoginForm';
-import OverrideAccess from './auth/OverrideAccess';
 import PrivateRoute from './auth/PrivateRoute';
 import SignInForm from './auth/SignInForm';
+
+import ForbiddenPage from './permissions/ForbiddenPage';
+import OverrideAccess from './permissions/OverrideAccess';
 
 import AllUserTable from 'containers/users/AllUserTable';
 import UserPage from './users/UserPage';
@@ -41,6 +43,8 @@ const App = () => {
             <AppBar>
               <Breadcrumbs />
               <Switch>
+                <Route path="/forbidden" component={ForbiddenPage} />
+                <Route path="/users" exact><AllUserTable /></Route>
                 <Route path="/users/:id">
                   { ({ match }) => (
                     <OverrideAccess name="users" level={user?._id === match!.params.id ? Lvl.READ | Lvl.UPDATE : Lvl.NONE}>
@@ -48,7 +52,6 @@ const App = () => {
                     </OverrideAccess>
                   ) }
                 </Route>
-                <Route path="/users"><AllUserTable /></Route>
                 <Route component={Home} />
               </Switch>
             </AppBar>

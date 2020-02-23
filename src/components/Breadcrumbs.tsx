@@ -25,6 +25,8 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 const UserName = ({ last }: Name) => <>{ useUser(last)?.email || last }</>;
 
 // Pages
+const errorPages = ['/forbidden'];
+
 const pathNames: RouteName[] = [
   { path: /^\/users$/, name: () => 'Utilisateurs' },
   { path: /^\/users\/[0-9a-f]{24}$/i, name: (props) => <UserName {...props} /> },
@@ -53,6 +55,10 @@ const Breadcrumbs = () => {
 
   // Render
   const styles = useStyles();
+
+  if (errorPages.indexOf(pathname) !== -1) {
+    return null;
+  }
 
   return (
     <Toolbar classes={{ root: styles.root }} component={Paper} variant="dense">

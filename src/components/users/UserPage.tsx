@@ -11,7 +11,7 @@ import {
   UserUpdate
 } from 'store/users/thunks';
 
-import RestrictedAccess, { Lvl } from 'components/auth/RestrictedAccess';
+import RestrictedAccess, { Lvl } from 'components/permissions/RestrictedAccess';
 import TokenTable from 'components/tokens/TokenTable';
 
 import CredentialsCard from './CredentialsCard';

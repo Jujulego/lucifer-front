@@ -22,7 +22,7 @@ import {
   TableProps
 } from 'components/basics';
 
-import RestrictedAccess, { Lvl } from 'components/auth/RestrictedAccess';
+import RestrictedAccess, { Lvl } from 'components/permissions/RestrictedAccess';
 
 import NewTokenDialog from './NewTokenDialog';
 import TokenFilterDialog from './TokenFilterDialog';

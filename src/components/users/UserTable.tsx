@@ -19,7 +19,7 @@ import {
   TableSortCell,
   TableToolbar
 } from 'components/basics';
-import RestrictedAccess, { Lvl } from 'components/auth/RestrictedAccess';
+import RestrictedAccess, { Lvl } from 'components/permissions/RestrictedAccess';
 
 import AddUserDialog from './AddUserDialog';
 

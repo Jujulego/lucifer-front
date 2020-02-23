@@ -7,14 +7,19 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { PermissionName } from 'data/permission';
 
 // Types
+interface LevelOptions {
+  create?: string, read?: string, update?: string, delete?: string
+}
+
 export interface PermissionOptions {
-  name: string, icon?: ReactElement
+  name: string, icon?: ReactElement, level?: LevelOptions
 }
 
 // Constants
 const OPTIONS: { [name: string]: PermissionOptions } = {
   admin: { name: 'Administrateur', icon: <SettingsIcon /> },
-  users: { name: 'Utilisateurs',   icon: <PeopleIcon /> }
+  permissions: { name: 'Permissions', level: { update: 'grant', delete: 'revoke' }},
+  users: { name: 'Utilisateurs', icon: <PeopleIcon /> },
 };
 
 // Utils

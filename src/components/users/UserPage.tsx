@@ -11,6 +11,7 @@ import {
   UserUpdate
 } from 'store/users/thunks';
 
+import PermissionCard from 'components/permissions/PermissionCard';
 import RestrictedAccess, { Lvl } from 'components/permissions/RestrictedAccess';
 import TokenTable from 'components/tokens/TokenTable';
 
@@ -62,6 +63,9 @@ const UserPage = (props: UserPageProps) => {
           <CredentialsCard user={user} onUpdate={handleUpdate} />
         </Grid>
         <Grid item xs={12} md={8}>
+          <PermissionCard holder={user} onRefresh={handleRefresh} />
+        </Grid>
+        <Grid item xs={12}>
           <TokenTable
             data={user.tokens}
             onRefresh={handleRefresh}

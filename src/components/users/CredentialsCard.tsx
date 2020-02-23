@@ -80,7 +80,7 @@ const CredentialsCard = (props: CredentialsCardProps) => {
     <Card {...card}
       component="form" onSubmit={handleSubmit(handleUpdate)} onReset={handleReset}
     >
-      <CardHeader title="Identifiants" titleTypographyProps={{ variant: "h6" }} />
+      <CardHeader title="Identifiants" />
       <CardContent>
         <Grid container direction="column" spacing={2}>
           <Grid item xs>

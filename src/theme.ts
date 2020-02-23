@@ -9,6 +9,11 @@ function createTheme(dark: boolean = false) {
       primary: amber,
       secondary: blue,
       type: dark ? 'dark' : 'light',
+    },
+    props: {
+      MuiCardHeader: {
+        titleTypographyProps: { variant: "h6" }
+      }
     }
   }, frFR);
 }

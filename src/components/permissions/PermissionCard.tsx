@@ -1,13 +1,13 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import {
   Card, CardHeader, CardProps,
-  Divider, List
+  List
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import Permission, { PermissionHolder, PermissionLevel as Lvl } from 'data/permission';
+import { PermissionHolder } from 'data/permission';
 
 import { ToolbarAction } from 'components/basics';
 
@@ -53,16 +53,10 @@ const PermissionCard = (props: PermissionTableProps) => {
       />
       <List>
         { holder.admin && (
-          <>
-            <Divider />
-            <PermissionItem permission={{ _id: "",  name: "admin", level: Lvl.ALL }} />
-          </>
+          <PermissionItem admin divider />
         ) }
-        { holder.permissions.map((perm: Permission) => (
-          <Fragment key={perm._id}>
-            <Divider />
-            <PermissionItem permission={perm} />
-          </Fragment>
+        { holder.permissions.map(perm => (
+          <PermissionItem key={perm._id} permission={perm} divider />
         )) }
       </List>
     </Card>

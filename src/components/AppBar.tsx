@@ -40,6 +40,8 @@ const useStyles = makeStyles(({ breakpoints, spacing, zIndex }: Theme) => ({
     zIndex: zIndex.drawer
   },
   content: {
+    maxHeight: '100vh',
+    overflow: 'auto',
     flexGrow: 1,
     padding: spacing(3),
     [breakpoints.down('sm')]: {

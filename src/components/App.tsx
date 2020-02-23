@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { CssBaseline, useMediaQuery } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 
+import { Lvl, useLoggedUser } from 'store/users/hooks';
 import createTheme from 'theme';
 
 import LoginForm from './auth/LoginForm';
@@ -20,7 +21,6 @@ import AppBar from './AppBar';
 import Breadcrumbs from './Breadcrumbs';
 import ErrorSnackbar from './ErrorSnackbar';
 import Home from './Home';
-import { Lvl, useLoggedUser } from 'store/users/hooks';
 
 // Component
 const App = () => {

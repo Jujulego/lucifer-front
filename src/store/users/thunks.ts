@@ -14,7 +14,7 @@ import {
 } from './actions';
 
 // Types
-export type UserUpdate = Partial<Omit<User, '_id' | 'tokens'> & Credentials>
+export type UserUpdate = Partial<Omit<User, '_id' | 'lastConnexion' | 'permissions' | 'tokens'> & Credentials>
 
 // Thunks
 export const createUserToken = (id: string, tags: string[] = []): AppThunk<Promise<FullToken | null>> =>

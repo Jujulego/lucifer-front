@@ -1,7 +1,7 @@
 import { SubDocument } from './document';
 
 // Enums
-export type PermissionName = "users";
+export type PermissionName = string;
 export enum PermissionLevel {
   NONE   = 0b0000,
   CREATE = 0b1000,

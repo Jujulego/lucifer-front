@@ -8,16 +8,11 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { PLvl, PName } from 'data/permission';
 
 // Types
-export interface DecomposedLevel {
-  create: boolean, read: boolean, update: boolean, delete: boolean
-}
+export type LevelName = "create" | "read" | "update" | "delete";
+export const LEVELS: LevelName[] = ["create", "read", "update", "delete"];
 
-interface LevelOptions {
-  create?: string | null;
-  read?:   string | null;
-  update?: string | null;
-  delete?: string | null;
-}
+export type DecomposedLevel = { [name in LevelName]: boolean };
+export type LevelOptions = { [name in LevelName]?: string | null };
 
 export interface PermissionOptions {
   name: string, icon?: ReactElement, level?: LevelOptions

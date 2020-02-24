@@ -1,19 +1,22 @@
-import React, { memo } from 'react';
-import { Control, Controller, useForm } from 'react-hook-form';
-import { capitalize } from 'lodash';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import {
-  Button, Checkbox,
+  Button,
   Dialog, DialogTitle, DialogContent, DialogActions,
-  FormControl, FormLabel, FormGroup, FormControlLabel,
+  FormControl, FormLabel, FormGroup,
   Grid,
   TextField, MenuItem
 } from '@material-ui/core';
 
 import Permission, { PLvl, PName, PERMISSIONS } from 'data/permission';
 import { usePermision } from 'store/users/hooks';
-import { permissionOption, buildLevel, decomposeLevel, DecomposedLevel } from 'utils/permissions';
+import {
+  permissionOption, buildLevel, decomposeLevel,
+  DecomposedLevel, LEVELS
+} from 'utils/permissions';
 
+import LevelCheckbox from './levels/LevelCheckbox';
 import RestrictedAccess from './RestrictedAccess';
 
 // Types
@@ -24,30 +27,11 @@ export interface EditPermissionDialogProps {
   onRevoke: (name: PName) => void,
 }
 
-interface LevelCheckboxProps {
-  name: string, option?: string | null,
-  control: Control
-}
-
 type FormState = DecomposedLevel & {
   name: PName
 };
 
-// Components
-const LevelCheckbox = memo(({ name, option, control }: LevelCheckboxProps) => (
-  (option === null) ? null : (
-    <FormControlLabel
-      label={capitalize(option || name)}
-      control={
-        <Controller
-          name={name} as={Checkbox}
-          control={control}
-        />
-      }
-    />
-  )
-));
-
+// Component
 const EditPermissionDialog = (props: EditPermissionDialogProps) => {
   // Props
   const {
@@ -114,30 +98,16 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
               <FormLabel component="legend">Niveau</FormLabel>
               <FormGroup>
                 <Grid container>
-                  <Grid item xs={6}>
-                    <LevelCheckbox
-                      name="create" control={control}
-                      option={opts?.level?.create}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <LevelCheckbox
-                      name="read" control={control}
-                      option={opts?.level?.read}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <LevelCheckbox
-                      name="update" control={control}
-                      option={opts?.level?.update}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <LevelCheckbox
-                      name="delete" control={control}
-                      option={opts?.level?.delete}
-                    />
-                  </Grid>
+                  { LEVELS.map(name => (
+                    <Grid item xs={6}>
+                      <Controller
+                        name={name} as={LevelCheckbox}
+                        control={control}
+
+                        options={opts}
+                      />
+                    </Grid>
+                  )) }
                 </Grid>
               </FormGroup>
             </FormControl>

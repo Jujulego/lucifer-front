@@ -82,7 +82,7 @@ const EditPasswordField = (props: EditPasswordFieldProps) => {
       required={editable && required}
 
       type={(editable && visible) ? 'text' : 'password'}
-      value={editable ? value : 'secretpassword!'}
+      value={editable ? value : ''}
 
       InputProps={{
         ...InputProps,

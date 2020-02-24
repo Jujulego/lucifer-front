@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { Grid } from '@material-ui/core';
 
-import { PermissionName, PermissionLevel as Lvl, PermissionLevel } from 'data/permission';
+import { PName, PLvl } from 'data/permission';
 import { FullToken } from 'data/token';
 import { AppDispatch } from 'store';
 import { usePermision, useUser } from 'store/users/hooks';
@@ -34,7 +34,7 @@ const UserPage = (props: UserPageProps) => {
 
   // Users
   const user = useUser(id);
-  const allowed = usePermision("users", Lvl.READ);
+  const allowed = usePermision("users", PLvl.READ);
 
   // Handlers
   const handleRefresh = useCallback(() => {
@@ -45,11 +45,11 @@ const UserPage = (props: UserPageProps) => {
     dispatch(updateUser(id, update));
   };
 
-  const handleGrant = (name: PermissionName, level: PermissionLevel) => {
+  const handleGrant = (name: PName, level: PLvl) => {
     dispatch(grantUser(id, name, level));
   };
 
-  const handleRevoke = (name: PermissionName) => {
+  const handleRevoke = (name: PName) => {
     dispatch(revokeUser(id, name));
   };
 

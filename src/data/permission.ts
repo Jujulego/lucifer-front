@@ -1,8 +1,12 @@
 import { SubDocument } from './document';
 
 // Enums
-export type PermissionName = "users" | "permissions";
-export enum PermissionLevel {
+export type PName = "users" | "permissions";
+export const PERMISSIONS: PName[] = [
+  "users", "permissions"
+];
+
+export enum PLvl {
   NONE   = 0b0000,
   CREATE = 0b1000,
   READ   = 0b0100,
@@ -14,8 +18,8 @@ export enum PermissionLevel {
 // Interface
 interface Permission extends SubDocument {
   // Attributes
-  name: PermissionName;
-  level: PermissionLevel;
+  name: PName;
+  level: PLvl;
 }
 
 // Types
@@ -25,7 +29,7 @@ export interface PermissionHolder {
 }
 
 // Utils
-export function isAllowed(holder: PermissionHolder, name: PermissionName, level: PermissionLevel): boolean {
+export function isAllowed(holder: PermissionHolder, name: PName, level: PLvl): boolean {
   // Admins always pass
   if (holder.admin) return true;
 

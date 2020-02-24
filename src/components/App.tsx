@@ -4,7 +4,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { CssBaseline, useMediaQuery } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 
-import { Lvl, useLoggedUser } from 'store/users/hooks';
+import { PLvl } from 'data/permission';
+import { useLoggedUser } from 'store/users/hooks';
 import createTheme from 'theme';
 
 import LoginForm from './auth/LoginForm';
@@ -47,7 +48,7 @@ const App = () => {
                 <Route path="/users" exact><AllUserTable /></Route>
                 <Route path="/users/:id">
                   { ({ match }) => (
-                    <OverrideAccess name="users" level={user?._id === match!.params.id ? Lvl.READ | Lvl.UPDATE : Lvl.NONE}>
+                    <OverrideAccess name="users" level={user?._id === match!.params.id ? PLvl.READ | PLvl.UPDATE : PLvl.NONE}>
                       <UserPage id={match!.params.id} />
                     </OverrideAccess>
                   ) }

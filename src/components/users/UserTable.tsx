@@ -7,19 +7,16 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
+import { PLvl } from 'data/permission';
 import User, { Credentials } from 'data/user';
 
 import {
   RelativeDate,
-  Table,
-  TableAction,
-  TableBody,
+  Table, TableBody, TableRow, TableSortCell,
+  TableToolbar, TableAction,
   TableProps,
-  TableRow,
-  TableSortCell,
-  TableToolbar
 } from 'components/basics';
-import RestrictedAccess, { Lvl } from 'components/permissions/RestrictedAccess';
+import RestrictedAccess from 'components/permissions/RestrictedAccess';
 
 import AddUserDialog from './AddUserDialog';
 
@@ -55,14 +52,14 @@ const UserTable = (props: UserTableProps) => {
   const toolbar = (
     <TableToolbar title="Utilisateurs">
       { handleDelete && (
-        <RestrictedAccess name="users" level={Lvl.DELETE}>
+        <RestrictedAccess name="users" level={PLvl.DELETE}>
           <TableAction when="some" tooltip="Supprimer" onActivate={handleDelete}>
             <DeleteIcon />
           </TableAction>
         </RestrictedAccess>
       ) }
       { onAdd && (
-        <RestrictedAccess name="users" level={Lvl.CREATE}>
+        <RestrictedAccess name="users" level={PLvl.CREATE}>
           <TableAction when="nothing" tooltip="Ajouter" onClick={() => setAdding(true)}>
             <AddIcon />
           </TableAction>

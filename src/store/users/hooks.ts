@@ -6,7 +6,7 @@ import User from 'data/user';
 import { AppDispatch, AppState } from 'store';
 
 import { getUser } from './thunks';
-import { isAllowed, PermissionLevel, PermissionName } from 'data/permission';
+import { isAllowed, PLvl, PName } from 'data/permission';
 
 // Hooks
 export function useUser(id: string | undefined): User | null {
@@ -34,7 +34,7 @@ export function useLoggedUser(): User | null {
   return useUser(id);
 }
 
-export function usePermision(name: PermissionName, level: PermissionLevel): boolean | null {
+export function usePermision(name: PName, level: PLvl): boolean | null {
   // Context
   const { overrides } = useContext(AccessContext);
 
@@ -48,5 +48,3 @@ export function usePermision(name: PermissionName, level: PermissionLevel): bool
   const user = useLoggedUser();
   return override || (user ? isAllowed(user, name, level) : null);
 }
-
-export { PermissionLevel as Lvl };

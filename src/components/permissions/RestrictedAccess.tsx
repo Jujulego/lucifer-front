@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react';
 import { Redirect } from 'react-router';
 
-import { PermissionName, PermissionLevel } from 'data/permission';
+import { PName, PLvl } from 'data/permission';
 import { usePermision } from 'store/users/hooks';
 
 // Types
 export interface RestrictedAccessProps {
-  name: PermissionName, level?: PermissionLevel,
+  name: PName, level?: PLvl,
   redirect?: boolean,
   children: ReactNode
 }
@@ -15,7 +15,7 @@ export interface RestrictedAccessProps {
 const RestrictedAccess = (props: RestrictedAccessProps) => {
   // Props
   const {
-    name, level = PermissionLevel.READ,
+    name, level = PLvl.READ,
     redirect = false,
     children
   } = props;
@@ -34,4 +34,3 @@ const RestrictedAccess = (props: RestrictedAccessProps) => {
 };
 
 export default RestrictedAccess;
-export { PermissionLevel as Lvl };

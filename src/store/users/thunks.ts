@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { omit } from 'lodash';
 
-import { PermissionLevel, PermissionName } from 'data/permission';
+import { PLvl, PName } from 'data/permission';
 import { FullToken } from 'data/token';
 import User, { Credentials } from 'data/user';
 import { AppDispatch, AppState, AppThunk } from 'store';
@@ -76,7 +76,7 @@ export const updateUser = (id: string, update: UserUpdate): AppThunk =>
     }
   };
 
-export const grantUser = (id: string, name: PermissionName, level: PermissionLevel): AppThunk =>
+export const grantUser = (id: string, name: PName, level: PLvl): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
@@ -93,7 +93,7 @@ export const grantUser = (id: string, name: PermissionName, level: PermissionLev
     }
   };
 
-export const revokeUser = (id: string, name: PermissionName): AppThunk =>
+export const revokeUser = (id: string, name: PName): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update

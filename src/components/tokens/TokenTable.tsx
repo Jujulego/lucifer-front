@@ -12,6 +12,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
+import { PLvl } from 'data/permission';
 import Token, { FullToken } from 'data/token';
 import { AppState } from 'store';
 import { ip2int } from 'utils/ip';
@@ -22,7 +23,7 @@ import {
   TableProps
 } from 'components/basics';
 
-import RestrictedAccess, { Lvl } from 'components/permissions/RestrictedAccess';
+import RestrictedAccess from 'components/permissions/RestrictedAccess';
 
 import NewTokenDialog from './NewTokenDialog';
 import TokenFilterDialog from './TokenFilterDialog';
@@ -78,14 +79,14 @@ const TokenTable = (props: TokenTableProps) => {
   const toolbar = (
     <TableToolbar title="Tokens">
       { handleDelete && (
-        <RestrictedAccess name="users" level={Lvl.UPDATE}>
+        <RestrictedAccess name="users" level={PLvl.UPDATE}>
           <TableAction when="some" tooltip="Supprimer" onActivate={handleDelete}>
             <DeleteIcon />
           </TableAction>
         </RestrictedAccess>
       ) }
       { handleAdd && (
-        <RestrictedAccess name="users" level={Lvl.UPDATE}>
+        <RestrictedAccess name="users" level={PLvl.UPDATE}>
           <TableAction when="nothing" tooltip="Générer" onClick={handleAdd}>
             <AddIcon />
           </TableAction>

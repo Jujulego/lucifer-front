@@ -5,7 +5,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen';
 import PeopleIcon from '@material-ui/icons/People';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import { PermissionLevel as Lvl, PermissionName } from 'data/permission';
+import { PLvl, PName } from 'data/permission';
 
 // Types
 export interface DecomposedLevel {
@@ -24,7 +24,7 @@ export interface PermissionOptions {
 }
 
 // Constants
-const OPTIONS: { [name in PermissionName | "admin"]: PermissionOptions } = {
+const OPTIONS: { [name in PName | "admin"]: PermissionOptions } = {
   admin:       { name: 'Administrateur', icon: <SettingsIcon /> },
   permissions: { name: 'Permissions',    icon: <LockOpenIcon />, level: { create: null, read: null, update: 'grant', delete: 'revoke' }},
   users:       { name: 'Utilisateurs',   icon: <PeopleIcon />   },
@@ -38,16 +38,16 @@ export function permissionOption(name: keyof typeof OPTIONS): PermissionOptions 
   return { name: capitalize(name) };
 }
 
-export const buildLevel = (level: DecomposedLevel): Lvl => (
-  (level.create ? Lvl.CREATE : Lvl.NONE) |
-  (level.read   ? Lvl.READ   : Lvl.NONE) |
-  (level.update ? Lvl.UPDATE : Lvl.NONE) |
-  (level.delete ? Lvl.DELETE : Lvl.NONE)
+export const buildLevel = (level: DecomposedLevel): PLvl => (
+  (level.create ? PLvl.CREATE : PLvl.NONE) |
+  (level.read   ? PLvl.READ   : PLvl.NONE) |
+  (level.update ? PLvl.UPDATE : PLvl.NONE) |
+  (level.delete ? PLvl.DELETE : PLvl.NONE)
 );
 
-export const decomposeLevel = (level: Lvl): DecomposedLevel => ({
-  create: (level & Lvl.CREATE) === Lvl.CREATE,
-  read:   (level & Lvl.READ)   === Lvl.READ,
-  update: (level & Lvl.UPDATE) === Lvl.UPDATE,
-  delete: (level & Lvl.DELETE) === Lvl.DELETE,
+export const decomposeLevel = (level: PLvl): DecomposedLevel => ({
+  create: (level & PLvl.CREATE) === PLvl.CREATE,
+  read:   (level & PLvl.READ)   === PLvl.READ,
+  update: (level & PLvl.UPDATE) === PLvl.UPDATE,
+  delete: (level & PLvl.DELETE) === PLvl.DELETE,
 });

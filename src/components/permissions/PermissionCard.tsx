@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import Permission, { PermissionHolder, PermissionName, PermissionLevel as Lvl } from 'data/permission';
+import Permission, { PermissionHolder, PName, PLvl } from 'data/permission';
 import { asc, stableSort } from 'utils/sort';
 
 import { ToolbarAction } from 'components/basics';
@@ -21,8 +21,8 @@ import PermissionItem from './PermissionItem';
 export type PermissionTableProps = CardProps & {
   holder: PermissionHolder,
   onRefresh?: () => void,
-  onGrant: (name: PermissionName, level: Lvl) => void,
-  onRevoke: (name: PermissionName) => void,
+  onGrant: (name: PName, level: PLvl) => void,
+  onRevoke: (name: PName) => void,
 }
 
 interface DialogState {
@@ -82,7 +82,7 @@ const PermissionCard = (props: PermissionTableProps) => {
               onClick={() => setDialog({ open: true, permission })}
             />
           )) }
-          <RestrictedAccess name="permissions" level={Lvl.UPDATE}>
+          <RestrictedAccess name="permissions" level={PLvl.UPDATE}>
             <ListItem button divider onClick={() => setDialog({ open: true })}>
               <ListItemIcon>
                 <AddIcon />

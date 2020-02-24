@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Control, Controller, useForm } from 'react-hook-form';
 import { capitalize } from 'lodash';
 
@@ -7,10 +7,10 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions,
   FormControl, FormLabel, FormGroup, FormControlLabel,
   Grid,
-  TextField
+  TextField, MenuItem
 } from '@material-ui/core';
 
-import Permission, { PermissionLevel as Lvl, PermissionName } from 'data/permission';
+import Permission, { PLvl, PName, PERMISSIONS } from 'data/permission';
 import { usePermision } from 'store/users/hooks';
 import { permissionOption, buildLevel, decomposeLevel, DecomposedLevel } from 'utils/permissions';
 
@@ -20,35 +20,24 @@ import RestrictedAccess from './RestrictedAccess';
 export interface EditPermissionDialogProps {
   open: boolean, onClose: () => void,
   permission?: Permission,
-  onGrant: (name: PermissionName, level: Lvl) => void,
-  onRevoke: (name: PermissionName) => void,
+  onGrant: (name: PName, level: PLvl) => void,
+  onRevoke: (name: PName) => void,
 }
 
 interface LevelCheckboxProps {
-  defaultValue: boolean,
   name: string, option?: string | null,
   control: Control
 }
 
 type FormState = DecomposedLevel & {
-  name: PermissionName
+  name: PName
 };
 
 // Components
-const LevelCheckbox = (props: LevelCheckboxProps) => {
-  // Props
-  const {
-    name, option,
-    control
-  } = props;
-
-  // Render
-  if (option === null) return null;
-
-  const label = capitalize(option || name);
-  return (
+const LevelCheckbox = memo(({ name, option, control }: LevelCheckboxProps) => (
+  (option === null) ? null : (
     <FormControlLabel
-      label={label}
+      label={capitalize(option || name)}
       control={
         <Controller
           name={name} as={Checkbox}
@@ -56,8 +45,8 @@ const LevelCheckbox = (props: LevelCheckboxProps) => {
         />
       }
     />
-  );
-};
+  )
+));
 
 const EditPermissionDialog = (props: EditPermissionDialogProps) => {
   // Props
@@ -68,11 +57,11 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
   } = props;
 
   // Users
-  const allowed = usePermision("permissions", Lvl.UPDATE);
+  const allowed = usePermision("permissions", PLvl.UPDATE);
 
   // Form
-  const level = decomposeLevel(permission?.level || Lvl.NONE);
-  const { control, register, watch, errors, handleSubmit } = useForm<FormState>({
+  const level = decomposeLevel(permission?.level || PLvl.NONE);
+  const { control, watch, errors, handleSubmit } = useForm<FormState>({
     defaultValues: { name: permission?.name, ...level }
   });
 
@@ -104,12 +93,21 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
       <DialogContent>
         <Grid container direction="column" spacing={2}>
           <Grid item xs>
-            <TextField
-              name="name" inputRef={register({ required: true })}
+            <Controller
+              name="name" as={TextField}
+              control={control}
+              rules={{ required: true }}
 
+              select
               label="Nom" required disabled={!allowed} fullWidth
               error={!!errors.name} helperText={errors.name?.message}
-            />
+            >
+              { PERMISSIONS.map(name => (
+                <MenuItem key={name} value={name}>
+                  { permissionOption(name).name }
+                </MenuItem>
+              )) }
+            </Controller>
           </Grid>
           <Grid item xs>
             <FormControl component="fieldset" fullWidth>
@@ -118,28 +116,24 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
                 <Grid container>
                   <Grid item xs={6}>
                     <LevelCheckbox
-                      defaultValue={level.create}
                       name="create" control={control}
                       option={opts?.level?.create}
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <LevelCheckbox
-                      defaultValue={level.read}
                       name="read" control={control}
                       option={opts?.level?.read}
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <LevelCheckbox
-                      defaultValue={level.update}
                       name="update" control={control}
                       option={opts?.level?.update}
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <LevelCheckbox
-                      defaultValue={level.delete}
                       name="delete" control={control}
                       option={opts?.level?.delete}
                     />
@@ -152,7 +146,7 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
       </DialogContent>
       <DialogActions>
         { permission && (
-          <RestrictedAccess name="permissions" level={Lvl.DELETE}>
+          <RestrictedAccess name="permissions" level={PLvl.DELETE}>
             <Button
               type="button" color="primary"
               onClick={handleSubmit(handleRevoke)}
@@ -162,7 +156,9 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
           </RestrictedAccess>
         ) }
         { allowed && (
-          <Button type="submit" color="primary">Ajouter</Button>
+          <Button type="submit" color="primary">
+            { permission ? "Modifier" : "Ajouter" }
+          </Button>
         ) }
       </DialogActions>
     </Dialog>

@@ -1,11 +1,11 @@
 import { createContext } from 'react';
 
-import { PermissionName, PermissionLevel } from 'data/permission';
+import { PName, PLvl } from 'data/permission';
 
 // Types
 export interface PermissionOverride {
-  name: PermissionName;
-  level: PermissionLevel;
+  name: PName;
+  level: PLvl;
 }
 
 export interface AccessContextProps {

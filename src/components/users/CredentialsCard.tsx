@@ -11,9 +11,11 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { EditPasswordField } from 'components/basics/Fields';
+import { PLvl } from 'data/permission';
 import User, { Credentials } from 'data/user';
-import { usePermision, Lvl } from 'store/users/hooks';
+import { usePermision } from 'store/users/hooks'
+
+import { EditPasswordField } from 'components/basics/Fields';
 
 // Types
 export interface CredentialsCardProps extends CardProps {
@@ -43,7 +45,7 @@ const CredentialsCard = (props: CredentialsCardProps) => {
   const { control, register, errors, handleSubmit, reset } = useForm<Credentials>();
 
   // User
-  const canUpdate = usePermision("users", Lvl.UPDATE);
+  const canUpdate = usePermision("users", PLvl.UPDATE);
 
   // Handlers
   const handleReset = useCallback((event?: FormEvent<HTMLDivElement>) => {

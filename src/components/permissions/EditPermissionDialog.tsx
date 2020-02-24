@@ -104,7 +104,7 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
                         name={name} as={LevelCheckbox}
                         control={control}
 
-                        options={opts}
+                        options={opts} disabled={!allowed}
                       />
                     </Grid>
                   )) }

@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import AccessContext from 'contexts/AccessContext';
 import User from 'data/user';
 import { AppDispatch, AppState } from 'store';
 
@@ -33,10 +34,19 @@ export function useLoggedUser(): User | null {
   return useUser(id);
 }
 
-export function usePermision(name: PermissionName, level: PermissionLevel): boolean {
+export function usePermision(name: PermissionName, level: PermissionLevel): boolean | null {
+  // Context
+  const { overrides } = useContext(AccessContext);
+
+  // Memo
+  const override = useMemo(
+    () => overrides.some(o => (o.name === name) && ((o.level & level) !== 0)),
+    [overrides, name, level]
+  );
+
   // User
   const user = useLoggedUser();
-  return user ? isAllowed(user, name, level) : false;
+  return override || (user ? isAllowed(user, name, level) : null);
 }
 
 export { PermissionLevel as Lvl };

@@ -1,7 +1,6 @@
-import React, { ReactNode, useContext, useMemo } from 'react';
+import React, { ReactNode } from 'react';
 import { Redirect } from 'react-router';
 
-import AccessContext from 'contexts/AccessContext';
 import { PermissionName, PermissionLevel } from 'data/permission';
 import { usePermision } from 'store/users/hooks';
 
@@ -21,18 +20,10 @@ const RestrictedAccess = (props: RestrictedAccessProps) => {
     children
   } = props;
 
-  // Context
-  const { overrides } = useContext(AccessContext);
-
-  // Memo
-  const override = useMemo(
-    () => overrides.some(o => (o.name === name) && ((o.level & level) !== 0)),
-    [overrides, name, level]
-  );
-
   // Render
-  if (!usePermision(name, level) && !override) {
-    if (redirect) {
+  const result = usePermision(name, level);
+  if (!result) {
+    if (redirect && result != null) {
       return <Redirect to="/forbidden" />;
     }
 

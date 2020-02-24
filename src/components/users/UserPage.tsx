@@ -5,17 +5,17 @@ import { Grid } from '@material-ui/core';
 
 import { FullToken } from 'data/token';
 import { AppDispatch } from 'store';
-import { useUser } from 'store/users/hooks';
+import { usePermision, useUser, Lvl } from 'store/users/hooks';
 import {
   createUserToken, getUser, updateUser, deleteUserToken,
   UserUpdate
 } from 'store/users/thunks';
 
 import PermissionCard from 'components/permissions/PermissionCard';
-import RestrictedAccess, { Lvl } from 'components/permissions/RestrictedAccess';
 import TokenTable from 'components/tokens/TokenTable';
 
 import CredentialsCard from './CredentialsCard';
+import { Redirect } from 'react-router';
 
 // Types
 interface UserPageProps {
@@ -32,6 +32,7 @@ const UserPage = (props: UserPageProps) => {
 
   // Users
   const user = useUser(id);
+  const allowed = usePermision("users", Lvl.READ);
 
   // Handlers
   const handleRefresh = useCallback(() => {
@@ -54,27 +55,26 @@ const UserPage = (props: UserPageProps) => {
   useEffect(() => handleRefresh(), [handleRefresh]);
 
   // Render
-  if (!user) return null;
+  if (allowed === false) return <Redirect to="/forbidden" />;
+  if (!user || allowed === null) return null;
 
   return (
-    <RestrictedAccess name="users" level={Lvl.READ}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={4}>
-          <CredentialsCard user={user} onUpdate={handleUpdate} />
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <PermissionCard holder={user} onRefresh={handleRefresh} />
-        </Grid>
-        <Grid item xs={12}>
-          <TokenTable
-            data={user.tokens}
-            onRefresh={handleRefresh}
-            onAdd={handleAddToken}
-            onDelete={handleDeleteToken}
-          />
-        </Grid>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={4}>
+        <CredentialsCard user={user} onUpdate={handleUpdate} />
       </Grid>
-    </RestrictedAccess>
+      <Grid item xs={12} md={8}>
+        <PermissionCard holder={user} onRefresh={handleRefresh} />
+      </Grid>
+      <Grid item xs={12}>
+        <TokenTable
+          data={user.tokens}
+          onRefresh={handleRefresh}
+          onAdd={handleAddToken}
+          onDelete={handleDeleteToken}
+        />
+      </Grid>
+    </Grid>
   )
 };
 

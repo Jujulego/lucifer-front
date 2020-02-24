@@ -12,7 +12,6 @@ import LoginForm from './auth/LoginForm';
 import PrivateRoute from './auth/PrivateRoute';
 import SignInForm from './auth/SignInForm';
 
-import ForbiddenPage from './permissions/ForbiddenPage';
 import OverrideAccess from './permissions/OverrideAccess';
 
 import AllUserTable from 'containers/users/AllUserTable';
@@ -21,6 +20,7 @@ import UserPage from './users/UserPage';
 import AppBar from './AppBar';
 import Breadcrumbs from './Breadcrumbs';
 import ErrorSnackbar from './ErrorSnackbar';
+import ForbiddenPage from './ForbiddenPage';
 import Home from './Home';
 
 // Component

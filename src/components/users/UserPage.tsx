@@ -3,11 +3,13 @@ import { useDispatch } from 'react-redux';
 
 import { Grid } from '@material-ui/core';
 
+import { PermissionName, PermissionLevel as Lvl, PermissionLevel } from 'data/permission';
 import { FullToken } from 'data/token';
 import { AppDispatch } from 'store';
-import { usePermision, useUser, Lvl } from 'store/users/hooks';
+import { usePermision, useUser } from 'store/users/hooks';
 import {
   createUserToken, getUser, updateUser, deleteUserToken,
+  grantUser, revokeUser,
   UserUpdate
 } from 'store/users/thunks';
 
@@ -43,6 +45,14 @@ const UserPage = (props: UserPageProps) => {
     dispatch(updateUser(id, update));
   };
 
+  const handleGrant = (name: PermissionName, level: PermissionLevel) => {
+    dispatch(grantUser(id, name, level));
+  };
+
+  const handleRevoke = (name: PermissionName) => {
+    dispatch(revokeUser(id, name));
+  };
+
   const handleAddToken = async (): Promise<FullToken | null> => {
     return await dispatch(createUserToken(id));
   };
@@ -64,7 +74,12 @@ const UserPage = (props: UserPageProps) => {
         <CredentialsCard user={user} onUpdate={handleUpdate} />
       </Grid>
       <Grid item xs={12} md={8}>
-        <PermissionCard holder={user} onRefresh={handleRefresh} />
+        <PermissionCard
+          holder={user}
+          onRefresh={handleRefresh}
+          onGrant={handleGrant}
+          onRevoke={handleRevoke}
+        />
       </Grid>
       <Grid item xs={12}>
         <TokenTable

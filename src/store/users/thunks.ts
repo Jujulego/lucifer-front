@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { omit } from 'lodash';
 
+import { PermissionLevel, PermissionName } from 'data/permission';
 import { FullToken } from 'data/token';
 import User, { Credentials } from 'data/user';
 import { AppDispatch, AppState, AppThunk } from 'store';
@@ -63,6 +64,40 @@ export const updateUser = (id: string, update: UserUpdate): AppThunk =>
     try {
       // Request for update
       const res = await axios.put<User>(`/api/user/${id}`, update);
+      const user = res.data;
+
+      // Store data
+      dispatch(setUserAction(user));
+
+    } catch (error) {
+      if (authError(error, dispatch)) return;
+      if (httpError(error, dispatch)) return;
+      throw error;
+    }
+  };
+
+export const grantUser = (id: string, name: PermissionName, level: PermissionLevel): AppThunk =>
+  async (dispatch: AppDispatch) => {
+    try {
+      // Request for update
+      const res = await axios.put<User>(`/api/user/${id}/grant`, { name, level });
+      const user = res.data;
+
+      // Store data
+      dispatch(setUserAction(user));
+
+    } catch (error) {
+      if (authError(error, dispatch)) return;
+      if (httpError(error, dispatch)) return;
+      throw error;
+    }
+  };
+
+export const revokeUser = (id: string, name: PermissionName): AppThunk =>
+  async (dispatch: AppDispatch) => {
+    try {
+      // Request for update
+      const res = await axios.put<User>(`/api/user/${id}/revoke`, { name });
       const user = res.data;
 
       // Store data

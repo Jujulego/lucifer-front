@@ -16,7 +16,7 @@ export type PermissionItemTypeMap<
   P = {}, D extends ElementType = 'button'
 > = ExtendButtonBaseTypeMap<{
   props: P & Omit<ListItemTypeMap<{}, D>['props'], 'button'> & {
-    permission: Permission
+    permission: Permission;
   };
   defaultComponent: D,
   classKey: ListItemClassKey
@@ -29,10 +29,10 @@ export type PermissionItemProps<
 // Component
 const PermissionItem = <D extends ElementType = PermissionItemTypeMap['defaultComponent']> (props: { component?: D } & PermissionItemProps<D>) => {
   // Props
-  const { permission: perm, ...item } = props;
+  const { permission, ...item } = props;
 
   // Render
-  const opts = permissionOption(perm.name);
+  const opts = permissionOption(permission.name);
 
   return (
     <ListItem {...item} button>
@@ -40,7 +40,7 @@ const PermissionItem = <D extends ElementType = PermissionItemTypeMap['defaultCo
         <ListItemIcon>{ opts.icon }</ListItemIcon>
       ) }
       <ListItemText inset={!opts.icon} primary={ opts.name } />
-      <PermissionLevel permission={perm} />
+      <PermissionLevel permission={permission} />
     </ListItem>
   )
 };

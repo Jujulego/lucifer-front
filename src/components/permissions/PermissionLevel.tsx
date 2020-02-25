@@ -34,7 +34,11 @@ const PermissionLevel = memo((props: PermissionLevelProps) => {
   return (
     <Typography color="secondary" classes={{ root: styles.root }}>
       { LEVELS.map(name => (
-        <LevelLetter name={name} active={lvl[name]} options={opts} />
+        <LevelLetter
+          key={name}
+          name={name} active={lvl[name]}
+          options={opts}
+        />
       )) }
     </Typography>
   )

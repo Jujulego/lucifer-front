@@ -9,7 +9,7 @@ import { AppDispatch } from 'store';
 import { usePermision, useUser } from 'store/users/hooks';
 import {
   createUserToken, getUser, updateUser, deleteUserToken,
-  grantUser, revokeUser,
+  grantUser, elevateUser, revokeUser,
   UserUpdate
 } from 'store/users/thunks';
 
@@ -49,6 +49,10 @@ const UserPage = (props: UserPageProps) => {
     dispatch(grantUser(id, name, level));
   };
 
+  const handleElevate = (admin: boolean) => {
+    dispatch(elevateUser(id, admin));
+  };
+
   const handleRevoke = (name: PName) => {
     dispatch(revokeUser(id, name));
   };
@@ -78,6 +82,7 @@ const UserPage = (props: UserPageProps) => {
           holder={user}
           onRefresh={handleRefresh}
           onGrant={handleGrant}
+          onElevate={handleElevate}
           onRevoke={handleRevoke}
         />
       </Grid>

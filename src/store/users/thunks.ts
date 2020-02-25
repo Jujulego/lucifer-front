@@ -93,6 +93,23 @@ export const grantUser = (id: string, name: PName, level: PLvl): AppThunk =>
     }
   };
 
+export const elevateUser = (id: string, admin?: boolean): AppThunk =>
+  async (dispatch: AppDispatch) => {
+    try {
+      // Request for update
+      const res = await axios.put<User>(`/api/user/${id}/elevate`, { admin });
+      const user = res.data;
+
+      // Store data
+      dispatch(setUserAction(user));
+
+    } catch (error) {
+      if (authError(error, dispatch)) return;
+      if (httpError(error, dispatch)) return;
+      throw error;
+    }
+  };
+
 export const revokeUser = (id: string, name: PName): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {

@@ -48,3 +48,8 @@ export function usePermision(name: PName, level: PLvl): boolean | null {
   const user = useLoggedUser();
   return override || (user ? isAllowed(user, name, level) : null);
 }
+
+export function useAdmin(): boolean | null {
+  const user = useLoggedUser();
+  return user && user.admin
+}

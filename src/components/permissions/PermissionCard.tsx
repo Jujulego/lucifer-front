@@ -1,18 +1,22 @@
 import React, { useMemo, useState } from 'react';
 
 import {
+  IconButton,
   Card, CardHeader, CardProps,
-  List, ListItem, ListItemText, ListItemIcon,
+  List, ListItem, ListItemText, ListItemIcon, ListItemSecondaryAction,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
+import ForwardIcon from '@material-ui/icons/Forward';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import Permission, { PermissionHolder, PName, PLvl } from 'data/permission';
 import { asc, stableSort } from 'utils/sort';
 
 import { ToolbarAction } from 'components/basics';
 
+import AdminOnly from './AdminOnly';
 import EditPermissionDialog from './EditPermissionDialog';
 import RestrictedAccess from './RestrictedAccess';
 import PermissionItem from './PermissionItem';
@@ -22,6 +26,7 @@ export type PermissionTableProps = CardProps & {
   holder: PermissionHolder,
   onRefresh?: () => void,
   onGrant: (name: PName, level: PLvl) => void,
+  onElevate: (admin: boolean) => void,
   onRevoke: (name: PName) => void,
 }
 
@@ -33,6 +38,12 @@ interface DialogState {
 const useStyles = makeStyles({
   action: {
     marginBottom: -8
+  },
+  elevate: {
+    transform: 'rotate(-90deg)'
+  },
+  downgrade: {
+    transform: 'rotate(90deg)'
   }
 });
 
@@ -41,7 +52,7 @@ const PermissionCard = (props: PermissionTableProps) => {
   // Props
   const {
     holder, onRefresh,
-    onGrant, onRevoke,
+    onGrant, onElevate, onRevoke,
     ...card
   } = props;
 
@@ -54,6 +65,9 @@ const PermissionCard = (props: PermissionTableProps) => {
     [holder]
   );
 
+  // Handlers
+  const handleElevate = (admin: boolean) => () => onElevate(admin);
+
   // Render
   const styles = useStyles();
 
@@ -65,15 +79,34 @@ const PermissionCard = (props: PermissionTableProps) => {
           classes={{ action: styles.action }}
           action={
             onRefresh && (
-              <ToolbarAction tooltip="Rafraîchir" onClick={onRefresh}>
-                <RefreshIcon />
-              </ToolbarAction>
+              <>
+                { (!holder.admin) && (
+                  <AdminOnly>
+                    <ToolbarAction tooltip="Elevate" onClick={handleElevate(true)}>
+                      <ForwardIcon classes={{ root: styles.elevate }} />
+                    </ToolbarAction>
+                  </AdminOnly>
+                ) }
+                <ToolbarAction tooltip="Rafraîchir" onClick={onRefresh}>
+                  <RefreshIcon />
+                </ToolbarAction>
+              </>
             )
           }
         />
         <List>
           { holder.admin && (
-            <PermissionItem admin divider />
+            <ListItem divider>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Administrateur" />
+              <ListItemSecondaryAction>
+                <IconButton edge="end" onClick={handleElevate(false)}>
+                  <ForwardIcon classes={{ root: styles.downgrade }} />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
           ) }
           { permissions.map(permission => (
             <PermissionItem

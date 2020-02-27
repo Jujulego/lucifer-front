@@ -28,6 +28,7 @@ const UserName = ({ last }: Name) => <>{ useUser(last)?.email || last }</>;
 const errorPages = ['/forbidden'];
 
 const pathNames: RouteName[] = [
+  { path: /^\/daemons$/, name: () => 'Daemons' },
   { path: /^\/users$/, name: () => 'Utilisateurs' },
   { path: /^\/users\/[0-9a-f]{24}$/i, name: (props) => <UserName {...props} /> },
 ];

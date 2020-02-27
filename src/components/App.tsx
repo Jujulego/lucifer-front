@@ -12,6 +12,8 @@ import LoginForm from './auth/LoginForm';
 import PrivateRoute from './auth/PrivateRoute';
 import SignInForm from './auth/SignInForm';
 
+import AllDaemonTable from 'containers/daemons/AllDaemonTable';
+
 import OverrideAccess from './permissions/OverrideAccess';
 
 import AllUserTable from 'containers/users/AllUserTable';
@@ -45,6 +47,7 @@ const App = () => {
               <Breadcrumbs />
               <Switch>
                 <Route path="/forbidden" component={ForbiddenPage} />
+                <Route path="/daemons" exact><AllDaemonTable /></Route>
                 <Route path="/users" exact><AllUserTable /></Route>
                 <Route path="/users/:id">
                   { ({ match }) => (

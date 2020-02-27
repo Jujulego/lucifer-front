@@ -14,6 +14,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import PeopleIcon from '@material-ui/icons/People';
+import StorageIcon from '@material-ui/icons/Storage';
 
 import AccountMenu from './auth/AccountMenu';
 
@@ -119,6 +120,10 @@ const AppBar = ({ children }: AppBarProps) => {
           <ListItem button component={Link} to="/">
             <ListItemIcon><HomeIcon /></ListItemIcon>
             <ListItemText primary="Accueil" />
+          </ListItem>
+          <ListItem button component={Link} to="/daemons">
+            <ListItemIcon><StorageIcon /></ListItemIcon>
+            <ListItemText primary="Daemons" />
           </ListItem>
           <ListItem button component={Link} to="/users">
             <ListItemIcon><PeopleIcon /></ListItemIcon>

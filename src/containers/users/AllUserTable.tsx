@@ -8,8 +8,8 @@ import useAPI from 'utils/hooks/useAPI';
 
 import UserTable, { UserTableProps } from 'components/users/UserTable';
 
-// Type
-export type AllUserTableProps = Omit<UserTableProps, 'data' | 'onLoad' | 'onReload'>;
+// Types
+export type AllUserTableProps = Omit<UserTableProps, 'data' | 'onLoad' | 'onReload' | 'onAdd' | 'onDelete'>;
 
 // Component
 const AllUserTable = (props: AllUserTableProps) => {
@@ -34,7 +34,8 @@ const AllUserTable = (props: AllUserTableProps) => {
   // Render
   return (
     <UserTable
-      {...props} data={data}
+      {...props}
+      data={data}
       onLoad={reload} onReload={reload}
       onAdd={handleAdd} onDelete={handleDelete}
     />

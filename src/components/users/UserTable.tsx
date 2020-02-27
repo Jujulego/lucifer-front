@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import moment from 'moment';
 
-import { Link, Paper, TableCell, TableContainer, TableHead } from '@material-ui/core';
+import {
+  Link,
+  Paper, TableContainer,
+  TableHead, TableCell
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';

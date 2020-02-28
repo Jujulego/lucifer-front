@@ -1,13 +1,11 @@
 import Document from './document';
 import { PermissionHolder } from './permission';
-import Token from './token';
+import { TokenHolder } from './token';
 
 // Interface
-interface Daemon extends Document, PermissionHolder {
+interface Daemon extends Document, PermissionHolder, TokenHolder {
   // Attributes
   name?: string;
-  readonly tokens: Token[];
-  lastConnexion?: string;
 }
 
 export default Daemon;

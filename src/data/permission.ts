@@ -24,6 +24,7 @@ interface Permission extends SubDocument {
 
 // Types
 export interface PermissionHolder {
+  // Attributes
   admin: boolean;
   readonly permissions: Permission[];
 }

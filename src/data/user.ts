@@ -1,12 +1,11 @@
 import Document from './document';
 import { PermissionHolder } from './permission';
-import Token from './token';
+import { TokenHolder } from './token';
 
 // Interface
-interface User extends Document, PermissionHolder {
+interface User extends Document, PermissionHolder, TokenHolder {
+  // Attributes
   email: string;
-  tokens: Token[];
-  lastConnexion?: string;
 }
 
 // Aliases

@@ -2,9 +2,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import User, { Credentials } from 'data/user';
+import useAPI from 'utils/hooks/useAPI';
+
 import { AppDispatch } from 'store';
 import { deleteUser } from 'store/users/thunks';
-import useAPI from 'utils/hooks/useAPI';
 
 import UserTable, { UserTableProps } from 'components/users/UserTable';
 

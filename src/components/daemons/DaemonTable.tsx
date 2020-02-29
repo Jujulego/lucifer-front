@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { capitalize } from 'lodash';
 import moment from 'moment';
@@ -8,9 +8,12 @@ import {
   Paper, TableContainer,
   TableHead, TableCell
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import Daemon from 'data/daemon';
+import Daemon, { DaemonUpdate } from 'data/daemon';
+import { PLvl } from 'data/permission';
 
 import {
   RelativeDate,
@@ -18,11 +21,16 @@ import {
   TableToolbar, TableAction,
   TableProps
 } from 'components/basics';
+import RestrictedAccess from 'components/permissions/RestrictedAccess';
+
+import AddDaemonDialog from './AddDaemonDialog';
 
 // Types
 export interface DaemonTableProps extends Omit<TableProps<Daemon>, 'toolbar'> {
   onLoad: () => void;
   onReload?: () => void;
+  onAdd?: (data: DaemonUpdate) => void;
+  onDelete?: (id: string) => void;
 }
 
 // Component
@@ -30,11 +38,18 @@ const DaemonTable = (props: DaemonTableProps) => {
   // Props
   const {
     onLoad, onReload,
+    onAdd, onDelete,
     ...table
   } = props;
 
+  // State
+  const [adding, setAdding] = useState(false);
+
   // Effects
   useEffect(() => { onLoad(); }, [onLoad]);
+
+  // Handlers
+  const handleDelete = onDelete && ((daemons: Daemon[]) => { daemons.forEach(daemon => onDelete(daemon._id)) });
 
   // Render
   const name = (user: Daemon) => user.name || user._id;
@@ -42,6 +57,24 @@ const DaemonTable = (props: DaemonTableProps) => {
 
   const toolbar = (
     <TableToolbar title="Daemons">
+      { handleDelete && (
+        <RestrictedAccess name="daemons" level={PLvl.DELETE}>
+          <TableAction when="some" tooltip="Supprimer" onActivate={handleDelete}>
+            <DeleteIcon />
+          </TableAction>
+        </RestrictedAccess>
+      ) }
+      { onAdd && (
+        <RestrictedAccess name="daemons" level={PLvl.CREATE}>
+          <TableAction when="nothing" tooltip="Ajouter" onClick={() => setAdding(true)}>
+            <AddIcon />
+          </TableAction>
+          <AddDaemonDialog
+            open={adding} onClose={() => setAdding(false)}
+            onAdd={onAdd}
+          />
+        </RestrictedAccess>
+      ) }
       { onReload && (
         <TableAction tooltip="Rafraîchir" onClick={() => onReload()}>
           <RefreshIcon />

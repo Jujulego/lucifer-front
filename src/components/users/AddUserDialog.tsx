@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import validator from 'validator';
 
 import {
   Button,
@@ -9,7 +10,6 @@ import {
 } from '@material-ui/core';
 
 import { Credentials } from 'data/user';
-import validator from 'validator';
 import { PasswordField } from 'components/basics/Fields';
 
 // Types

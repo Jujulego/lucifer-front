@@ -19,13 +19,13 @@ export function useUser(id: string | undefined): User | null {
   // Load user if needed
   useEffect(() => {
     if (!id) return;
-    if (state?.user || state?.loading) return;
+    if (state?.doc || state?.loading) return;
 
     dispatch(getUser(id));
   }, [dispatch, id, state]);
 
   // Return user
-  return state ? state.user : null;
+  return state ? state.doc : null;
 }
 
 export function useLoggedUser(): User | null {

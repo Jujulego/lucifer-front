@@ -1,23 +1,17 @@
+import Token from 'data/token';
 import User from 'data/user';
 
-import Token from 'data/token';
+import { creators, otherAction } from 'utils/actions/doc';
 
-import { ADD_USER, ADD_USER_TOKEN, DEL_USER, SET_USER } from './constants';
+import { ADD_USER_TOKEN, DOC_USER } from './constants';
 import { UsersAction } from './types';
 
 // Actions
-export const addUserAction = (id: string): UsersAction => ({
-  type: ADD_USER, id
-});
+export const addUserAction = creators.loading<UsersAction, typeof DOC_USER>(DOC_USER);
+export const setUserAction = creators.set<UsersAction, typeof DOC_USER, User>(DOC_USER);
+export const delUserAction = creators.del<UsersAction, typeof DOC_USER>(DOC_USER);
 
-export const addUserTokenAction = (id: string, token: Token): UsersAction => ({
-  type: ADD_USER_TOKEN, id, token
-});
-
-export const setUserAction = (user: User): UsersAction => ({
-  type: SET_USER, id: user._id, user
-});
-
-export const delUserAction = (id: string): UsersAction => ({
-  type: DEL_USER, id
-});
+export const addUserTokenAction = (id: string, token: Token): UsersAction =>
+  otherAction<UsersAction, typeof ADD_USER_TOKEN>({
+    type: ADD_USER_TOKEN, id, token
+  });

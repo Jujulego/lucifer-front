@@ -29,14 +29,23 @@ export type ToolbarActionProps<
 // Component
 const ToolbarAction = <D extends ElementType = IconButtonTypeMap['defaultComponent']> (props: { component?: D } & ToolbarActionProps<D>) => {
   // Props
-  const { children, tooltip, tooltipProps, ...button } = props;
+  const {
+    children, disabled,
+    tooltip, tooltipProps,
+    ...button
+  } = props;
 
   // Render
+  const btn = (
+    <IconButton {...button} disabled={disabled} color="inherit">
+      { children }
+    </IconButton>
+  );
+
+  if (disabled) return btn;
   return (
     <Tooltip {...tooltipProps} title={tooltip}>
-      <IconButton {...button} color="inherit">
-        { children }
-      </IconButton>
+      { btn }
     </Tooltip>
   );
 };

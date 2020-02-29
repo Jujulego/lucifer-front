@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { capitalize } from 'lodash';
 import moment from 'moment';
 
 import {
+  Link,
   Paper, TableContainer,
   TableHead, TableCell
 } from '@material-ui/core';
@@ -60,7 +63,9 @@ const DaemonTable = (props: DaemonTableProps) => {
           <TableBody>
             { (daemon: Daemon) => (
               <TableRow key={daemon._id} doc={daemon}>
-                <TableCell>{ name(daemon) }</TableCell>
+                <TableCell>
+                  <Link component={RouterLink} to={`/daemons/${daemon._id}`}>{ capitalize(name(daemon)) }</Link>
+                </TableCell>
                 <TableCell>
                   { daemon.lastConnexion && (
                     <RelativeDate date={lastConnection(daemon)} mode="from" />

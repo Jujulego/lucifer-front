@@ -23,8 +23,9 @@ import RestrictedAccess from './RestrictedAccess';
 export interface EditPermissionDialogProps {
   open: boolean, onClose: () => void,
   permission?: Permission,
-  onGrant: (name: PName, level: PLvl) => void,
-  onRevoke: (name: PName) => void,
+  blacklist?: PName[],
+  onGrant?: (name: PName, level: PLvl) => void,
+  onRevoke?: (name: PName) => void,
 }
 
 type FormState = DecomposedLevel & {
@@ -37,6 +38,7 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
   const {
     open, onClose,
     permission,
+    blacklist = [],
     onGrant, onRevoke,
   } = props;
 
@@ -50,15 +52,15 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
   });
 
   // Handlers
-  const handleGrant = (form: FormState) => {
+  const handleGrant = onGrant && ((form: FormState) => {
     onGrant(form.name, buildLevel(form));
     onClose();
-  };
+  });
 
-  const handleRevoke = (form: FormState) => {
+  const handleRevoke = onRevoke && ((form: FormState) => {
     onRevoke(form.name);
     onClose();
-  };
+  });
 
   // Render
   const opts = permissionOption(watch("name", permission?.name));
@@ -70,7 +72,7 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
 
       PaperProps={{
         component: 'form',
-        onSubmit: handleSubmit(handleGrant)
+        onSubmit: handleGrant && handleSubmit(handleGrant)
       }}
     >
       <DialogTitle>Permission</DialogTitle>
@@ -86,7 +88,7 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
               label="Nom" required disabled={!allowed} fullWidth
               error={!!errors.name} helperText={errors.name?.message}
             >
-              { PERMISSIONS.map(name => (
+              { PERMISSIONS.filter(p => blacklist.indexOf(p) === -1).map(name => (
                 <MenuItem key={name} value={name}>
                   { permissionOption(name).name }
                 </MenuItem>
@@ -118,15 +120,15 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
         { permission && (
           <RestrictedAccess name="permissions" level={PLvl.DELETE}>
             <Button
-              type="button" color="primary"
-              onClick={handleSubmit(handleRevoke)}
+              type="button" color="primary" disabled={!handleRevoke}
+              onClick={handleRevoke && handleSubmit(handleRevoke)}
             >
               Supprimer
             </Button>
           </RestrictedAccess>
         ) }
         { allowed && (
-          <Button type="submit" color="primary">
+          <Button type="submit" color="primary" disabled={!handleGrant}>
             { permission ? "Modifier" : "Ajouter" }
           </Button>
         ) }

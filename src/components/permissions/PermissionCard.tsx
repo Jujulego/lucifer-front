@@ -24,10 +24,11 @@ import PermissionItem from './PermissionItem';
 // Types
 export type PermissionTableProps = CardProps & {
   holder: PermissionHolder,
+  blacklist?: PName[],
   onRefresh?: () => void,
-  onGrant: (name: PName, level: PLvl) => void,
-  onElevate: (admin: boolean) => void,
-  onRevoke: (name: PName) => void,
+  onElevate?: (admin: boolean) => void,
+  onGrant?: (name: PName, level: PLvl) => void,
+  onRevoke?: (name: PName) => void,
 }
 
 interface DialogState {
@@ -51,7 +52,9 @@ const useStyles = makeStyles({
 const PermissionCard = (props: PermissionTableProps) => {
   // Props
   const {
-    holder, onRefresh,
+    holder,
+    blacklist = [],
+    onRefresh,
     onGrant, onElevate, onRevoke,
     ...card
   } = props;
@@ -66,7 +69,7 @@ const PermissionCard = (props: PermissionTableProps) => {
   );
 
   // Handlers
-  const handleElevate = (admin: boolean) => () => onElevate(admin);
+  const handleElevate = onElevate && ((admin: boolean) => () => onElevate(admin));
 
   // Render
   const styles = useStyles();
@@ -78,20 +81,20 @@ const PermissionCard = (props: PermissionTableProps) => {
           title="Permissions"
           classes={{ action: styles.action }}
           action={
-            onRefresh && (
-              <>
-                { (!holder.admin) && (
-                  <AdminOnly>
-                    <ToolbarAction tooltip="Elevate" onClick={handleElevate(true)}>
-                      <ForwardIcon classes={{ root: styles.elevate }} />
-                    </ToolbarAction>
-                  </AdminOnly>
-                ) }
+            <>
+              { handleElevate && (!holder.admin) && (
+                <AdminOnly>
+                  <ToolbarAction tooltip="Elevate" onClick={handleElevate(true)}>
+                    <ForwardIcon classes={{ root: styles.elevate }} />
+                  </ToolbarAction>
+                </AdminOnly>
+              ) }
+              { onRefresh && (
                 <ToolbarAction tooltip="Rafraîchir" onClick={onRefresh}>
                   <RefreshIcon />
                 </ToolbarAction>
-              </>
-            )
+              ) }
+            </>
           }
         />
         <List>
@@ -101,11 +104,13 @@ const PermissionCard = (props: PermissionTableProps) => {
                 <SettingsIcon />
               </ListItemIcon>
               <ListItemText primary="Administrateur" />
-              <ListItemSecondaryAction>
-                <IconButton edge="end" onClick={handleElevate(false)}>
-                  <ForwardIcon classes={{ root: styles.downgrade }} />
-                </IconButton>
-              </ListItemSecondaryAction>
+              { handleElevate && (
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" onClick={handleElevate(false)}>
+                    <ForwardIcon classes={{ root: styles.downgrade }} />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              ) }
             </ListItem>
           ) }
           { permissions.map(permission => (
@@ -127,7 +132,7 @@ const PermissionCard = (props: PermissionTableProps) => {
       </Card>
       { dialog.open && (
         <EditPermissionDialog
-          {...dialog}
+          {...dialog} blacklist={blacklist}
           onClose={() => setDialog({ open: false })}
           onGrant={onGrant} onRevoke={onRevoke}
         />

@@ -12,8 +12,8 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import { PLvl } from 'data/permission';
-import Token, { FullToken } from 'data/token';
+import { PName, PLvl } from 'data/permission';
+import Token, { FullToken, TokenHolder } from 'data/token';
 import { AppState } from 'store';
 import { ip2int } from 'utils/ip';
 
@@ -29,7 +29,9 @@ import NewTokenDialog from './NewTokenDialog';
 import TokenFilterDialog from './TokenFilterDialog';
 
 // Types
-export type TokenTableProps = Omit<TableProps<Token>, 'toolbar' | 'blacklist'> & {
+export type TokenTableProps = Omit<TableProps<Token>, 'data' | 'toolbar' | 'blacklist'> & {
+  holder: TokenHolder,
+  permission: PName,
   onRefresh?: () => void,
   onAdd?: () => Promise<FullToken | null>;
   onDelete?: (id: Token['_id']) => void
@@ -47,6 +49,7 @@ const useStyles = makeStyles({
 const TokenTable = (props: TokenTableProps) => {
   // Props
   const {
+    holder, permission,
     onRefresh, onAdd, onDelete,
     ...table
   } = props;
@@ -79,14 +82,14 @@ const TokenTable = (props: TokenTableProps) => {
   const toolbar = (
     <TableToolbar title="Tokens">
       { handleDelete && (
-        <RestrictedAccess name="users" level={PLvl.UPDATE}>
+        <RestrictedAccess name={permission} level={PLvl.UPDATE}>
           <TableAction when="some" tooltip="Supprimer" onActivate={handleDelete}>
             <DeleteIcon />
           </TableAction>
         </RestrictedAccess>
       ) }
       { handleAdd && (
-        <RestrictedAccess name="users" level={PLvl.UPDATE}>
+        <RestrictedAccess name={permission} level={PLvl.UPDATE}>
           <TableAction when="nothing" tooltip="Générer" onClick={handleAdd}>
             <AddIcon />
           </TableAction>
@@ -109,6 +112,7 @@ const TokenTable = (props: TokenTableProps) => {
     <Paper>
       <TableContainer>
         <Table {...table}
+          data={holder.tokens}
           blacklist={[currentToken]}
           toolbar={toolbar}
           pagination={

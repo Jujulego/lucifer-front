@@ -3,6 +3,7 @@ import { capitalize } from 'lodash';
 
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import PeopleIcon from '@material-ui/icons/People';
+import StorageIcon from '@material-ui/icons/Storage';
 
 import { PLvl, PName } from 'data/permission';
 
@@ -18,7 +19,8 @@ export interface PermissionOptions {
 }
 
 // Constants
-const OPTIONS: { [name in PName]: PermissionOptions } = {
+const OPTIONS: { [name in PName]?: PermissionOptions } = {
+  daemons:     { name: 'Daemons',        icon: <StorageIcon />  },
   permissions: { name: 'Permissions',    icon: <LockOpenIcon />, level: { create: null, read: null, update: 'grant', delete: 'revoke' }},
   users:       { name: 'Utilisateurs',   icon: <PeopleIcon />   },
 };

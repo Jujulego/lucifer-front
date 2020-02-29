@@ -77,7 +77,7 @@ export const updateDaemon = (id: string, update: DaemonUpdate): AppThunk =>
     }
   };
 
-export const grantDaemon = (id: string, name: Exclude<PName, 'permissions'>, level: PLvl): AppThunk =>
+export const grantDaemon = (id: string, name: PName, level: PLvl): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update

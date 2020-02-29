@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { Redirect } from 'react-router';
 
 import { Grid } from '@material-ui/core';
 
 import { PName, PLvl } from 'data/permission';
-import { FullToken } from 'data/token';
+
 import { AppDispatch } from 'store';
 import { usePermision, useUser } from 'store/users/hooks';
 import {
@@ -17,7 +18,6 @@ import PermissionCard from 'components/permissions/PermissionCard';
 import TokenTable from 'components/tokens/TokenTable';
 
 import CredentialsCard from './CredentialsCard';
-import { Redirect } from 'react-router';
 
 // Types
 interface UserPageProps {
@@ -37,36 +37,18 @@ const UserPage = (props: UserPageProps) => {
   const allowed = usePermision("users", PLvl.READ);
 
   // Handlers
-  const handleRefresh = useCallback(() => {
-    dispatch(getUser(id));
-  }, [dispatch, id]);
+  const handleRefresh = useCallback(() => { dispatch(getUser(id)) }, [dispatch, id]);
+  const handleUpdate = (update: UserUpdate) => { dispatch(updateUser(id, update)) };
 
-  const handleUpdate = (update: UserUpdate) => {
-    dispatch(updateUser(id, update));
-  };
+  const handleGrant = (name: PName, level: PLvl) => { dispatch(grantUser(id, name, level)) };
+  const handleElevate = (admin: boolean) => { dispatch(elevateUser(id, admin)) };
+  const handleRevoke = (name: PName) => { dispatch(revokeUser(id, name)) };
 
-  const handleGrant = (name: PName, level: PLvl) => {
-    dispatch(grantUser(id, name, level));
-  };
-
-  const handleElevate = (admin: boolean) => {
-    dispatch(elevateUser(id, admin));
-  };
-
-  const handleRevoke = (name: PName) => {
-    dispatch(revokeUser(id, name));
-  };
-
-  const handleAddToken = async (): Promise<FullToken | null> => {
-    return await dispatch(createUserToken(id));
-  };
-
-  const handleDeleteToken = (tokenId: string) => {
-    dispatch(deleteUserToken(id, tokenId));
-  };
+  const handleAddToken = async () => await dispatch(createUserToken(id));
+  const handleDeleteToken = (tokenId: string) => { dispatch(deleteUserToken(id, tokenId)) };
 
   // Effects
-  useEffect(() => handleRefresh(), [handleRefresh]);
+  useEffect(() => { handleRefresh() }, [handleRefresh]);
 
   // Render
   if (allowed === false) return <Redirect to="/forbidden" />;
@@ -81,21 +63,19 @@ const UserPage = (props: UserPageProps) => {
         <PermissionCard
           holder={user}
           onRefresh={handleRefresh}
-          onGrant={handleGrant}
           onElevate={handleElevate}
-          onRevoke={handleRevoke}
+          onGrant={handleGrant} onRevoke={handleRevoke}
         />
       </Grid>
       <Grid item xs={12}>
         <TokenTable
-          data={user.tokens}
+          holder={user} permission="users"
           onRefresh={handleRefresh}
-          onAdd={handleAddToken}
-          onDelete={handleDeleteToken}
+          onAdd={handleAddToken} onDelete={handleDeleteToken}
         />
       </Grid>
     </Grid>
-  )
+  );
 };
 
 export default UserPage;

@@ -4,17 +4,20 @@ import { useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 
 import { PName, PLvl } from 'data/permission';
+import { DaemonUpdate } from 'data/daemon';
 
 import { AppDispatch } from 'store';
 import { useDaemon } from 'store/daemons/hooks';
 import {
-  getDaemon,
+  getDaemon, updateDaemon,
   grantDaemon, revokeDaemon,
   createDaemonToken, deleteDaemonToken
 } from 'store/daemons/thunks';
 
 import PermissionCard from 'components/permissions/PermissionCard';
 import TokenTable from 'components/tokens/TokenTable';
+
+import DataCard from './DataCard';
 
 // Types
 interface DaemonPageProps {
@@ -34,6 +37,7 @@ const DaemonPage = (props: DaemonPageProps) => {
 
   // Handlers
   const handleRefresh = useCallback(() => { dispatch(getDaemon(id)) }, [dispatch, id]);
+  const handleUpdate = (update: DaemonUpdate) => { dispatch(updateDaemon(id, update)) };
 
   const handleGrant = (name: PName, lvl: PLvl) => { dispatch(grantDaemon(id, name, lvl)) };
   const handleRevoke = (name: PName) => { dispatch(revokeDaemon(id, name)) };
@@ -50,6 +54,7 @@ const DaemonPage = (props: DaemonPageProps) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={4}>
+        <DataCard daemon={daemon} onUpdate={handleUpdate} />
       </Grid>
       <Grid item xs={8}>
         <PermissionCard

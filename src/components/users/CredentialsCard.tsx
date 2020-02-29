@@ -44,7 +44,7 @@ const CredentialsCard = (props: CredentialsCardProps) => {
   // Form
   const { control, register, errors, handleSubmit, reset } = useForm<Credentials>();
 
-  // User
+  // Users
   const canUpdate = usePermision("users", PLvl.UPDATE);
 
   // Handlers
@@ -65,22 +65,21 @@ const CredentialsCard = (props: CredentialsCardProps) => {
     if (creds.email)    update.email    = creds.email;
     if (creds.password) update.password = creds.password;
 
-    if (Object.keys(creds).length > 0) {
+    if (Object.keys(update).length > 0) {
       onUpdate(update);
     }
   };
 
   // Effects
-  useEffect(() => {
-    handleReset();
-  }, [handleReset, user]);
+  useEffect(() => { handleReset() }, [handleReset, user]);
 
   // Render
   const styles = useStyles();
 
   return (
-    <Card {...card}
-      component="form" onSubmit={handleSubmit(handleUpdate)} onReset={handleReset}
+    <Card
+      {...card} component="form"
+      onSubmit={handleSubmit(handleUpdate)} onReset={handleReset}
     >
       <CardHeader title="Identifiants" />
       <CardContent>
@@ -122,7 +121,7 @@ const CredentialsCard = (props: CredentialsCardProps) => {
         ) }
       </CardActions>
     </Card>
-  )
+  );
 };
 
 export default CredentialsCard;

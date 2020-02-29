@@ -8,4 +8,7 @@ interface Daemon extends Document, PermissionHolder, TokenHolder {
   name?: string;
 }
 
+// Aliases
+export type DaemonUpdate = Partial<Pick<Daemon, 'name'>>
+
 export default Daemon;

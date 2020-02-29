@@ -3,7 +3,7 @@ import { omit } from 'lodash';
 
 import { PLvl, PName } from 'data/permission';
 import { FullToken } from 'data/token';
-import Daemon from 'data/daemon';
+import Daemon, { DaemonUpdate } from 'data/daemon';
 
 import { AppDispatch, AppState, AppThunk } from 'store';
 import { authError } from 'store/auth/utils';
@@ -14,9 +14,6 @@ import {
   setDaemonAction,
   delDaemonAction
 } from './actions';
-
-// Types
-export type DaemonUpdate = Partial<Pick<Daemon, 'name'>>
 
 // Thunks
 export const createDaemonToken = (id: string, tags: string[] = []): AppThunk<Promise<FullToken | null>> =>

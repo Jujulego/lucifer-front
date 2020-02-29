@@ -9,6 +9,7 @@ interface User extends Document, PermissionHolder, TokenHolder {
 }
 
 // Aliases
-export type Credentials = Pick<User, 'email'> & { password: string }
+export type Credentials = Pick<User, 'email'> & { password: string };
+export type UserUpdate = Partial<Pick<User & Credentials, 'email' | 'password'>>;
 
 export default User;

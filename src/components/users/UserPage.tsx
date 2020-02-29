@@ -5,13 +5,14 @@ import { Redirect } from 'react-router';
 import { Grid } from '@material-ui/core';
 
 import { PName, PLvl } from 'data/permission';
+import { UserUpdate } from 'data/user';
 
 import { AppDispatch } from 'store';
 import { usePermision, useUser } from 'store/users/hooks';
 import {
-  createUserToken, getUser, updateUser, deleteUserToken,
-  grantUser, elevateUser, revokeUser,
-  UserUpdate
+  getUser, updateUser,
+  createUserToken, deleteUserToken,
+  grantUser, elevateUser, revokeUser
 } from 'store/users/thunks';
 
 import PermissionCard from 'components/permissions/PermissionCard';

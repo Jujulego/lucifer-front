@@ -26,10 +26,12 @@ const OPTIONS: { [name in PName]?: PermissionOptions } = {
 };
 
 // Utils
-export function permissionOption(name: keyof typeof OPTIONS): PermissionOptions {
-  const { [name]: opts } = OPTIONS;
+export function permissionOption(name?: keyof typeof OPTIONS | ''): PermissionOptions {
+  if (name) {
+    const { [name]: opts } = OPTIONS;
+    if (opts) return opts;
+  }
 
-  if (opts) return opts;
   return { name: capitalize(name) };
 }
 

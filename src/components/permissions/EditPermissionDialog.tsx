@@ -29,7 +29,7 @@ export interface EditPermissionDialogProps {
 }
 
 type FormState = DecomposedLevel & {
-  name: PName
+  name: PName | ''
 };
 
 // Component
@@ -48,17 +48,17 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
   // Form
   const level = decomposeLevel(permission?.level || PLvl.NONE);
   const { control, watch, errors, handleSubmit } = useForm<FormState>({
-    defaultValues: { name: permission?.name, ...level }
+    defaultValues: { name: permission?.name || '', ...level }
   });
 
   // Handlers
   const handleGrant = onGrant && ((form: FormState) => {
-    onGrant(form.name, buildLevel(form));
+    if (form.name) onGrant(form.name, buildLevel(form));
     onClose();
   });
 
   const handleRevoke = onRevoke && ((form: FormState) => {
-    onRevoke(form.name);
+    if (form.name) onRevoke(form.name);
     onClose();
   });
 
@@ -101,7 +101,7 @@ const EditPermissionDialog = (props: EditPermissionDialogProps) => {
               <FormGroup>
                 <Grid container>
                   { LEVELS.map(name => (
-                    <Grid item xs={6}>
+                    <Grid key={name} item xs={6}>
                       <Controller
                         name={name} as={LevelCheckbox}
                         control={control}

@@ -1,18 +1,21 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import {
   Button, TextField,
   Dialog, DialogTitle, DialogContent, DialogActions,
+  FormControl, InputLabel, FormHelperText,
   Grid
 } from '@material-ui/core';
 
-import { DaemonUpdate } from 'data/daemon';
+import { DaemonCreate } from 'data/daemon';
+
+import UserSelect from 'components/users/UserSelect';
 
 // Types
 export interface AddDaemonDialogProps {
   open: boolean; onClose: () => void;
-  onAdd: (data: DaemonUpdate) => void;
+  onAdd: (data: DaemonCreate) => void;
 }
 
 // Component
@@ -24,10 +27,10 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
   } = props;
 
   // Form
-  const { register, handleSubmit, errors, reset } = useForm<DaemonUpdate>();
+  const { control, register, handleSubmit, errors, reset } = useForm<DaemonCreate>();
 
   // Handlers
-  const handleAdd = (data: DaemonUpdate) => {
+  const handleAdd = (data: DaemonCreate) => {
     onAdd(data);
     onClose();
   };
@@ -58,6 +61,19 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
               name="name" inputRef={register()}
               error={!!errors.name} helperText={errors.name?.message}
             />
+          </Grid>
+          <Grid item xs>
+            <FormControl fullWidth required error={!!errors.user}>
+              <InputLabel>Utilistateur</InputLabel>
+              <Controller
+                name="user"
+                control={control} as={UserSelect}
+                rules={{ required: "Utilisateur requis" }}
+              />
+              { errors.user && (
+                <FormHelperText>{ errors.user.message }</FormHelperText>
+              ) }
+            </FormControl>
           </Grid>
         </Grid>
       </DialogContent>

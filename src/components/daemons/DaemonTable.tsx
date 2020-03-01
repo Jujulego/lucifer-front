@@ -9,7 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import Daemon, { DaemonUpdate } from 'data/daemon';
+import Daemon, { DaemonCreate } from 'data/daemon';
 import { PLvl } from 'data/permission';
 
 import {
@@ -28,7 +28,7 @@ import DaemonLink from './DaemonLink';
 export interface DaemonTableProps extends Omit<TableProps<Daemon>, 'toolbar'> {
   onLoad: () => void;
   onReload?: () => void;
-  onAdd?: (data: DaemonUpdate) => void;
+  onAdd?: (data: DaemonCreate) => void;
   onDelete?: (id: string) => void;
 }
 

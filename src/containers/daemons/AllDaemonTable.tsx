@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Daemon, { DaemonUpdate } from 'data/daemon';
+import Daemon, { DaemonCreate } from 'data/daemon';
 import useAPI from 'utils/hooks/useAPI';
 
 import { AppDispatch } from 'store';
@@ -18,11 +18,11 @@ const AllDaemonTable = (props: AllDaemonTableProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   // API
-  const { send: add } = useAPI.post<DaemonUpdate, Daemon>('/api/daemon');
+  const { send: add } = useAPI.post<DaemonCreate, Daemon>('/api/daemon');
   const { data = [], reload, update } = useAPI.get<Daemon[]>('/api/daemons', {}, { load: false });
 
   // Handlers
-  const handleAdd = async (data: DaemonUpdate) => {
+  const handleAdd = async (data: DaemonCreate) => {
     const daemon = await add(data);
     if (daemon) update((data = []) => [...data, daemon]);
   };

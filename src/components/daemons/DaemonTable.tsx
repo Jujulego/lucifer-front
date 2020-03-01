@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { capitalize } from 'lodash';
 import moment from 'moment';
 
 import {
-  Link,
   Paper, TableContainer,
   TableHead, TableCell
 } from '@material-ui/core';
@@ -22,8 +19,10 @@ import {
   TableProps
 } from 'components/basics';
 import RestrictedAccess from 'components/permissions/RestrictedAccess';
+import UserLink from 'components/users/UserLink';
 
 import AddDaemonDialog from './AddDaemonDialog';
+import DaemonLink from './DaemonLink';
 
 // Types
 export interface DaemonTableProps extends Omit<TableProps<Daemon>, 'toolbar'> {
@@ -52,8 +51,8 @@ const DaemonTable = (props: DaemonTableProps) => {
   const handleDelete = onDelete && ((daemons: Daemon[]) => { daemons.forEach(daemon => onDelete(daemon._id)) });
 
   // Render
-  const name = (user: Daemon) => user.name || user._id;
-  const lastConnection = (user: Daemon) => moment(user.lastConnexion);
+  const name = (daemon: Daemon) => daemon.name || daemon._id;
+  const lastConnection = (daemon: Daemon) => moment(daemon.lastConnexion);
 
   const toolbar = (
     <TableToolbar title="Daemons">
@@ -90,6 +89,7 @@ const DaemonTable = (props: DaemonTableProps) => {
           <TableHead>
             <TableRow>
               <TableSortCell field={name}>Nom</TableSortCell>
+              <TableCell>Utilisateur</TableCell>
               <TableSortCell field={lastConnection}>Dernière connexion</TableSortCell>
             </TableRow>
           </TableHead>
@@ -97,7 +97,10 @@ const DaemonTable = (props: DaemonTableProps) => {
             { (daemon: Daemon) => (
               <TableRow key={daemon._id} doc={daemon}>
                 <TableCell>
-                  <Link component={RouterLink} to={`/daemons/${daemon._id}`}>{ capitalize(name(daemon)) }</Link>
+                  <DaemonLink id={daemon._id} daemon={daemon} />
+                </TableCell>
+                <TableCell>
+                  <UserLink id={daemon.user} />
                 </TableCell>
                 <TableCell>
                   { daemon.lastConnexion && (

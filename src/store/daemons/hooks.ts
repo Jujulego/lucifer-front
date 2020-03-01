@@ -7,7 +7,7 @@ import { AppDispatch, AppState } from 'store';
 import { getDaemon } from './thunks';
 
 // Hooks
-export function useDaemon(id: string | undefined): Daemon | null {
+export function useDaemon(id: string | undefined, load: boolean = true): Daemon | null {
   // Redux
   const dispatch = useDispatch<AppDispatch>();
   const state = useSelector((state: AppState) =>
@@ -16,11 +16,11 @@ export function useDaemon(id: string | undefined): Daemon | null {
 
   // Load daemon if needed
   useEffect(() => {
-    if (!id) return;
+    if (!id || !load) return;
     if (state?.doc || state?.loading) return;
 
     dispatch(getDaemon(id));
-  }, [dispatch, id, state]);
+  }, [dispatch, id, state, load]);
 
   // Return user
   return state ? state.doc : null;

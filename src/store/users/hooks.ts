@@ -9,7 +9,7 @@ import { getUser } from './thunks';
 import { isAllowed, PLvl, PName } from 'data/permission';
 
 // Hooks
-export function useUser(id: string | undefined): User | null {
+export function useUser(id: string | undefined, load: boolean = true): User | null {
   // Redux
   const dispatch = useDispatch<AppDispatch>();
   const state = useSelector((state: AppState) =>
@@ -18,11 +18,11 @@ export function useUser(id: string | undefined): User | null {
 
   // Load user if needed
   useEffect(() => {
-    if (!id) return;
+    if (!id || !load) return;
     if (state?.doc || state?.loading) return;
 
     dispatch(getUser(id));
-  }, [dispatch, id, state]);
+  }, [dispatch, id, state, load]);
 
   // Return user
   return state ? state.doc : null;

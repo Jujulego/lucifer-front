@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import moment from 'moment';
 
 import {
-  Link,
   Paper, TableContainer,
   TableHead, TableCell
 } from '@material-ui/core';
@@ -23,6 +21,7 @@ import {
 import RestrictedAccess from 'components/permissions/RestrictedAccess';
 
 import AddUserDialog from './AddUserDialog';
+import UserLink from './UserLink';
 
 // Types
 export interface UserTableProps extends Omit<TableProps<User>, 'toolbar'> {
@@ -95,7 +94,7 @@ const UserTable = (props: UserTableProps) => {
             { (user: User) => (
               <TableRow key={user._id} doc={user}>
                 <TableCell>
-                  <Link component={RouterLink} to={`/users/${user._id}`}>{ user.email }</Link>
+                  <UserLink id={user._id} user={user} />
                 </TableCell>
                 <TableCell>
                   { user.lastConnexion && (

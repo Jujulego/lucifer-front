@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import {
   Button, TextField,
   Card, CardHeader, CardContent, CardActions,
+  FormControl, InputLabel,
   Grid,
   CardProps
 } from '@material-ui/core';
@@ -13,6 +14,8 @@ import { PLvl } from 'data/permission';
 import Daemon, { DaemonUpdate } from 'data/daemon';
 
 import { usePermision } from 'store/users/hooks';
+
+import UserLink from 'components/users/UserLink';
 
 // Types
 export interface InfoCardProps extends CardProps {
@@ -24,6 +27,11 @@ export type FormState = { [name in keyof DaemonUpdate]: Daemon[name] };
 
 // Styles
 const useStyles = makeStyles({
+  user: {
+    marginTop: 16,
+    paddingTop: 6,
+    paddingBottom: 7,
+  },
   actions: {
     justifyContent: 'end'
   }
@@ -83,6 +91,12 @@ const DataCard = (props: InfoCardProps) => {
               label="Nom" fullWidth disabled={!canUpdate}
               error={!!errors.name} helperText={errors.name?.message}
             />
+          </Grid>
+          <Grid item xs>
+            <FormControl fullWidth>
+              <InputLabel shrink>Utilisateur</InputLabel>
+              <UserLink id={daemon.user} classes={{ root: styles.user }} forceLoad />
+            </FormControl>
           </Grid>
         </Grid>
       </CardContent>

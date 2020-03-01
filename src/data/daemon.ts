@@ -6,6 +6,7 @@ import { TokenHolder } from './token';
 interface Daemon extends Document, PermissionHolder, TokenHolder {
   // Attributes
   name?: string;
+  user: string;
 }
 
 // Aliases

@@ -9,17 +9,17 @@ import {
   TextField
 } from '@material-ui/core';
 
-import { Credentials } from 'data/user';
+import { UserCreate } from 'data/user';
 import { PasswordField } from 'components/basics/Fields';
 
 // Types
 export interface AddUserDialogProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (cred: Credentials) => void;
+  onAdd: (data: UserCreate) => void;
 }
 
-type FormState = Credentials & { confirm: string };
+type FormState = UserCreate & { confirm: string };
 
 // Component
 const AddUserDialog = (props: AddUserDialogProps) => {

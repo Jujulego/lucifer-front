@@ -10,7 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
 import { PLvl } from 'data/permission';
-import User, { Credentials } from 'data/user';
+import { UserCreate, SimpleUser } from 'data/user';
 
 import {
   RelativeDate,
@@ -24,11 +24,11 @@ import AddUserDialog from './AddUserDialog';
 import UserLink from './UserLink';
 
 // Types
-export interface UserTableProps extends Omit<TableProps<User>, 'toolbar'> {
+export interface UserTableProps extends Omit<TableProps<SimpleUser>, 'toolbar'> {
   onLoad: () => void;
   onReload?: () => void;
-  onAdd?: (cred: Credentials) => void;
-  onDelete?: (id: User['_id']) => void;
+  onAdd?: (data: UserCreate) => void;
+  onDelete?: (id: string) => void;
 }
 
 // Component
@@ -47,10 +47,10 @@ const UserTable = (props: UserTableProps) => {
   useEffect(() => { onLoad(); }, [onLoad]);
 
   // Handlers
-  const handleDelete = onDelete && ((users: User[]) => { users.forEach(user => onDelete(user._id)); });
+  const handleDelete = onDelete && ((users: SimpleUser[]) => { users.forEach(user => onDelete(user._id)); });
 
   // Render
-  const lastConnection = (user: User) => moment(user.lastConnexion);
+  const lastConnection = (user: SimpleUser) => moment(user.lastConnexion);
 
   const toolbar = (
     <TableToolbar title="Utilisateurs">
@@ -86,12 +86,12 @@ const UserTable = (props: UserTableProps) => {
         <Table {...table} toolbar={toolbar}>
           <TableHead>
             <TableRow>
-              <TableSortCell<User> field="email">Email</TableSortCell>
+              <TableSortCell<SimpleUser> field="email">Email</TableSortCell>
               <TableSortCell field={lastConnection}>Dernière connexion</TableSortCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            { (user: User) => (
+            { (user: SimpleUser) => (
               <TableRow key={user._id} doc={user}>
                 <TableCell>
                   <UserLink id={user._id} user={user} />

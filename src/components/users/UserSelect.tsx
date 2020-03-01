@@ -5,7 +5,7 @@ import {
   CircularProgress, CircularProgressProps, useFormControl,
 } from '@material-ui/core';
 
-import User from 'data/user';
+import { SimpleUser } from 'data/user';
 import { useUser } from 'store/users/hooks';
 import useAPI from 'utils/hooks/useAPI';
 
@@ -18,13 +18,14 @@ export type UserSelectProps = Omit<SelectProps, 'value'> & {
 const SmallProgress = (props: CircularProgressProps) => <CircularProgress {...props} size={20} />;
 const UserSelect = (props: UserSelectProps) => {
   // Props
-  const { disabled, required, IconComponent, value } = props;
+  const { disabled, IconComponent, value } = props;
 
   // Context
   const ctx = useFormControl();
+  const required = props.required || ctx.required;
 
   // API
-  const { data: users, loading } = useAPI.get<User[]>('/api/users');
+  const { data: users, loading } = useAPI.get<SimpleUser[]>('/api/users');
 
   // Users
   const user = useUser(value, false);
@@ -35,7 +36,7 @@ const UserSelect = (props: UserSelectProps) => {
       {...props} disabled={disabled || loading}
       IconComponent={loading ? SmallProgress : IconComponent}
     >
-      { (!required && !ctx.required) && (
+      { !required && (
         <MenuItem value="">
           <em>Pas d'utilisateur</em>
         </MenuItem>

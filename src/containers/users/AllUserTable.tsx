@@ -1,7 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { omit } from 'lodash';
 
-import User, { Credentials } from 'data/user';
+import User, { SimpleUser, UserCreate } from 'data/user';
 import useAPI from 'utils/hooks/useAPI';
 
 import { AppDispatch } from 'store';
@@ -18,13 +19,13 @@ const AllUserTable = (props: AllUserTableProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   // API
-  const { send: add } = useAPI.post<Credentials, User>('/api/user/');
-  const { data = [], reload, update } = useAPI.get<User[]>('/api/users', {}, { load: false });
+  const { send: add } = useAPI.post<UserCreate, User>('/api/user/');
+  const { data = [], reload, update } = useAPI.get<SimpleUser[]>('/api/users', {}, { load: false });
 
   // Handlers
-  const handleAdd = async (cred: Credentials) => {
-    const user = await add(cred);
-    if (user) update((data = []) => [...data, user]);
+  const handleAdd = async (data: UserCreate) => {
+    const user = await add(data);
+    if (user) update((data = []) => [...data, omit(user, ['tokens', 'permissions'])]);
   };
 
   const handleDelete = (id: string) => {

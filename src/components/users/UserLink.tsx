@@ -3,13 +3,13 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { Link, LinkTypeMap, LinkProps } from '@material-ui/core';
 
-import User from 'data/user';
+import { SimpleUser } from 'data/user';
 import { useUser } from 'store/users/hooks';
 
 // Types
 export type UserLinkProps<D extends ElementType = LinkTypeMap['defaultComponent']> = LinkProps<D> & {
   id: string;
-  user?: User;
+  user?: SimpleUser;
   forceLoad?: boolean;
 }
 

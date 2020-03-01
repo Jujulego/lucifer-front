@@ -15,7 +15,7 @@ import { PLvl } from 'data/permission';
 import {
   RelativeDate,
   Table, TableBody, TableRow, TableSortCell,
-  TableToolbar, TableAction,
+  TableToolbar, TableAction, TableFilterAction,
   TableProps
 } from 'components/basics';
 import RestrictedAccess from 'components/permissions/RestrictedAccess';
@@ -23,6 +23,7 @@ import UserLink from 'components/users/UserLink';
 
 import AddDaemonDialog from './AddDaemonDialog';
 import DaemonLink from './DaemonLink';
+import FilterDaemonDialog from './FilterDaemonDialog';
 
 // Types
 export interface DaemonTableProps extends Omit<TableProps<Daemon>, 'toolbar'> {
@@ -74,6 +75,7 @@ const DaemonTable = (props: DaemonTableProps) => {
           />
         </RestrictedAccess>
       ) }
+      <TableFilterAction dialog={FilterDaemonDialog} />
       { onReload && (
         <TableAction tooltip="Rafraîchir" onClick={() => onReload()}>
           <RefreshIcon />

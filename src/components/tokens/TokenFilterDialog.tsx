@@ -8,9 +8,9 @@ import {
 
 import { useTableContext } from 'contexts/TableContext';
 import Token from 'data/token';
+import { Filter } from 'utils/filter';
 
 import { ChipSelect, TableFilterDialogProps } from 'components/basics';
-import { Filter } from 'utils/filter';
 
 // Types
 export type TokenFilterDialogProps = TableFilterDialogProps;

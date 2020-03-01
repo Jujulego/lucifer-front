@@ -4,13 +4,13 @@ import { capitalize } from 'lodash';
 
 import { Link, LinkTypeMap, LinkProps } from '@material-ui/core';
 
-import Daemon from 'data/daemon';
+import { SimpleDaemon } from 'data/daemon';
 import { useDaemon } from 'store/daemons/hooks';
 
 // Types
 export type DaemonLinkProps<D extends ElementType = LinkTypeMap['defaultComponent']> = LinkProps<D> & {
   id: string;
-  daemon?: Daemon;
+  daemon?: SimpleDaemon;
   forceLoad?: boolean;
 }
 

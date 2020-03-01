@@ -9,7 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import Daemon, { DaemonCreate } from 'data/daemon';
+import { SimpleDaemon, DaemonCreate } from 'data/daemon';
 import { PLvl } from 'data/permission';
 
 import {
@@ -26,7 +26,7 @@ import DaemonLink from './DaemonLink';
 import FilterDaemonDialog from './FilterDaemonDialog';
 
 // Types
-export interface DaemonTableProps extends Omit<TableProps<Daemon>, 'toolbar'> {
+export interface DaemonTableProps extends Omit<TableProps<SimpleDaemon>, 'toolbar'> {
   onLoad: () => void;
   onReload?: () => void;
   onAdd?: (data: DaemonCreate) => void;
@@ -49,11 +49,11 @@ const DaemonTable = (props: DaemonTableProps) => {
   useEffect(() => { onLoad(); }, [onLoad]);
 
   // Handlers
-  const handleDelete = onDelete && ((daemons: Daemon[]) => { daemons.forEach(daemon => onDelete(daemon._id)) });
+  const handleDelete = onDelete && ((daemons: SimpleDaemon[]) => { daemons.forEach(daemon => onDelete(daemon._id)) });
 
   // Render
-  const name = (daemon: Daemon) => daemon.name || daemon._id;
-  const lastConnection = (daemon: Daemon) => moment(daemon.lastConnexion);
+  const name = (daemon: SimpleDaemon) => daemon.name || daemon._id;
+  const lastConnection = (daemon: SimpleDaemon) => moment(daemon.lastConnexion);
 
   const toolbar = (
     <TableToolbar title="Daemons">
@@ -96,7 +96,7 @@ const DaemonTable = (props: DaemonTableProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            { (daemon: Daemon) => (
+            { (daemon: SimpleDaemon) => (
               <TableRow key={daemon._id} doc={daemon}>
                 <TableCell>
                   <DaemonLink id={daemon._id} daemon={daemon} />

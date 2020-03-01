@@ -1,6 +1,7 @@
 import React from 'react';
+import { omit } from 'lodash';
 
-import Daemon, { DaemonCreate } from 'data/daemon';
+import Daemon, { SimpleDaemon, DaemonCreate } from 'data/daemon';
 import useAPI from 'utils/hooks/useAPI';
 
 import { AppDispatch } from 'store';
@@ -19,12 +20,12 @@ const AllDaemonTable = (props: AllDaemonTableProps) => {
 
   // API
   const { send: add } = useAPI.post<DaemonCreate, Daemon>('/api/daemon');
-  const { data = [], reload, update } = useAPI.get<Daemon[]>('/api/daemons', {}, { load: false });
+  const { data = [], reload, update } = useAPI.get<SimpleDaemon[]>('/api/daemons', {}, { load: false });
 
   // Handlers
   const handleAdd = async (data: DaemonCreate) => {
     const daemon = await add(data);
-    if (daemon) update((data = []) => [...data, daemon]);
+    if (daemon) update((data = []) => [...data, omit(daemon, ['permissions', 'tokens'])]);
   };
 
   const handleDelete = async (id: string) => {

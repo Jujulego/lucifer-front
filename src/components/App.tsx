@@ -4,8 +4,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { CssBaseline, useMediaQuery } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 
-import { PLvl } from 'data/permission';
-import { useLoggedUser } from 'store/users/hooks';
 import createTheme from 'theme';
 
 import LoginForm from './auth/LoginForm';
@@ -14,8 +12,6 @@ import SignInForm from './auth/SignInForm';
 
 import AllDaemonTable from 'containers/daemons/AllDaemonTable';
 import DaemonPage from './daemons/DaemonPage';
-
-import OverrideAccess from './permissions/OverrideAccess';
 
 import AllUserTable from 'containers/users/AllUserTable';
 import UserPage from './users/UserPage';
@@ -28,9 +24,6 @@ import Home from './Home';
 
 // Component
 const App = () => {
-  // User
-  const user = useLoggedUser();
-
   // Theme
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = useMemo(() => createTheme(prefersDark), [prefersDark]);
@@ -54,11 +47,7 @@ const App = () => {
                 </Route>
                 <Route path="/users" exact><AllUserTable /></Route>
                 <Route path="/users/:id">
-                  { ({ match }) => (
-                    <OverrideAccess name="users" level={user?._id === match!.params.id ? PLvl.READ | PLvl.UPDATE : PLvl.NONE}>
-                      <UserPage id={match!.params.id} />
-                    </OverrideAccess>
-                  ) }
+                  { ({ match }) => <UserPage id={match!.params.id} /> }
                 </Route>
                 <Route component={Home} />
               </Switch>

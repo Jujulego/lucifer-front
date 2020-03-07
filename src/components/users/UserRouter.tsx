@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Route, RouteChildrenProps, Switch } from 'react-router';
 
 import { PLvl } from 'data/permission';
@@ -12,7 +12,7 @@ import UserPage from './UserPage';
 export type UserRouterProps = RouteChildrenProps<{ id: string }>;
 
 // Component
-const UserRouter = memo((props: UserRouterProps) => {
+const UserRouter = (props: UserRouterProps) => {
   // Props
   const path = props.match!.path;
   const id = props.match!.params.id;
@@ -30,6 +30,6 @@ const UserRouter = memo((props: UserRouterProps) => {
       </Switch>
     </OverrideAccess>
   );
-});
+};
 
 export default UserRouter;

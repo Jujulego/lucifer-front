@@ -17,7 +17,6 @@ import {
   updateDaemon
 } from 'store/daemons/thunks';
 
-import OverrideAccess from 'components/permissions/OverrideAccess';
 import PermissionCard from 'components/permissions/PermissionCard';
 import RestrictedAccess from 'components/permissions/RestrictedAccess';
 
@@ -58,29 +57,27 @@ const DaemonPage = (props: DaemonPageProps) => {
   if (!daemon) return null;
 
   return (
-    <OverrideAccess name="daemons" level={PLvl.READ | PLvl.UPDATE} forUser={daemon.user}>
-      <RestrictedAccess name="daemons" level={PLvl.READ}>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <DataCard daemon={daemon} onUpdate={handleUpdate} />
-          </Grid>
-          <Grid item xs={8}>
-            <PermissionCard
-              holder={daemon} blacklist={["permissions"]}
-              onRefresh={handleRefresh}
-              onGrant={handleGrant} onRevoke={handleRevoke}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TokenTable
-              holder={daemon} permission="daemons"
-              onRefresh={handleRefresh}
-              onAdd={handleAddToken} onDelete={handleDeleteToken}
-            />
-          </Grid>
+    <RestrictedAccess name="daemons" level={PLvl.READ}>
+      <Grid container spacing={2}>
+        <Grid item xs={4}>
+          <DataCard daemon={daemon} onUpdate={handleUpdate} />
         </Grid>
-      </RestrictedAccess>
-    </OverrideAccess>
+        <Grid item xs={4}>
+          <PermissionCard
+            holder={daemon} blacklist={["permissions"]}
+            onRefresh={handleRefresh}
+            onGrant={handleGrant} onRevoke={handleRevoke}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TokenTable
+            holder={daemon} permission="daemons"
+            onRefresh={handleRefresh}
+            onAdd={handleAddToken} onDelete={handleDeleteToken}
+          />
+        </Grid>
+      </Grid>
+    </RestrictedAccess>
   );
 };
 

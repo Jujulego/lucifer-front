@@ -11,7 +11,7 @@ import PrivateRoute from './auth/PrivateRoute';
 import SignInForm from './auth/SignInForm';
 
 import AllDaemonTable from 'containers/daemons/AllDaemonTable';
-import DaemonPage from './daemons/DaemonPage';
+import DaemonRouter from './daemons/DaemonRouter';
 
 import AllUserTable from 'containers/users/AllUserTable';
 import UserRouter from './users/UserRouter';
@@ -42,9 +42,7 @@ const App = () => {
               <Switch>
                 <Route path="/forbidden" component={ForbiddenPage} />
                 <Route path="/daemons" exact><AllDaemonTable /></Route>
-                <Route path="/daemons/:id">
-                  { ({ match }) => <DaemonPage id={match!.params.id} /> }
-                </Route>
+                <Route path="/daemons/:id" component={DaemonRouter} />
                 <Route path="/users" exact><AllUserTable /></Route>
                 <Route path="/users/:id" component={UserRouter} />
                 <Route component={Home} />

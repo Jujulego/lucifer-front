@@ -14,7 +14,7 @@ import AllDaemonTable from 'containers/daemons/AllDaemonTable';
 import DaemonPage from './daemons/DaemonPage';
 
 import AllUserTable from 'containers/users/AllUserTable';
-import UserPage from './users/UserPage';
+import UserRouter from './users/UserRouter';
 
 import AppBar from './AppBar';
 import Breadcrumbs from './Breadcrumbs';
@@ -46,9 +46,7 @@ const App = () => {
                   { ({ match }) => <DaemonPage id={match!.params.id} /> }
                 </Route>
                 <Route path="/users" exact><AllUserTable /></Route>
-                <Route path="/users/:id">
-                  { ({ match }) => <UserPage id={match!.params.id} /> }
-                </Route>
+                <Route path="/users/:id" component={UserRouter} />
                 <Route component={Home} />
               </Switch>
             </AppBar>

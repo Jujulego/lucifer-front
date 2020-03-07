@@ -1,7 +1,14 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useRouteMatch } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Grid } from '@material-ui/core';
+import {
+  Card, CardHeader,
+  Grid,
+  List, ListItem, ListItemIcon, ListItemText
+} from '@material-ui/core';
+import StorageIcon from '@material-ui/icons/Storage';
 
 import { PLvl, PName } from 'data/permission';
 import { UserUpdate } from 'data/user';
@@ -19,11 +26,10 @@ import {
 } from 'store/users/thunks';
 
 import PermissionCard from 'components/permissions/PermissionCard';
+import RestrictedAccess from 'components/permissions/RestrictedAccess';
 import TokenTable from 'components/tokens/TokenTable';
 
 import CredentialsCard from './CredentialsCard';
-import OverrideAccess from 'components/permissions/OverrideAccess';
-import RestrictedAccess from 'components/permissions/RestrictedAccess';
 
 // Types
 interface UserPageProps {
@@ -37,6 +43,9 @@ const UserPage = (props: UserPageProps) => {
 
   // Redux
   const dispatch = useDispatch<AppDispatch>();
+
+  // Router
+  const { url } = useRouteMatch();
 
   // Users
   const user = useUser(id);
@@ -59,30 +68,41 @@ const UserPage = (props: UserPageProps) => {
   if (!user) return null;
 
   return (
-    <OverrideAccess name="users" level={PLvl.READ | PLvl.UPDATE} forUser={id}>
-      <RestrictedAccess name="users" level={PLvl.READ} redirect>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={4}>
-            <CredentialsCard user={user} onUpdate={handleUpdate} />
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <PermissionCard
-              holder={user}
-              onRefresh={handleRefresh}
-              onElevate={handleElevate}
-              onGrant={handleGrant} onRevoke={handleRevoke}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TokenTable
-              holder={user} permission="users"
-              onRefresh={handleRefresh}
-              onAdd={handleAddToken} onDelete={handleDeleteToken}
-            />
-          </Grid>
+    <RestrictedAccess name="users" level={PLvl.READ} redirect>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+          <CredentialsCard user={user} onUpdate={handleUpdate} />
         </Grid>
-      </RestrictedAccess>
-    </OverrideAccess>
+        <Grid item xs={12} md={4}>
+          <PermissionCard
+            holder={user}
+            onRefresh={handleRefresh}
+            onElevate={handleElevate}
+            onGrant={handleGrant} onRevoke={handleRevoke}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card>
+            <CardHeader title="Liens" />
+            <List component="nav">
+              <ListItem button component={RouterLink} to={`${url}/daemons`}>
+                <ListItemIcon>
+                  <StorageIcon />
+                </ListItemIcon>
+                <ListItemText primary="Daemons" />
+              </ListItem>
+            </List>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          <TokenTable
+            holder={user} permission="users"
+            onRefresh={handleRefresh}
+            onAdd={handleAddToken} onDelete={handleDeleteToken}
+          />
+        </Grid>
+      </Grid>
+    </RestrictedAccess>
   );
 };
 

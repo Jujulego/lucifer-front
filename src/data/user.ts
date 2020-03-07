@@ -14,6 +14,6 @@ export type Credentials = Pick<User, 'email'> & { password: string };
 export type SimpleUser = Omit<User, 'permissions' | 'tokens'>;
 
 export type UserCreate = Pick<User & Credentials, 'email' | 'password'>;
-export type UserUpdate = Partial<UserCreate>;
+export type UserUpdate = Partial<Pick<User & Credentials, 'email' | 'password'>>;
 
 export default User;

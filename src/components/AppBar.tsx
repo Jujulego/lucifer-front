@@ -17,6 +17,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import StorageIcon from '@material-ui/icons/Storage';
 
 import AccountMenu from './auth/AccountMenu';
+import ThemeButton from './ThemeButton';
 
 // Styles
 const useStyles = makeStyles(({ breakpoints, palette, spacing, zIndex }: Theme) => ({
@@ -93,6 +94,7 @@ const AppBar = ({ children }: AppBarProps) => {
             </IconButton>
           ) }
           <Typography classes={{ root: styles.title }} variant="h6">Lucifer</Typography>
+          <ThemeButton color='inherit' />
           <AccountMenu />
         </Toolbar>
       </MuiAppBar>

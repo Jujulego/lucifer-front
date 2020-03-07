@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React from 'react';
+import { CookiesProvider } from 'react-cookie';
 import ReactDOM from 'react-dom';
 
 import { StylesProvider } from '@material-ui/core';
@@ -23,11 +24,13 @@ function handleBeforeLift() {
 // Application
 ReactDOM.render((
   <StylesProvider injectFirst>
-    <Provider store={store}>
-      <PersistGate persistor={persistor} onBeforeLift={handleBeforeLift}>
-        <App />
-      </PersistGate>
-    </Provider>
+    <CookiesProvider>
+      <Provider store={store}>
+        <PersistGate persistor={persistor} onBeforeLift={handleBeforeLift}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </CookiesProvider>
   </StylesProvider>
 ), document.getElementById('root'));
 

@@ -19,6 +19,7 @@ import UserPage from './users/UserPage';
 import AppBar from './AppBar';
 import Breadcrumbs from './Breadcrumbs';
 import ErrorSnackbar from './ErrorSnackbar';
+import EventProvider from './EventProvider';
 import ForbiddenPage from './ForbiddenPage';
 import Home from './Home';
 
@@ -37,21 +38,23 @@ const App = () => {
           <Route path="/login" component={LoginForm} />
           <Route path="/signin" component={SignInForm} />
           <PrivateRoute>
-            <AppBar>
-              <Breadcrumbs />
-              <Switch>
-                <Route path="/forbidden" component={ForbiddenPage} />
-                <Route path="/daemons" exact><AllDaemonTable /></Route>
-                <Route path="/daemons/:id">
-                  { ({ match }) => <DaemonPage id={match!.params.id} /> }
-                </Route>
-                <Route path="/users" exact><AllUserTable /></Route>
-                <Route path="/users/:id">
-                  { ({ match }) => <UserPage id={match!.params.id} /> }
-                </Route>
-                <Route component={Home} />
-              </Switch>
-            </AppBar>
+            <EventProvider>
+              <AppBar>
+                <Breadcrumbs />
+                <Switch>
+                  <Route path="/forbidden" component={ForbiddenPage} />
+                  <Route path="/daemons" exact><AllDaemonTable /></Route>
+                  <Route path="/daemons/:id">
+                    { ({ match }) => <DaemonPage id={match!.params.id} /> }
+                  </Route>
+                  <Route path="/users" exact><AllUserTable /></Route>
+                  <Route path="/users/:id">
+                    { ({ match }) => <UserPage id={match!.params.id} /> }
+                  </Route>
+                  <Route component={Home} />
+                </Switch>
+              </AppBar>
+            </EventProvider>
           </PrivateRoute>
         </Switch>
       </BrowserRouter>

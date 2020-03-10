@@ -20,6 +20,7 @@ import UserRouter from './users/UserRouter';
 import AppBar from './AppBar';
 import Breadcrumbs from './Breadcrumbs';
 import ErrorSnackbar from './ErrorSnackbar';
+import EventProvider from './EventProvider';
 import ForbiddenPage from './ForbiddenPage';
 import Home from './Home';
 
@@ -38,19 +39,21 @@ const App = () => {
           <Route path="/login" component={LoginForm} />
           <Route path="/signin" component={SignInForm} />
           <PrivateRoute>
-            <AppBar>
-              <Breadcrumbs />
-              <Switch>
-                <Route path="/daemons" exact><AllDaemonTable /></Route>
-                <Route path="/daemons/:id" component={DaemonRouter} />
+            <EventProvider>
+              <AppBar>
+                <Breadcrumbs />
+                <Switch>
+                  <Route path="/daemons" exact><AllDaemonTable /></Route>
+                  <Route path="/daemons/:id" component={DaemonRouter} />
 
-                <Route path="/users" exact><AllUserTable /></Route>
-                <Route path="/users/:id" component={UserRouter} />
+                  <Route path="/users" exact><AllUserTable /></Route>
+                  <Route path="/users/:id" component={UserRouter} />
 
-                <Route path="/forbidden" component={ForbiddenPage} />
-                <Route component={Home} />
-              </Switch>
-            </AppBar>
+                  <Route path="/forbidden" component={ForbiddenPage} />
+                  <Route component={Home} />
+                </Switch>
+              </AppBar>
+            </EventProvider>
           </PrivateRoute>
         </Switch>
       </BrowserRouter>

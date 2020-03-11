@@ -10,6 +10,7 @@ import { addError } from 'store/errors/actions';
 
 // Types
 type Socket = typeof io.Socket;
+type Handlers = { [room: string]: EventHandler[] | undefined };
 
 export interface EventProviderProps {
   children: ReactNode
@@ -23,6 +24,7 @@ const EventProvider = (props: EventProviderProps) => {
 
   // Refs
   const socket = useRef<Socket | null>(null);
+  const handlers = useRef<Handlers>({});
 
   // Effects
   useEffect(() => {
@@ -47,17 +49,39 @@ const EventProvider = (props: EventProviderProps) => {
   const register = useCallback((room: string, handler: EventHandler) => {
     if (!socket.current) return;
 
-    // Add handler and register
+    // Add room
+    if (!handlers.current[room]) {
+      handlers.current[room] = [];
+    }
+
+    const rh = handlers.current[room];
+
+    // Add handler
+    rh!.push(handler);
     socket.current.on('event', handler);
-    socket.current.emit('register', room);
-  }, [socket]);
+
+    // Register to room if needed
+    if (rh!.length === 1) {
+      socket.current.emit('register', room);
+    }
+  }, [socket, handlers]);
 
   const unregister = useCallback((room: string, handler: EventHandler) => {
     if (!socket.current) return;
 
+    // Current room
+    const rh = handlers.current[room];
+    if (!rh) return;
+
     // Remove handler
     socket.current.off('event', handler);
-  }, [socket]);
+    rh.splice(rh.indexOf(handler), 1);
+
+    // Unregister from the room
+    if (rh.length === 0) {
+      socket.current.emit('register', room);
+    }
+  }, [socket, handlers]);
 
   return (
     <EventContext.Provider

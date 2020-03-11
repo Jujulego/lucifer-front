@@ -1,8 +1,8 @@
-import React, { ReactNode, useCallback, useEffect, useRef } from 'react';
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import io from 'socket.io-client';
 
-import EventContext, { EventHandler } from 'contexts/EventContext';
+import EventContext, { EventHandler, LinkStatus } from 'contexts/EventContext';
 import Event from 'data/event';
 
 import { AppDispatch, AppState } from 'store';
@@ -18,12 +18,15 @@ export interface EventProviderProps {
 
 // Component
 const EventProvider = (props: EventProviderProps) => {
+  // State
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [status, setStatus] = useState<LinkStatus>('broken');
+
   // Redux
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector((state: AppState) => state.auth.token);
 
   // Refs
-  const socket = useRef<Socket | null>(null);
   const handlers = useRef<Handlers>({});
 
   // Effects
@@ -31,32 +34,46 @@ const EventProvider = (props: EventProviderProps) => {
     if (!token) return;
 
     // Connect
-    socket.current = io.connect('/api', { query: { token }});
-    socket.current.on('event', (event: Event) => { console.log(event); });
-    socket.current.on('error', (error: any) => {
+    const socket = io.connect('/api', { query: { token }});
+    setSocket(socket);
+    setStatus('connecting');
+
+    // Events
+    socket.on('event', (event: Event) => { console.log(event); });
+
+    socket.on('connect',       () => { setStatus('connected');  });
+    socket.on('reconnecting',  () => { setStatus('connecting'); });
+    socket.on('connect_error', () => { setStatus('broken');     });
+
+    socket.on('reconnect', () => {
+      Object.keys(handlers.current).forEach(room => {
+        const rh = handlers.current[room];
+
+        if (rh && rh.length > 0) {
+          console.log(`join ${room}`);
+          socket!.emit('register', room);
+        }
+      });
+    });
+
+    socket.on('error', (error: any) => {
       if (typeof error === 'string') {
         dispatch(addError(error));
       } else {
         dispatch(addError(error.message));
       }
     });
-    socket.current.on('reconnect', () => {
-      Object.keys(handlers.current).forEach(room => {
-        const rh = handlers.current[room];
-
-        if (rh && rh.length >= 0) {
-          socket.current!.emit('register', room);
-        }
-      });
-    });
 
     // Clean up
-    return () => { socket.current?.close(); };
+    return () => {
+      socket?.close();
+      setStatus('broken');
+    };
   }, [dispatch, handlers, token]);
 
   // Callbacks
   const register = useCallback((room: string, handler: EventHandler) => {
-    if (!socket.current) return;
+    if (!socket) return;
 
     // Add room
     if (!handlers.current[room]) {
@@ -67,34 +84,37 @@ const EventProvider = (props: EventProviderProps) => {
 
     // Add handler
     rh!.push(handler);
-    socket.current.on('event', handler);
+    socket.on('event', handler);
 
     // Register to room if needed
     if (rh!.length === 1) {
-      socket.current.emit('register', room);
+      console.log(`join ${room}`);
+      socket.emit('register', room);
     }
   }, [socket, handlers]);
 
   const unregister = useCallback((room: string, handler: EventHandler) => {
-    if (!socket.current) return;
+    if (!socket) return;
 
     // Current room
     const rh = handlers.current[room];
     if (!rh) return;
 
     // Remove handler
-    socket.current.off('event', handler);
+    socket.off('event', handler);
     rh.splice(rh.indexOf(handler), 1);
 
     // Unregister from the room
     if (rh.length === 0) {
-      socket.current.emit('unregister', room);
+      console.log(`leave ${room}`);
+      socket.emit('unregister', room);
     }
   }, [socket, handlers]);
 
   return (
     <EventContext.Provider
       value={{
+        status,
         register, unregister
       }}
     >

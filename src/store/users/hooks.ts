@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AccessContext from 'contexts/AccessContext';
@@ -28,10 +28,13 @@ export function useUser(id: string | undefined, load: boolean = true): User | nu
     dispatch(getUser(id));
   }, [dispatch, id, state, load]);
 
+  // Callbacks
+  const update = useCallback((user: User) => {
+    dispatch(setUserAction(user))
+  }, [dispatch]);
+
   // Events
-  useUpdateEvent(state?.doc?.lrn, (user: User) => {
-    dispatch(setUserAction(user));
-  });
+  useUpdateEvent(state?.doc?.lrn, update);
 
   // Return user
   return state ? state.doc : null;

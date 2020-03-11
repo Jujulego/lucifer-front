@@ -8,15 +8,18 @@ import { Filter, toPredicate } from 'utils/filter';
 // Types
 type Updator<T> = (cb: (data?: T) => T) => void;
 
+export type LinkStatus = 'broken' | 'connecting' | 'connected';
 export type EventHandler = (event: Event) => void;
 
 export interface EventContextProps {
+  status: LinkStatus;
   register:   (room: string, handler: EventHandler) => void;
   unregister: (room: string, handler: EventHandler) => void;
 }
 
 // Default values
 const eventDefaults: EventContextProps = {
+  status: 'broken',
   register: () => {},
   unregister: () => {}
 };
@@ -27,7 +30,7 @@ const EventContext = createContext(eventDefaults);
 // Hooks
 export function useEventRoom(room: string | undefined, handler: EventHandler) {
   // Context
-  const ctx = useContext(EventContext);
+  const { register, unregister } = useContext(EventContext);
 
   // Effects
   useEffect(() => {
@@ -39,11 +42,11 @@ export function useEventRoom(room: string | undefined, handler: EventHandler) {
     };
 
     // Register
-    ctx.register(room, cb);
+    register(room, cb);
 
     // Clean up
-    return () => { ctx.unregister(room, cb); };
-  }, [ctx, room, handler]);
+    return () => { unregister(room, cb); };
+  }, [register, unregister, room, handler]);
 }
 
 export function useDataEvents<T extends BaseDocument>(room: string | undefined, update: Updator<T[]>, filter?: Filter<T>) {

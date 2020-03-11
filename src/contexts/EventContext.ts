@@ -1,7 +1,9 @@
 import { createContext, useCallback, useContext, useEffect } from 'react';
 
 import Event from 'data/event';
-import { BaseDocument, isDocument } from '../data/document';
+import { BaseDocument, isDocument } from 'data/document';
+
+import { Filter, toPredicate } from 'utils/filter';
 
 // Types
 type Updator<T> = (cb: (data?: T) => T) => void;
@@ -42,11 +44,14 @@ export function useEventRoom(room: string, handler: EventHandler) {
   }, [ctx, room, handler]);
 }
 
-export function useDataEvents<T extends BaseDocument>(room: string, update: Updator<T[]>) {
+export function useDataEvents<T extends BaseDocument>(room: string, update: Updator<T[]>, filter?: Filter<T>) {
   // Callback
   const handler = useCallback((event: Event) => {
+    const predicate = filter ? toPredicate(filter) : () => true;
+
     switch (event.kind) {
       case 'create':
+        if (!predicate(event.value as T)) return;
         return update((data = []) => {
           const res = data.filter(doc => doc._id !== event.id);
           res.push(event.value as T);
@@ -55,6 +60,7 @@ export function useDataEvents<T extends BaseDocument>(room: string, update: Upda
         });
 
       case 'update':
+        if (!predicate(event.value as T)) return;
         return update((data = []) => data.map((doc) => {
           if (doc._id !== event.id) return doc;
           if (isDocument(doc) && isDocument(event.value) && doc.__v > event.value.__v) {
@@ -65,11 +71,12 @@ export function useDataEvents<T extends BaseDocument>(room: string, update: Upda
         }));
 
       case 'delete':
+        if (!predicate(event.value as T)) return;
         return update((data = []) =>
           data.filter(doc => doc._id !== event.id)
         );
     }
-  }, [update]);
+  }, [filter, update]);
 
   // Event
   useEventRoom(room, handler);

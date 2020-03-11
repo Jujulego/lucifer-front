@@ -29,7 +29,7 @@ const UserDaemonTable = (props: UserDaemonTableProps) => {
   const { data = [], reload, update } = useAPI.get<SimpleDaemon[]>('/api/daemons', { user }, { load: false });
 
   // Events
-  useDataEvents('daemons', update);
+  useDataEvents('daemons', update, { user });
 
   // Handlers
   const handleAdd = async (data: DaemonCreate) => {

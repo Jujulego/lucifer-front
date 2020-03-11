@@ -6,6 +6,8 @@ import { TokenHolder } from './token';
 interface User extends Document, PermissionHolder, TokenHolder {
   // Attributes
   email: string;
+
+  readonly lrn: string;
 }
 
 // Aliases

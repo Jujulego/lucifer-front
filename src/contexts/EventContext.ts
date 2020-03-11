@@ -25,12 +25,14 @@ const eventDefaults: EventContextProps = {
 const EventContext = createContext(eventDefaults);
 
 // Hooks
-export function useEventRoom(room: string, handler: EventHandler) {
+export function useEventRoom(room: string | undefined, handler: EventHandler) {
   // Context
   const ctx = useContext(EventContext);
 
   // Effects
   useEffect(() => {
+    if (!room) return;
+
     // Callback
     const cb = (event: Event) => {
       if (event.target === room) handler(event);
@@ -44,7 +46,7 @@ export function useEventRoom(room: string, handler: EventHandler) {
   }, [ctx, room, handler]);
 }
 
-export function useDataEvents<T extends BaseDocument>(room: string, update: Updator<T[]>, filter?: Filter<T>) {
+export function useDataEvents<T extends BaseDocument>(room: string | undefined, update: Updator<T[]>, filter?: Filter<T>) {
   // Callback
   const handler = useCallback((event: Event) => {
     const predicate = filter ? toPredicate(filter) : () => true;
@@ -77,6 +79,18 @@ export function useDataEvents<T extends BaseDocument>(room: string, update: Upda
         );
     }
   }, [filter, update]);
+
+  // Event
+  useEventRoom(room, handler);
+}
+
+export function useUpdateEvent<T extends BaseDocument>(room: string | undefined, cb: (data: T) => void) {
+  // Callbacks
+  const handler = useCallback((event: Event) => {
+    if (event.kind === 'update') {
+      cb(event.value as T);
+    }
+  }, [cb]);
 
   // Event
   useEventRoom(room, handler);

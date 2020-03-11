@@ -1,14 +1,15 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { omit } from 'lodash';
 
 import Daemon, { SimpleDaemon, DaemonCreate } from 'data/daemon';
+import { useDataEvents } from 'contexts/EventContext';
 import useAPI from 'utils/hooks/useAPI';
 
 import { AppDispatch } from 'store';
 import { deleteDaemon } from 'store/daemons/thunks';
 
 import DaemonTable, { DaemonTableProps } from 'components/daemons/DaemonTable';
-import { useDispatch } from 'react-redux';
 
 // Types
 export type AllDaemonTableProps = Omit<DaemonTableProps, 'data' | 'onLoad' | 'onReload' | 'onAdd' | 'onDelete'>;
@@ -21,6 +22,9 @@ const AllDaemonTable = (props: AllDaemonTableProps) => {
   // API
   const { send: add } = useAPI.post<DaemonCreate, Daemon>('/api/daemon');
   const { data = [], reload, update } = useAPI.get<SimpleDaemon[]>('/api/daemons', {}, { load: false });
+
+  // Events
+  useDataEvents('daemons', update);
 
   // Handlers
   const handleAdd = async (data: DaemonCreate) => {

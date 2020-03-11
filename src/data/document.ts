@@ -13,4 +13,9 @@ export type AnyDocument = BaseDocument & {
   [extra in string | number | symbol]: any;
 }
 
+// Utils
+export function isDocument(doc: AnyDocument): doc is Document {
+  return typeof doc.__v === 'number';
+}
+
 export default Document;

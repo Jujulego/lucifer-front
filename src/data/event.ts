@@ -1,4 +1,4 @@
-import { BaseDocument as Document, AnyDocument } from './document';
+import { BaseDocument } from './document';
 
 // Types
 export type EventKind = Event['kind'];
@@ -9,12 +9,12 @@ interface BaseEvent<K extends string> {
   kind: K;
 }
 
-export interface DataEvent<T extends Document> extends BaseEvent<'create' | 'update' | 'delete'> {
+export interface DataEvent extends BaseEvent<'create' | 'update' | 'delete'> {
   id: string;
-  value: T;
+  value: BaseDocument;
 }
 
 // Aliases
-type Event = DataEvent<AnyDocument>;
+type Event = DataEvent;
 
 export default Event;

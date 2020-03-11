@@ -6,7 +6,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import SyncIcon from '@material-ui/icons/Sync';
-import SyncAltIcon from '@material-ui/icons/SyncAlt';
+import SwapVertIcon from '@material-ui/icons/SwapVert';
 import SyncProblemIcon from '@material-ui/icons/SyncProblem';
 
 import EventContext from 'contexts/EventContext';
@@ -21,9 +21,6 @@ const useStyles = makeStyles({
     to: { transform: 'rotate(0deg)' },
   },
 
-  connected: {
-    transform: 'rotate(90deg)'
-  },
   connecting: {
     animationName: '$rotate',
     animationDuration: '1s',
@@ -43,7 +40,7 @@ const LinkStatus = (props: LinkStatusProps) => {
   return (
     <Tooltip title={status}>
       <IconButton {...props}>
-        { (status === 'connected') && <SyncAltIcon classes={{ root: styles.connected }} /> }
+        { (status === 'connected') && <SwapVertIcon /> }
         { (status === 'connecting') && <SyncIcon classes={{ root: styles.connecting }} /> }
         { (status === 'broken') && <SyncProblemIcon /> }
       </IconButton>

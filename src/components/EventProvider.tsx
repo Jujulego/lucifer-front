@@ -35,15 +35,24 @@ const EventProvider = (props: EventProviderProps) => {
     socket.current.on('event', (event: Event) => { console.log(event); });
     socket.current.on('error', (error: any) => {
       if (typeof error === 'string') {
-        dispatch(addError(`WS: ${error}`));
+        dispatch(addError(error));
       } else {
-        dispatch(addError(`WS: ${error.message}`));
+        dispatch(addError(error.message));
       }
+    });
+    socket.current.on('reconnect', () => {
+      Object.keys(handlers.current).forEach(room => {
+        const rh = handlers.current[room];
+
+        if (rh && rh.length >= 0) {
+          socket.current!.emit('register', room);
+        }
+      });
     });
 
     // Clean up
     return () => { socket.current?.close(); };
-  }, [dispatch, token]);
+  }, [dispatch, handlers, token]);
 
   // Callbacks
   const register = useCallback((room: string, handler: EventHandler) => {
@@ -79,7 +88,7 @@ const EventProvider = (props: EventProviderProps) => {
 
     // Unregister from the room
     if (rh.length === 0) {
-      socket.current.emit('register', room);
+      socket.current.emit('unregister', room);
     }
   }, [socket, handlers]);
 

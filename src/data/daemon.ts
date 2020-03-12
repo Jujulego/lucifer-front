@@ -7,6 +7,8 @@ interface Daemon extends Document, PermissionHolder, TokenHolder {
   // Attributes
   name?: string;
   user: string;
+
+  readonly lrn: string;
 }
 
 // Aliases

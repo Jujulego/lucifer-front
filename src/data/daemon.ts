@@ -10,6 +10,7 @@ interface Daemon extends Document, PermissionHolder, TokenHolder {
 }
 
 // Aliases
+export type FullDaemon = Daemon & { secret: string };
 export type SimpleDaemon = Omit<Daemon, 'permissions' | 'tokens'>;
 
 export type DaemonCreate = Pick<Daemon, 'name' | 'user'>;

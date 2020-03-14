@@ -9,7 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import { SimpleDaemon, DaemonCreate } from 'data/daemon';
+import { FullDaemon, SimpleDaemon, DaemonCreate } from 'data/daemon';
 import { PLvl } from 'data/permission';
 
 import {
@@ -24,12 +24,13 @@ import UserLink from 'components/users/UserLink';
 import AddDaemonDialog from './AddDaemonDialog';
 import DaemonLink from './DaemonLink';
 import FilterDaemonDialog from './FilterDaemonDialog';
+import NewDaemonDialog from './NewDaemonDialog';
 
 // Types
 export interface DaemonTableProps extends Omit<TableProps<SimpleDaemon>, 'toolbar'> {
   onLoad: () => void;
   onReload?: () => void;
-  onAdd?: (data: DaemonCreate) => void;
+  onAdd?: (data: DaemonCreate) => Promise<FullDaemon | null>;
   onDelete?: (id: string) => void;
 }
 
@@ -44,11 +45,16 @@ const DaemonTable = (props: DaemonTableProps) => {
 
   // State
   const [adding, setAdding] = useState(false);
+  const [newDaemon, setNewDaemon] = useState<FullDaemon | null>(null);
 
   // Effects
   useEffect(() => { onLoad(); }, [onLoad]);
 
   // Handlers
+  const handleAdd = onAdd && (async (data: DaemonCreate) => {
+    const daemon = await onAdd(data);
+    if (daemon) setNewDaemon(daemon);
+  });
   const handleDelete = onDelete && ((daemons: SimpleDaemon[]) => { daemons.forEach(daemon => onDelete(daemon._id)) });
 
   // Render
@@ -64,14 +70,18 @@ const DaemonTable = (props: DaemonTableProps) => {
           </TableAction>
         </RestrictedAccess>
       ) }
-      { onAdd && (
+      { handleAdd && (
         <RestrictedAccess name="daemons" level={PLvl.CREATE}>
           <TableAction when="nothing" tooltip="Ajouter" onClick={() => setAdding(true)}>
             <AddIcon />
           </TableAction>
           <AddDaemonDialog
             open={adding} onClose={() => setAdding(false)}
-            onAdd={onAdd}
+            onAdd={handleAdd}
+          />
+          <NewDaemonDialog
+            open={!!newDaemon} onClose={() => setNewDaemon(null)}
+            daemon={newDaemon}
           />
         </RestrictedAccess>
       ) }

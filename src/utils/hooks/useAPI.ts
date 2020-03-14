@@ -53,6 +53,7 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
         setState({ data: res.data, loading: false });
       })
       .catch((error) => {
+        if (axios.isCancel(error)) return;
         if (httpError(error, dispatch)) return;
         throw error;
       });

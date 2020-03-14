@@ -33,7 +33,8 @@ const UserSelect = (props: UserSelectProps) => {
   // Render
   return (
     <Select
-      {...props} disabled={disabled || loading}
+      {...props} value={value || ''}
+      disabled={disabled || loading}
       IconComponent={loading ? SmallProgress : IconComponent}
     >
       { !required && (

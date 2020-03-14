@@ -57,9 +57,8 @@ const AccountMenu = () => {
         <AccountCircleIcon />
       </IconButton>
       <Menu
-        keepMounted
         anchorEl={anchor}
-        transformOrigin={{ vertical: "bottom", horizontal: "left" }}
+        variant="menu" keepMounted disableAutoFocusItem
         open={anchor != null} onClose={handleClose}
       >
         <ListItem>

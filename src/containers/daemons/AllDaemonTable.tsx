@@ -29,7 +29,12 @@ const AllDaemonTable = (props: AllDaemonTableProps) => {
   // Handlers
   const handleAdd = async (data: DaemonCreate): Promise<FullDaemon | null> => {
     const daemon = await add(data);
-    if (daemon) update((data = []) => [...data, omit(daemon, ['permissions', 'tokens'])]);
+    if (daemon) {
+      update((data = []) => [
+        ...data.filter(doc => doc._id !== daemon._id),
+        omit(daemon, ['permissions', 'tokens'])
+      ]);
+    }
 
     return daemon || null;
   };

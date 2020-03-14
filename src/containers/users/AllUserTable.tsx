@@ -29,7 +29,12 @@ const AllUserTable = (props: AllUserTableProps) => {
   // Handlers
   const handleAdd = async (data: UserCreate) => {
     const user = await add(data);
-    if (user) update((data = []) => [...data, omit(user, ['tokens', 'permissions'])]);
+    if (user) {
+      update((data = []) => [
+        ...data.filter(doc => doc._id !== user._id),
+        omit(user, ['tokens', 'permissions'])
+      ]);
+    }
   };
 
   const handleDelete = (id: string) => {

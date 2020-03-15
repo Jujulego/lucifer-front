@@ -34,7 +34,7 @@ const EventProvider = (props: EventProviderProps) => {
     if (!token) return;
 
     // Connect
-    const socket = io.connect('/api', { query: { token }});
+    const socket = io.connect('/api', { query: { token }, reconnectionAttempts: 5 });
     setSocket(socket);
     setStatus('connecting');
 
@@ -44,6 +44,7 @@ const EventProvider = (props: EventProviderProps) => {
     socket.on('connect',       () => { setStatus('connected');  });
     socket.on('reconnecting',  () => { setStatus('connecting'); });
     socket.on('connect_error', () => { setStatus('broken');     });
+    socket.on('disconnect',    () => { setStatus('broken');     });
 
     socket.on('reconnect', () => {
       Object.keys(handlers.current).forEach(room => {

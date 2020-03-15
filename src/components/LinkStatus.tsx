@@ -1,8 +1,9 @@
 import React, { MouseEvent, useContext, useEffect, useState } from 'react';
 
 import {
+  Divider,
   IconButton, IconButtonProps,
-  List, ListItem, ListItemText,
+  List, ListItem, ListItemIcon, ListItemText,
   Popover,
   Tooltip, Theme
 } from '@material-ui/core';
@@ -39,7 +40,7 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   },
   header: {
     display: 'inline-block',
-    width: 60
+    width: 56
   },
   commit: {
     color: palette.text.secondary
@@ -91,14 +92,33 @@ const LinkStatus = (props: LinkStatusProps) => {
         open={anchor != null} onClose={handleClose}
       >
         <List>
+          { (status === 'connected') && (
+            <ListItem>
+              <ListItemIcon><SwapVertIcon /></ListItemIcon>
+              <ListItemText>Connecté</ListItemText>
+            </ListItem>
+          ) }
+          { (status === 'connecting') && (
+            <ListItem>
+              <ListItemIcon><SyncIcon classes={{ root: styles.connecting }} /></ListItemIcon>
+              <ListItemText>Connection ...</ListItemText>
+            </ListItem>
+          ) }
+          { (status === 'broken') && (
+            <ListItem>
+              <ListItemIcon><SyncProblemIcon /></ListItemIcon>
+              <ListItemText>Déconnecté</ListItemText>
+            </ListItem>
+          ) }
+          <Divider />
           <ListItem>
             <ListItemText primaryTypographyProps={{ noWrap: true }}>
-              <span className={styles.header}>Client</span> { pkg.version }
+              <span className={styles.header}>App</span>{ pkg.version }
             </ListItemText>
           </ListItem>
           <ListItem>
             <ListItemText primaryTypographyProps={{ noWrap: true }}>
-              <span className={styles.header}>Serveur</span> { version?.version }
+              <span className={styles.header}>API</span>{ version?.version }
               { (version?.commit) && <em className={styles.commit}> @{ version?.commit }</em> }
             </ListItemText>
           </ListItem>

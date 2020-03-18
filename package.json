@@ -5,7 +5,7 @@
   "author": "Julien Capellari",
   "license": "MIT",
   "dependencies": {
-    "@material-ui/core": "^4.9.2",
+    "@material-ui/core": "^4.9.4",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.43",
     "axios": "^0.19.2",

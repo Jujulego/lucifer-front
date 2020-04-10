@@ -22,7 +22,7 @@ const UserSelect = (props: UserSelectProps) => {
 
   // Context
   const ctx = useFormControl();
-  const required = props.required || ctx.required;
+  const required = props.required || ctx?.required;
 
   // API
   const { data: users, loading } = useAPI.get<SimpleUser[]>('/api/users');

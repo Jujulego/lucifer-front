@@ -20,7 +20,7 @@ export const createUserToken = (id: string, tags: string[] = []): AppThunk<Promi
   async (dispatch: AppDispatch): Promise<FullToken | null> => {
     try {
       // Request for new token
-      const res = await axios.post<FullToken>(`/api/user/${id}/token`, { tags });
+      const res = await axios.post<FullToken>(`/api/users/${id}/token`, { tags });
       const token = res.data;
 
       // Store data
@@ -44,7 +44,7 @@ export const getUser = (id: string): AppThunk =>
       dispatch(addUserAction(id));
 
       // Request for user data
-      const res = await axios.get<User>(`/api/user/${id}`);
+      const res = await axios.get<User>(`/api/users/${id}`);
       const user = res.data;
 
       // Store data
@@ -61,7 +61,7 @@ export const updateUser = (id: string, update: UserUpdate): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      const res = await axios.put<User>(`/api/user/${id}`, update);
+      const res = await axios.put<User>(`/api/users/${id}`, update);
       const user = res.data;
 
       // Store data
@@ -78,7 +78,7 @@ export const grantUser = (id: string, name: PName, level: PLvl): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      const res = await axios.put<User>(`/api/user/${id}/grant`, { name, level });
+      const res = await axios.put<User>(`/api/users/${id}/grant`, { name, level });
       const user = res.data;
 
       // Store data
@@ -95,7 +95,7 @@ export const elevateUser = (id: string, admin?: boolean): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      const res = await axios.put<User>(`/api/user/${id}/elevate`, { admin });
+      const res = await axios.put<User>(`/api/users/${id}/elevate`, { admin });
       const user = res.data;
 
       // Store data
@@ -112,7 +112,7 @@ export const revokeUser = (id: string, name: PName): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      const res = await axios.put<User>(`/api/user/${id}/revoke`, { name });
+      const res = await axios.put<User>(`/api/users/${id}/revoke`, { name });
       const user = res.data;
 
       // Store data
@@ -129,7 +129,7 @@ export const deleteUserToken = (id: string, tokenId: string): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      const res = await axios.delete<User>(`/api/user/${id}/token/${tokenId}`);
+      const res = await axios.delete<User>(`/api/users/${id}/token/${tokenId}`);
       const user = res.data;
 
       // Store data
@@ -146,7 +146,7 @@ export const deleteUser = (id: string): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      await axios.delete<User>(`/api/user/${id}`);
+      await axios.delete<User>(`/api/users/${id}`);
 
       // Store data
       dispatch(delUserAction(id));

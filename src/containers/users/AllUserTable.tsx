@@ -20,7 +20,7 @@ const AllUserTable = (props: AllUserTableProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   // API
-  const { send: add } = useAPI.post<UserCreate, User>('/api/user/');
+  const { send: add } = useAPI.post<UserCreate, User>('/api/users/');
   const { data = [], reload, update } = useAPI.get<SimpleUser[]>('/api/users', {}, { load: false });
 
   // Events

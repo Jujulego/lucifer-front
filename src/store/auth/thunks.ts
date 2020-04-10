@@ -17,7 +17,7 @@ export const login = (credentials: Credentials): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Make login request
-      const res = await axios.post<LoginToken>('/api/login', { ...credentials, tags: ['Front'] });
+      const res = await axios.post<LoginToken>('/api/users/login', { ...credentials, tags: ['Front'] });
       const data = res.data;
 
       // Set auth header
@@ -65,7 +65,7 @@ export const signIn = (credentials: Credentials, shouldLogin: boolean = true): A
   async (dispatch: AppDispatch) => {
     try {
       // Make sign-in request
-      await axios.post<User>('/api/signin', credentials);
+      await axios.post<User>('/api/users/signin', credentials);
       if (shouldLogin) await dispatch(login(credentials));
 
     } catch (error) {

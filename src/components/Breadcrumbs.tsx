@@ -67,22 +67,24 @@ const Breadcrumbs = () => {
   }
 
   return (
-    <Toolbar classes={{ root: styles.root }} component={Paper} variant="dense">
-      <MuiBreadcrumbs>
-        <Link color="inherit" component={RouterLink} to="/">Accueil</Link>
-        { links.map((to, i) =>
-          (i === links.length - 1) ? (
-            <Typography key={to} color="textPrimary">
-              { getName(to) }
-            </Typography>
-          ) : (
-            <Link key={to} color="inherit" component={RouterLink} to={to}>
-              { getName(to) }
-            </Link>
-          )
-        ) }
-      </MuiBreadcrumbs>
-    </Toolbar>
+    <Paper>
+      <Toolbar classes={{ root: styles.root }} variant="dense">
+        <MuiBreadcrumbs>
+          <Link color="inherit" component={RouterLink} to="/">Accueil</Link>
+          { links.map((to, i) =>
+            (i === links.length - 1) ? (
+              <Typography key={to} color="textPrimary">
+                { getName(to) }
+              </Typography>
+            ) : (
+              <Link key={to} color="inherit" component={RouterLink} to={to}>
+                { getName(to) }
+              </Link>
+            )
+          ) }
+        </MuiBreadcrumbs>
+      </Toolbar>
+    </Paper>
   );
 };
 

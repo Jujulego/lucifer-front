@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 // Types
 interface ChipSelectBaseProps {
   label?: string, helperText?: string,
-  options: string[], value: string[],
+  options: string[], value?: string[],
   onChange: SelectProps['onChange'],
 
   ChipProps?: Omit<ChipProps, 'label'>,
@@ -38,7 +38,7 @@ const ChipSelect = (props: ChipSelectProps) => {
   // Props
   const {
     label, helperText,
-    options, value, onChange,
+    options, value = [], onChange,
 
     ChipProps, SelectProps,
 

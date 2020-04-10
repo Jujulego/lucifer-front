@@ -20,7 +20,7 @@ export const createDaemonToken = (id: string, tags: string[] = []): AppThunk<Pro
   async (dispatch: AppDispatch): Promise<FullToken | null> => {
     try {
       // Request for new token
-      const res = await axios.post<FullToken>(`/api/daemon/${id}/token`, { tags });
+      const res = await axios.post<FullToken>(`/api/daemons/${id}/token`, { tags });
       const token = res.data;
 
       // Store data
@@ -44,7 +44,7 @@ export const getDaemon = (id: string): AppThunk =>
       dispatch(addDaemonAction(id));
 
       // Request for daemon data
-      const res = await axios.get<Daemon>(`/api/daemon/${id}`);
+      const res = await axios.get<Daemon>(`/api/daemons/${id}`);
       const daemon = res.data;
 
       // Store data
@@ -61,7 +61,7 @@ export const updateDaemon = (id: string, update: DaemonUpdate): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      const res = await axios.put<Daemon>(`/api/daemon/${id}`, update);
+      const res = await axios.put<Daemon>(`/api/daemons/${id}`, update);
       const daemon = res.data;
 
       // Store data
@@ -78,7 +78,7 @@ export const grantDaemon = (id: string, name: PName, level: PLvl): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      const res = await axios.put<Daemon>(`/api/daemon/${id}/grant`, { name, level });
+      const res = await axios.put<Daemon>(`/api/daemons/${id}/grant`, { name, level });
       const daemon = res.data;
 
       // Store data
@@ -95,7 +95,7 @@ export const revokeDaemon = (id: string, name: PName): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      const res = await axios.put<Daemon>(`/api/daemon/${id}/revoke`, { name });
+      const res = await axios.put<Daemon>(`/api/daemons/${id}/revoke`, { name });
       const daemon = res.data;
 
       // Store data
@@ -112,7 +112,7 @@ export const deleteDaemonToken = (id: string, tokenId: string): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      const res = await axios.delete<Daemon>(`/api/daemon/${id}/token/${tokenId}`);
+      const res = await axios.delete<Daemon>(`/api/daemons/${id}/token/${tokenId}`);
       const daemon = res.data;
 
       // Store data
@@ -129,7 +129,7 @@ export const deleteDaemon = (id: string): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Request for update
-      await axios.delete<Daemon>(`/api/daemon/${id}`);
+      await axios.delete<Daemon>(`/api/daemons/${id}`);
 
       // Store data
       dispatch(delDaemonAction(id));

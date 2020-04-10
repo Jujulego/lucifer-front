@@ -25,7 +25,7 @@ const UserDaemonTable = (props: UserDaemonTableProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   // API
-  const { send: add } = useAPI.post<DaemonCreate, FullDaemon>('/api/daemon');
+  const { send: add } = useAPI.post<DaemonCreate, FullDaemon>('/api/daemons');
   const { data = [], reload, update } = useAPI.get<SimpleDaemon[]>('/api/daemons', { user }, { load: false });
 
   // Events

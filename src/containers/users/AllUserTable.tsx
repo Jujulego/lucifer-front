@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { omit } from 'lodash';
 
 import User, { SimpleUser, UserCreate } from 'data/user';
-import { useDataEvents } from 'contexts/EventContext';
 import useAPI from 'utils/hooks/useAPI';
 
 import { AppDispatch } from 'store';
@@ -22,9 +21,6 @@ const AllUserTable = (props: AllUserTableProps) => {
   // API
   const { send: add } = useAPI.post<UserCreate, User>('/api/users/');
   const { data = [], reload, update } = useAPI.get<SimpleUser[]>('/api/users', {}, { load: false });
-
-  // Events
-  useDataEvents('users', update);
 
   // Handlers
   const handleAdd = async (data: UserCreate) => {

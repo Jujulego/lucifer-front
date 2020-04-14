@@ -17,7 +17,6 @@ import PeopleIcon from '@material-ui/icons/People';
 import StorageIcon from '@material-ui/icons/Storage';
 
 import AccountMenu from './auth/AccountMenu';
-import LinkStatus from './LinkStatus';
 import ThemeButton from './ThemeButton';
 
 // Styles
@@ -95,7 +94,6 @@ const AppBar = ({ children }: AppBarProps) => {
             </IconButton>
           ) }
           <Typography classes={{ root: styles.title }} variant="h6">Lucifer</Typography>
-          <LinkStatus color='inherit' />
           <ThemeButton color='inherit' />
           <AccountMenu />
         </Toolbar>

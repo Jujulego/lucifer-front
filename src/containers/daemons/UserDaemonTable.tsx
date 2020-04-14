@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { omit } from 'lodash';
 
 import { FullDaemon, SimpleDaemon, DaemonCreate } from 'data/daemon';
-import { useDataEvents } from 'contexts/EventContext';
 import useAPI from 'utils/hooks/useAPI';
 
 import { AppDispatch } from 'store';
@@ -27,9 +26,6 @@ const UserDaemonTable = (props: UserDaemonTableProps) => {
   // API
   const { send: add } = useAPI.post<DaemonCreate, FullDaemon>('/api/daemons');
   const { data = [], reload, update } = useAPI.get<SimpleDaemon[]>('/api/daemons', { user }, { load: false });
-
-  // Events
-  useDataEvents('daemons', update, { user });
 
   // Handlers
   const handleAdd = async (data: DaemonCreate): Promise<FullDaemon | null> => {

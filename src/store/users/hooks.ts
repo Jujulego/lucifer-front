@@ -1,8 +1,7 @@
-import { useCallback, useContext, useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AccessContext from 'contexts/AccessContext';
-import { useUpdateEvent } from 'contexts/EventContext';
 
 import { isAllowed, PLvl, PName } from 'data/permission';
 import User from 'data/user';
@@ -10,7 +9,6 @@ import User from 'data/user';
 import { AppDispatch, AppState } from 'store';
 
 import { getUser } from './thunks';
-import { setUserAction } from './actions';
 
 // Hooks
 export function useUser(id: string | undefined, load: boolean = true): User | null {
@@ -27,14 +25,6 @@ export function useUser(id: string | undefined, load: boolean = true): User | nu
 
     dispatch(getUser(id));
   }, [dispatch, id, state, load]);
-
-  // Callbacks
-  const update = useCallback((user: User) => {
-    dispatch(setUserAction(user))
-  }, [dispatch]);
-
-  // Events
-  useUpdateEvent(state?.doc?.lrn, update);
 
   // Return user
   return state ? state.doc : null;

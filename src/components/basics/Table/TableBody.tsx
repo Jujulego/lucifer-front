@@ -5,22 +5,21 @@ import {
   TableBodyProps as MuiTableBodyProps
 } from '@material-ui/core';
 
-import { Order, useTableContext } from 'contexts/TableContext';
-import { BaseDocument } from 'data/document';
+import { Document, Order, useTableContext } from 'contexts/TableContext';
 import { Comparator, OrderByField, desc, stableSort } from 'utils/sort';
 
 // Types
-export interface TableBodyProps<T extends BaseDocument> extends Omit<MuiTableBodyProps, 'classes'> {
+export interface TableBodyProps<T extends Document> extends Omit<MuiTableBodyProps, 'classes'> {
   children: (doc: T) => ReactNode
 }
 
 // Utils
-function getSorting<T extends BaseDocument>(field: OrderByField<T>, order: Order): Comparator<T> {
+function getSorting<T extends Document>(field: OrderByField<T>, order: Order): Comparator<T> {
   return order === 'desc' ? (a, b) => desc(a, b, field) : (a, b) => -desc(a, b, field);
 }
 
 // Component
-const TableBody = <T extends BaseDocument> (props: TableBodyProps<T>) => {
+const TableBody = <T extends Document> (props: TableBodyProps<T>) => {
   // Props
   const { children, ...body } = props;
 

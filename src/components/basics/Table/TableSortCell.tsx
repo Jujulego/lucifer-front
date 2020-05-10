@@ -5,18 +5,17 @@ import {
   TableCellProps
 } from '@material-ui/core';
 
-import { useTableContext } from 'contexts/TableContext';
-import { BaseDocument } from 'data/document';
+import { Document, useTableContext } from 'contexts/TableContext';
 import { OrderByField } from 'utils/sort';
 
 // Types
-export interface TableSortCellProps<T extends BaseDocument> extends Omit<TableCellProps, 'sortDirection'> {
+export interface TableSortCellProps<T extends Document> extends Omit<TableCellProps, 'sortDirection'> {
   field: OrderByField<T>,
   children: ReactNode
 }
 
 // Component
-const TableSortCell = <T extends BaseDocument> (props: TableSortCellProps<T>) => {
+const TableSortCell = <T extends Document> (props: TableSortCellProps<T>) => {
   // Props
   const {
     field, children,

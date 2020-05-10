@@ -7,8 +7,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import TableContext, { Order, Ordering, Paginator, SelectedState } from 'contexts/TableContext';
-import { BaseDocument } from 'data/document';
+import TableContext, { Document, Order, Ordering, Paginator, SelectedState } from 'contexts/TableContext';
 import { Filter, toPredicate } from 'utils/filter';
 import { StyledProps } from 'utils/style';
 
@@ -25,7 +24,7 @@ const useStyles = makeStyles({
 
 // Types
 export type TableClassKey = 'root' | MuiTableClassKey;
-export interface TableProps<T extends BaseDocument> extends MuiTableProps, StyledProps<TableClassKey> {
+export interface TableProps<T extends Document> extends MuiTableProps, StyledProps<TableClassKey> {
   data: T[],
   blacklist?: string[],
   toolbar?: ReactNode,
@@ -34,7 +33,7 @@ export interface TableProps<T extends BaseDocument> extends MuiTableProps, Style
 }
 
 // Component
-const Table = <T extends BaseDocument> (props: TableProps<T>) => {
+const Table = <T extends Document> (props: TableProps<T>) => {
   // Props
   const {
     data, blacklist = [],
@@ -61,12 +60,12 @@ const Table = <T extends BaseDocument> (props: TableProps<T>) => {
   );
 
   const blacklistCount = useMemo(
-    () => filtered.reduce((count, doc: T) => (blacklist.indexOf(doc._id) === -1) ? count : count + 1, 0),
+    () => filtered.reduce((count, doc: T) => (blacklist.indexOf(doc.id) === -1) ? count : count + 1, 0),
     [blacklist, filtered]
   );
 
   const selectedCount = useMemo(
-    () => filtered.reduce((acc, doc) => selected[doc._id] ? acc + 1 : acc, 0),
+    () => filtered.reduce((acc, doc) => selected[doc.id] ? acc + 1 : acc, 0),
     [filtered, selected]
   );
 
@@ -90,8 +89,8 @@ const Table = <T extends BaseDocument> (props: TableProps<T>) => {
       setSelected({});
     } else {
       setSelected(filtered.reduce<SelectedState>((acc, doc) => {
-        if (blacklist.indexOf(doc._id) === -1) {
-          acc[doc._id] = true;
+        if (blacklist.indexOf(doc.id) === -1) {
+          acc[doc.id] = true;
         }
 
         return acc;

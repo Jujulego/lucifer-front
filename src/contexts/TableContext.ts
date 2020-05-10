@@ -1,14 +1,18 @@
 import { createContext, useContext } from 'react';
 
-import { BaseDocument, AnyDocument } from 'data/document';
 import { Filter } from 'utils/filter';
 import { OrderByField } from 'utils/sort';
 
 // Types
+export interface Document {
+  readonly id: string;
+}
+export type AnyDocument = Document & { [extra in string | symbol | number]: any };
+
 export interface SelectedState { [id: string]: boolean }
 
 export type Order = 'asc' | 'desc'
-export interface Ordering<T extends BaseDocument> {
+export interface Ordering<T extends Document> {
   field?: OrderByField<T>,
   order: Order
 }
@@ -17,7 +21,7 @@ export interface Paginator {
   page: number, rowsPerPage: number
 }
 
-interface BaseTableContextProps<T extends BaseDocument> {
+interface BaseTableContextProps<T extends Document> {
   blacklist: string[],
   documents: T[],
   filter: Filter<T>, filtered: T[],
@@ -36,7 +40,7 @@ interface BaseTableContextProps<T extends BaseDocument> {
   onPaginate: (paginator: Paginator) => void
 }
 
-export type TableContextProps<T extends BaseDocument> = BaseTableContextProps<T> & {
+export type TableContextProps<T extends Document> = BaseTableContextProps<T> & {
   onOrderBy: (field: OrderByField<T>) => void
 };
 
@@ -66,7 +70,7 @@ const tableDefaults: TableContextDefaults = {
 const TableContext = createContext(tableDefaults);
 
 // Hook
-export function useTableContext<T extends BaseDocument = AnyDocument>(): TableContextProps<T> {
+export function useTableContext<T extends Document = AnyDocument>(): TableContextProps<T> {
   return useContext(TableContext);
 }
 

@@ -123,11 +123,11 @@ const AppBar = ({ children }: AppBarProps) => {
             <ListItemIcon><HomeIcon /></ListItemIcon>
             <ListItemText primary="Accueil" />
           </ListItem>
-          <ListItem button component={Link} to="/daemons">
+          <ListItem button component={Link} to="/daemons" disabled>
             <ListItemIcon><StorageIcon /></ListItemIcon>
             <ListItemText primary="Daemons" />
           </ListItem>
-          <ListItem button component={Link} to="/users">
+          <ListItem button component={Link} to="/users" disabled>
             <ListItemIcon><PeopleIcon /></ListItemIcon>
             <ListItemText primary="Utilisateurs" />
           </ListItem>

@@ -3,8 +3,7 @@ import React, { ElementType, MouseEvent } from 'react';
 import { ExtendButtonBaseTypeMap } from '@material-ui/core';
 import { OverrideProps } from '@material-ui/core/OverridableComponent';
 
-import { useTableContext } from 'contexts/TableContext';
-import { BaseDocument } from 'data/document';
+import { useTableContext, Document } from 'contexts/TableContext';
 
 import {
   ToolbarAction, ToolbarActionTypeMap, ToolbarActionClassKey
@@ -15,7 +14,7 @@ type When = "always" | "some" | "nothing"; // selected
 
 export type TableActionClassKey = ToolbarActionClassKey;
 export type TableActionTypeMap<
-  T extends BaseDocument,
+  T extends Document,
   P = {}, D extends ElementType = ToolbarActionTypeMap['defaultComponent']
 > = ExtendButtonBaseTypeMap<{
   props: P & ToolbarActionTypeMap<P, D>['props'] & {
@@ -27,12 +26,12 @@ export type TableActionTypeMap<
 }>;
 
 export type TableActionProps<
-  T extends BaseDocument,
+  T extends Document,
   D extends ElementType = ToolbarActionTypeMap['defaultComponent'], P = {}
 > = OverrideProps<TableActionTypeMap<T, P, D>, D>;
 
 // Component
-const TableAction = <T extends BaseDocument, D extends ElementType = ToolbarActionTypeMap['defaultComponent']> (props: { component?: D } & TableActionProps<T, D>) => {
+const TableAction = <T extends Document, D extends ElementType = ToolbarActionTypeMap['defaultComponent']> (props: { component?: D } & TableActionProps<T, D>) => {
   // Props
   const {
     children, tooltip, when = "always",
@@ -47,7 +46,7 @@ const TableAction = <T extends BaseDocument, D extends ElementType = ToolbarActi
   const handleClick = onActivate ?
     ((event: MouseEvent<HTMLButtonElement>) => {
       // Get selected components
-      const docs = filtered.filter(doc => selected[doc._id]);
+      const docs = filtered.filter(doc => selected[doc.id]);
 
       // Events !
       if (onClick) onClick(event);

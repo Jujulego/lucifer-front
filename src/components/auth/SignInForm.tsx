@@ -7,7 +7,6 @@ import validator from 'validator';
 import { Grid, TextField } from '@material-ui/core';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 
-import { Credentials } from 'data/user';
 import { AppDispatch } from 'store';
 import { signIn } from 'store/auth/thunks';
 
@@ -16,6 +15,10 @@ import { PasswordField, ToolbarAction } from 'components/basics';
 import AuthForm from './AuthForm'
 
 // Types
+interface Credentials {
+  email: string,
+  password: string
+}
 type FormState = Credentials & { confirm: string };
 
 // Component

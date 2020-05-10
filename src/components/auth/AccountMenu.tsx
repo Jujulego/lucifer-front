@@ -15,7 +15,6 @@ import PersonIcon from '@material-ui/icons/Person';
 
 import { AppDispatch } from 'store';
 import { logout } from 'store/auth/thunks';
-import { useLoggedUser } from 'store/users/hooks';
 
 // Component
 const AccountMenu = () => {
@@ -29,7 +28,7 @@ const AccountMenu = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   // API
-  const user = useLoggedUser();
+  const user: any = undefined;
 
   // Effects
   useEffect(() => {

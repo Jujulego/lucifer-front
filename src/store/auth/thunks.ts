@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-import Token from 'data/token';
-import User, { Credentials } from 'data/user';
 import { AppState, AppDispatch, AppThunk } from 'store';
 import { globalReset } from 'store/actions';
 
@@ -10,21 +8,25 @@ import { authError } from './utils';
 import { httpError } from 'store/errors/utils';
 
 // Types
-export type LoginToken = Pick<Token, '_id'> & { token: string, user: User['_id'] };
+interface Credentials {
+  email: string,
+  password: string
+}
+export type LoginToken = { token: string };
 
 // Thunks
 export const login = (credentials: Credentials): AppThunk =>
   async (dispatch: AppDispatch) => {
     try {
       // Make login request
-      const res = await axios.post<LoginToken>('/api/users/login', { ...credentials, tags: ['Front'] });
+      const res = await axios.post<LoginToken>('/api/login', { ...credentials, tags: ['Front'] });
       const data = res.data;
 
       // Set auth header
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
 
       // Store token & user
-      dispatch(loginAction(data.token, data._id, data.user));
+      dispatch(loginAction(data.token));
 
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -65,7 +67,7 @@ export const signIn = (credentials: Credentials, shouldLogin: boolean = true): A
   async (dispatch: AppDispatch) => {
     try {
       // Make sign-in request
-      await axios.post<User>('/api/users/signin', credentials);
+      await axios.post('/api/users/signin', credentials);
       if (shouldLogin) await dispatch(login(credentials));
 
     } catch (error) {

@@ -9,12 +9,10 @@ import useDarkTheme from 'utils/hooks/useDarkTheme';
 
 import LoginForm from './auth/LoginForm';
 import PrivateRoute from './auth/PrivateRoute';
-import SignInForm from './auth/SignInForm';
 
 import AppBar from './AppBar';
 import Breadcrumbs from './Breadcrumbs';
 import ErrorSnackbar from './ErrorSnackbar';
-import ForbiddenPage from './ForbiddenPage';
 import Home from './Home';
 
 // Component
@@ -30,10 +28,10 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           <Route path="/login" component={LoginForm} />
-          <Route path="/signin" component={SignInForm} />
           <PrivateRoute>
             <AppBar>
               <Breadcrumbs />
+              <Home />
             </AppBar>
           </PrivateRoute>
         </Switch>

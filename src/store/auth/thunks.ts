@@ -62,16 +62,3 @@ export const logout = (): AppThunk =>
       throw error;
     }
   };
-
-export const signIn = (credentials: Credentials, shouldLogin: boolean = true): AppThunk =>
-  async (dispatch: AppDispatch) => {
-    try {
-      // Make sign-in request
-      await axios.post('/api/users/signin', credentials);
-      if (shouldLogin) await dispatch(login(credentials));
-
-    } catch (error) {
-      if (httpError(error, dispatch)) return;
-      throw error;
-    }
-  };

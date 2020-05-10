@@ -40,7 +40,6 @@ export interface AuthFormProps {
   title: string,
   submit: string,
 
-  action: ReactNode,
   children: ReactNode,
 
   onSubmit: FormEventHandler<HTMLDivElement>
@@ -51,7 +50,7 @@ const AuthForm = (props: AuthFormProps) => {
   // Props
   const {
     title, submit,
-    action, children,
+    children,
     onSubmit
   } = props;
 
@@ -79,7 +78,6 @@ const AuthForm = (props: AuthFormProps) => {
         <CardHeader
           classes={{ root: styles.header, action: styles.headerAction }}
           title={title} titleTypographyProps={{ variant: "h6" }}
-          action={action}
         />
         <CardContent>{ children }</CardContent>
         <CardActions classes={{ root: styles.actions }}>

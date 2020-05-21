@@ -1,5 +1,4 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
 import {
@@ -13,8 +12,10 @@ import EditIcon from '@material-ui/icons/Edit';
 import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 
-import { AppDispatch } from 'store';
-// import { logout } from 'store/auth/thunks';
+import { useSubject } from 'utils/hooks/useSubject';
+
+import { useLogout } from '../auth.hooks';
+import { Subject } from 'rxjs';
 
 // Component
 const AccountMenu = () => {
@@ -24,8 +25,11 @@ const AccountMenu = () => {
   // Router
   const location = useLocation();
 
-  // Redux
-  const dispatch = useDispatch<AppDispatch>();
+  // Subject
+  const $logout = useSubject(new Subject());
+
+  // Auth
+  useLogout($logout);
 
   // API
   const user: any = undefined;
@@ -46,7 +50,7 @@ const AccountMenu = () => {
 
   const handleLogout = () => {
     setAnchor(null);
-    // dispatch(logout());
+    $logout.next();
   };
 
   // Render

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { Redirect, useLocation } from 'react-router';
 import { Subject } from 'rxjs';
@@ -13,10 +13,10 @@ import {
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { PasswordField } from 'components/basics';
+import { useSubject } from 'utils/hooks/useSubject';
 
 import { Credentials } from '../models/credentials';
 import { useToken, useLogin } from '../auth.hooks';
-import { useSubject } from 'utils/hooks/useSubject';
 
 // Types
 interface LocationState {
@@ -53,7 +53,7 @@ const LoginForm = () => {
 
   // Auth
   const token = useToken();
-  useLogin($creds.asObservable());
+  useLogin(useMemo(() => $creds.asObservable(), [$creds]));
 
   // Form
   const { register, handleSubmit, errors } = useForm<Credentials>();

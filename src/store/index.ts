@@ -3,7 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { persistStore } from 'redux-persist';
 import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
-import { AuthAction } from './auth/types';
+import { AuthAction } from 'auth/auth.actions';
 import { ErrorsAction } from './errors/types';
 
 import appReducer from './reducers';

@@ -14,7 +14,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 
 import { AppDispatch } from 'store';
-import { logout } from 'store/auth/thunks';
+// import { logout } from 'store/auth/thunks';
 
 // Component
 const AccountMenu = () => {
@@ -46,7 +46,7 @@ const AccountMenu = () => {
 
   const handleLogout = () => {
     setAnchor(null);
-    dispatch(logout());
+    // dispatch(logout());
   };
 
   // Render

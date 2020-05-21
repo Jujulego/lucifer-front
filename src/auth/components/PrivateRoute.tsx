@@ -1,11 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import {
   Redirect, Route, RouteProps,
   useLocation
 } from 'react-router';
 
-import { AppState } from 'store';
+import { useToken } from '../auth.hooks';
 
 // Types
 export type PrivateRouteProps = RouteProps;
@@ -15,15 +14,15 @@ const PrivateRoute = (props: PrivateRouteProps) => {
   // Router
   const location = useLocation();
 
-  // Redux
-  const isLoggedIn = useSelector((state: AppState) => state.auth.token != null);
+  // Auth
+  const token = useToken();
 
   // Render
-  if (!isLoggedIn) {
+  if (!token) {
     return <Redirect to={{ pathname: "/login", state: { from: location }}} />;
   }
 
-  return <Route {...props} />
+  return <Route {...props} />;
 };
 
 export default PrivateRoute;

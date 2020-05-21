@@ -8,7 +8,7 @@ import createTheme from 'theme';
 import useDarkTheme from 'utils/hooks/useDarkTheme';
 
 import LoginForm from 'auth/components/LoginForm';
-import PrivateRoute from './auth/PrivateRoute';
+import PrivateRoute from 'auth/components/PrivateRoute';
 
 import AppBar from './AppBar';
 import Breadcrumbs from './Breadcrumbs';

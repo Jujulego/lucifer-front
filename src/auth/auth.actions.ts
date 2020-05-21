@@ -7,13 +7,13 @@ export const AUTH_LOGOUT = 'auth/LOGOUT';
 // Actions
 // - login
 export type LoginAction = Action<typeof AUTH_LOGIN> & { token: string };
-export const login = (token: string): LoginAction => ({
+export const _login = (token: string): LoginAction => ({
   type: AUTH_LOGIN, token
 });
 
 // - logout
 export type LogoutAction = Action<typeof AUTH_LOGOUT>;
-export const logout = (): LogoutAction => ({
+export const _logout = (): LogoutAction => ({
   type: AUTH_LOGOUT
 });
 

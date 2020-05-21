@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Redirect, useLocation } from 'react-router';
-import { Subject } from 'rxjs';
 import validator from 'validator';
 
 import {
@@ -13,7 +12,6 @@ import {
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { PasswordField } from 'components/basics';
-import { useSubject } from 'utils/hooks/useSubject';
 
 import { Credentials } from '../models/credentials';
 import { useToken, useLogin } from '../auth.hooks';
@@ -48,20 +46,12 @@ const LoginForm = () => {
   // Router
   const location = useLocation<LocationState>();
 
-  // Subjects
-  const $creds = useSubject<Credentials>(new Subject());
-
   // Auth
   const token = useToken();
-  useLogin(useMemo(() => $creds.asObservable(), [$creds]));
+  const handleLogin = useLogin();
 
   // Form
   const { register, handleSubmit, errors } = useForm<Credentials>();
-
-  // Handlers
-  const handleLogin = (creds: Credentials) => {
-    $creds.next(creds);
-  }
 
   // Render
   const styles = useStyles();

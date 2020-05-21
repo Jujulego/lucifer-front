@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Redirect, useLocation } from 'react-router';
 import { Subject } from 'rxjs';
@@ -16,6 +16,7 @@ import { PasswordField } from 'components/basics';
 
 import { Credentials } from '../models/credentials';
 import { useToken, useLogin } from '../auth.hooks';
+import { useSubject } from 'utils/hooks/useSubject';
 
 // Types
 interface LocationState {
@@ -47,14 +48,15 @@ const LoginForm = () => {
   // Router
   const location = useLocation<LocationState>();
 
+  // Subjects
+  const $creds = useSubject<Credentials>(new Subject());
+
   // Auth
   const token = useToken();
+  useLogin($creds.asObservable());
 
   // Form
   const { register, handleSubmit, errors } = useForm<Credentials>();
-
-  const $creds = useRef(new Subject<Credentials>()).current;
-  useLogin($creds);
 
   // Handlers
   const handleLogin = (creds: Credentials) => {

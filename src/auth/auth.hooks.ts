@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { from, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { distinct, map, switchMap } from 'rxjs/operators';
 
 import { AppDispatch, AppState } from 'store';
 
@@ -25,11 +25,13 @@ export const useLogin = ($creds: Observable<Credentials>) => {
 
   // Effect
   useEffect(() => {
-    $creds
+    const sub = $creds
       .pipe(
         switchMap(creds => from(axios.post<LoginResponse>('/api/login', creds))),
         map(res => login(res.data.token))
       )
-      .subscribe(dispatch)
+      .subscribe(a => dispatch(a));
+
+    return () => sub.unsubscribe();
   }, [$creds, dispatch]);
 }

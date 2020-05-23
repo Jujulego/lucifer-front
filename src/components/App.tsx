@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -7,8 +6,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import createTheme from 'theme';
 import useDarkTheme from 'utils/hooks/useDarkTheme';
 
-import LoginForm from 'auth/components/LoginForm';
-import PrivateRoute from 'auth/components/PrivateRoute';
+import { useAuth0 } from 'auth/auth0.context';
 
 import AppBar from './AppBar';
 import Breadcrumbs from './Breadcrumbs';
@@ -21,22 +19,29 @@ const App = () => {
   const { prefersDark } = useDarkTheme();
   const theme = useMemo(() => createTheme(prefersDark), [prefersDark]);
 
+  // Auth0
+  const { isAuthenticated, loading, loginWithRedirect } = useAuth0();
+
   // Render
+  if (loading) {
+    return (
+      <p>Loading ...</p>
+    );
+  }
+
+  if (!isAuthenticated) {
+    loginWithRedirect()
+      .then(() => {});
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
-        <Switch>
-          <Route path="/login" component={LoginForm} />
-          <PrivateRoute>
-            <AppBar>
-              <Breadcrumbs />
-              <Home />
-            </AppBar>
-          </PrivateRoute>
-        </Switch>
-      </BrowserRouter>
-      <ErrorSnackbar />
+      <Home />
+      {/*<AppBar>*/}
+      {/*  <Breadcrumbs />*/}
+      {/*</AppBar>*/}
+      {/*<ErrorSnackbar />*/}
     </ThemeProvider>
   );
 };

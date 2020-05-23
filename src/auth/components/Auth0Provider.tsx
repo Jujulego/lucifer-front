@@ -10,7 +10,7 @@ import { Auth0Context } from '../auth0.context';
 // Types
 export interface Auth0ProviderProps extends Auth0ClientOptions {
   children: ReactNode;
-  onRedirectCallback: (result: any) => void;
+  onRedirectCallback?: (result: any) => void;
 }
 
 // Components
@@ -25,7 +25,7 @@ const Auth0Provider = (props: Auth0ProviderProps) => {
   // State
   const [auth0,     setAuth0]   = useState<Auth0Client>();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading,   setLoading] = useState(false);
+  const [loading,   setLoading] = useState(true);
   const [popupOpen, setPopup]   = useState(false);
   const [user,      setUser]    = useState<any>(null);
 

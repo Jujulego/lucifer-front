@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-router';
 
 import { StylesProvider } from '@material-ui/core';
 
@@ -9,13 +8,24 @@ import history from 'app.history';
 
 import App from 'components/App';
 import * as serviceWorker from 'serviceWorker';
+import Auth0Provider from 'auth/components/Auth0Provider';
+
+// Callback
+const onRedirectCallback = (state: any) => {
+  history.push((state && state.targetUrl) || window.location.pathname);
+};
 
 // Application
 ReactDOM.render((
   <StylesProvider injectFirst>
-    <Router history={history}>
+    <Auth0Provider
+      domain="dev-lucifer.eu.auth0.com"
+      client_id="EiFpapg4lwQb1jJGtVGv7pMx49QIgEaP"
+      redirect_uri={window.location.origin}
+      onRedirectCallback={onRedirectCallback}
+    >
       <App />
-    </Router>
+    </Auth0Provider>
   </StylesProvider>
 ), document.getElementById('root'));
 

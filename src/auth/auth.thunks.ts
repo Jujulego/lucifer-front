@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { AppDispatch, AppThunk } from 'store';
+import { AppThunk } from 'store';
 
 import { _login, _logout } from './auth.actions';
 import { Credentials } from './models/credentials';

@@ -1,36 +1,21 @@
-import axios from 'axios';
 import React from 'react';
-import { CookiesProvider } from 'react-cookie';
 import ReactDOM from 'react-dom';
+import { Router } from 'react-router';
 
 import { StylesProvider } from '@material-ui/core';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 
 import 'configs';
+import history from 'app.history';
+
 import App from 'components/App';
 import * as serviceWorker from 'serviceWorker';
-import { persistor, store } from 'store';
-
-// Handlers
-function handleBeforeLift() {
-  const state = store.getState();
-
-  if (state.auth.token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${state.auth.token}`;
-  }
-}
 
 // Application
 ReactDOM.render((
   <StylesProvider injectFirst>
-    <CookiesProvider>
-      <Provider store={store}>
-        <PersistGate persistor={persistor} onBeforeLift={handleBeforeLift}>
-          <App />
-        </PersistGate>
-      </Provider>
-    </CookiesProvider>
+    <Router history={history}>
+      <App />
+    </Router>
   </StylesProvider>
 ), document.getElementById('root'));
 

@@ -12,7 +12,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 
-import { useLogout } from '../auth.hooks';
+import { useAuth } from '../auth.context';
 
 // Component
 const AccountMenu = () => {
@@ -23,7 +23,7 @@ const AccountMenu = () => {
   const location = useLocation();
 
   // Auth
-  const logout = useLogout();
+  const { logout } = useAuth();
 
   // API
   const user: any = undefined;

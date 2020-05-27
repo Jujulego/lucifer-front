@@ -1,36 +1,52 @@
-import axios from 'axios';
+import { Auth0Client, LogoutOptions, PopupLoginOptions } from '@auth0/auth0-spa-js';
 
 import { AppThunk } from 'store';
 
-import { _login, _logout } from './auth.actions';
-import { Credentials } from './models/credentials';
-
-// Types
-interface RLogin {
-  token: string
-}
+import { _loading, _login, _logout, _popup } from './auth.actions';
 
 // Thunks
-export const login = (creds: Credentials): AppThunk =>
+export const loginWithPopup = (auth0: Auth0Client, options: PopupLoginOptions): AppThunk =>
   async (dispatch) => {
-    // Request login
-    const res = await axios.post<RLogin>('/api/login', creds);
+    dispatch(_popup.true());
 
-    // Save token
-    dispatch(_login(res.data.token));
+    try {
+      // Login
+      await auth0.loginWithPopup(options);
+
+      // Save token
+      const token = await auth0.getIdTokenClaims();
+      const user = await auth0.getUser();
+
+      dispatch(_login(token.__raw, user));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      dispatch(_popup.false());
+    }
   };
 
-export const logout = (): AppThunk =>
-  async (dispatch, getState) => {
-    const state = getState();
+export const handleRedirectCallback = (auth0: Auth0Client): AppThunk =>
+  async (dispatch) => {
+    dispatch(_loading.true());
 
-    // Request login
-    await axios.delete('/api/logout', {
-      headers: {
-        AUTHORIZATION: `Bearer ${state.auth.token}`
-      }
-    });
+    try {
+      // Login
+      await auth0.handleRedirectCallback();
 
-    // Save token
+      // Save token
+      const token = await auth0.getIdTokenClaims();
+      const user = await auth0.getUser();
+
+      dispatch(_login(token.__raw, user));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      dispatch(_loading.false());
+    }
+  };
+
+export const logout = (auth0: Auth0Client, options: LogoutOptions): AppThunk =>
+  async (dispatch) => {
+    await auth0.logout(options);
     dispatch(_logout());
   };

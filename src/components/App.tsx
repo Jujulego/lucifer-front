@@ -3,14 +3,12 @@ import React, { useMemo } from 'react';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 
+import history from 'app.history';
 import createTheme from 'theme';
 import useDarkTheme from 'utils/hooks/useDarkTheme';
 
-import { useAuth0 } from 'auth/auth0.context';
+import AuthGate from 'auth/components/AuthGate';
 
-import AppBar from './AppBar';
-import Breadcrumbs from './Breadcrumbs';
-import ErrorSnackbar from './ErrorSnackbar';
 import Home from './Home';
 
 // Component
@@ -19,25 +17,18 @@ const App = () => {
   const { prefersDark } = useDarkTheme();
   const theme = useMemo(() => createTheme(prefersDark), [prefersDark]);
 
-  // Auth0
-  const { isAuthenticated, loading, loginWithRedirect } = useAuth0();
-
   // Render
-  if (loading) {
-    return (
-      <p>Loading ...</p>
-    );
-  }
-
-  if (!isAuthenticated) {
-    loginWithRedirect()
-      .then(() => {});
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Home />
+      <AuthGate
+        domain="dev-lucifer.eu.auth0.com"
+        client_id="EiFpapg4lwQb1jJGtVGv7pMx49QIgEaP"
+        redirect_uri={window.location.origin}
+        onRedirectCallback={(state: any) => history.push((state && state.targetUrl) || window.location.pathname)}
+      >
+        <Home />
+      </AuthGate>
       {/*<AppBar>*/}
       {/*  <Breadcrumbs />*/}
       {/*</AppBar>*/}

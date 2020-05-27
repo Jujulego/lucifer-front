@@ -1,21 +1,33 @@
 import { Action } from 'redux';
 
+import { BoolAction, bool_ac } from 'utils/actions/bool';
+
 // Constants
-export const AUTH_LOGIN  = 'auth/LOGIN';
-export const AUTH_LOGOUT = 'auth/LOGOUT';
+export const AUTH_LOADING = 'AUTH_LOADING';
+export const AUTH_POPUP   = 'AUTH_POPUP';
+export const AUTH_LOGIN   = 'AUTH_LOGIN';
+export const AUTH_LOGOUT  = 'AUTH_LOGOUT';
 
 // Actions
+// - loading
+export type AuthLoading = BoolAction<typeof AUTH_LOADING>;
+export const _loading = bool_ac<typeof AUTH_LOADING>(AUTH_LOADING);
+
+// - popup
+export type AuthPopup = BoolAction<typeof AUTH_POPUP>;
+export const _popup = bool_ac<typeof AUTH_POPUP>(AUTH_POPUP);
+
 // - login
-export type LoginAction = Action<typeof AUTH_LOGIN> & { token: string };
-export const _login = (token: string): LoginAction => ({
-  type: AUTH_LOGIN, token
+export type AuthLoginAction = Action<typeof AUTH_LOGIN> & { token: string, user: any };
+export const _login = (token: string, user: any): AuthLoginAction => ({
+  type: AUTH_LOGIN, token, user
 });
 
 // - logout
-export type LogoutAction = Action<typeof AUTH_LOGOUT>;
-export const _logout = (): LogoutAction => ({
+export type AuthLogoutAction = Action<typeof AUTH_LOGOUT>;
+export const _logout = (): AuthLogoutAction => ({
   type: AUTH_LOGOUT
 });
 
 // Aliases
-export type AuthAction = LoginAction | LogoutAction;
+export type AuthAction = AuthLoading | AuthPopup | AuthLoginAction | AuthLogoutAction;

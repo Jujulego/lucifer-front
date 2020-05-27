@@ -1,25 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { PopupLoginOptions, RedirectLoginOptions, LogoutOptions } from '@auth0/auth0-spa-js';
 
 import { AppDispatch, AppState } from 'store';
 
-import { login, logout } from './auth.thunks';
-import { Credentials } from './models/credentials';
+import { AuthState } from './auth.reducer';
+
+// Type
+export type AuthHookReturn = AuthState & {
+  loginWithPopup: (options?: PopupLoginOptions) => Promise<void>;
+  loginWithRedirect: (options?: RedirectLoginOptions) => Promise<void>;
+  logout: (options?: LogoutOptions) => Promise<void>;
+};
 
 // Hooks
-export function useToken() {
-  return useSelector((state: AppState) => state.auth.token);
-}
-
-export function useLogin() {
-  // Redux
-  const dispatch = useDispatch<AppDispatch>();
-
-  return (creds: Credentials) => dispatch(login(creds));
-}
-
-export function useLogout() {
-  // Redux
-  const dispatch = useDispatch<AppDispatch>();
-
-  return () => dispatch(logout());
+export function useAuth() {
 }

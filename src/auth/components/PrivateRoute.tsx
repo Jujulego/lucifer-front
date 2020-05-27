@@ -4,7 +4,7 @@ import {
   useLocation
 } from 'react-router';
 
-import { useToken } from '../auth.hooks';
+import { useAuth } from '../auth.context';
 
 // Types
 export type PrivateRouteProps = RouteProps;
@@ -15,10 +15,10 @@ const PrivateRoute = (props: PrivateRouteProps) => {
   const location = useLocation();
 
   // Auth
-  const token = useToken();
+  const { isLogged } = useAuth();
 
   // Render
-  if (!token) {
+  if (!isLogged) {
     return <Redirect to={{ pathname: "/login", state: { from: location }}} />;
   }
 

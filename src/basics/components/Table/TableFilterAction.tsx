@@ -6,9 +6,10 @@ import { OverrideProps } from '@material-ui/core/OverridableComponent';
 import { Badge } from '@material-ui/core';
 import { FilterList as FilterIcon } from '@material-ui/icons';
 
-import { AnyDocument, Document, useTableContext } from 'contexts/TableContext';
 import { Filter } from 'utils/filter';
 
+import { AnyDocument, Document } from '../../models/document';
+import { useTable } from '../../table.context';
 import TableAction, { TableActionClassKey, TableActionTypeMap } from './TableAction';
 
 // Types
@@ -54,7 +55,7 @@ const TableFilterAction = <T extends Document = AnyDocument, D extends ElementTy
   } = props;
 
   // Contexts
-  const { filtered, filter } = useTableContext<T>();
+  const { filtered, filter } = useTable<T>();
 
   // State
   const [open, setOpen] = useState(false);

@@ -5,8 +5,10 @@ import {
   TableBodyProps as MuiTableBodyProps
 } from '@material-ui/core';
 
-import { Document, Order, useTableContext } from 'contexts/TableContext';
-import { Comparator, OrderByField, desc, stableSort } from 'utils/sort';
+import { asc, Comparator, desc, OrderByField, stableSort } from 'utils/sort';
+
+import { Document } from '../../models/document';
+import { Order, useTable } from '../../table.context';
 
 // Types
 export interface TableBodyProps<T extends Document> extends Omit<MuiTableBodyProps, 'classes'> {
@@ -15,7 +17,7 @@ export interface TableBodyProps<T extends Document> extends Omit<MuiTableBodyPro
 
 // Utils
 function getSorting<T extends Document>(field: OrderByField<T>, order: Order): Comparator<T> {
-  return order === 'desc' ? (a, b) => desc(a, b, field) : (a, b) => -desc(a, b, field);
+  return order === 'desc' ? (a, b) => desc(a, b, field) : (a, b) => asc(a, b, field);
 }
 
 // Component
@@ -24,21 +26,21 @@ const TableBody = <T extends Document> (props: TableBodyProps<T>) => {
   const { children, ...body } = props;
 
   // Contexts
-  const { filtered, ordering, paginator } = useTableContext<T>();
+  const { filtered, ordering, paginator } = useTable<T>();
 
   // Memos
-  const sorted = useMemo<T[]>(() => {
+  const sorted = useMemo(() => {
     if (ordering.field === undefined) return filtered;
 
     return stableSort(filtered, getSorting(ordering.field, ordering.order));
   }, [filtered, ordering]);
 
-  const paginated = useMemo<T[]>(() => {
+  const paginated = useMemo(() => {
     if (!paginator) return sorted;
 
     const { page, rowsPerPage } = paginator;
     return sorted.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
-  }, [paginator, sorted]);
+  }, [sorted, paginator]);
 
   // Render
   if (paginated.length === 0) return null;
@@ -47,7 +49,7 @@ const TableBody = <T extends Document> (props: TableBodyProps<T>) => {
     <MuiTableBody {...body}>
       { paginated.map(children) }
     </MuiTableBody>
-  )
+  );
 };
 
 export default TableBody;

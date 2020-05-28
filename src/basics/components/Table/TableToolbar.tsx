@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import clsx from 'clsx';
 
-
 import {
   Toolbar as MuiToolbar,
   ToolbarProps as MuiToolbarProps,
@@ -9,8 +8,9 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useTableContext } from 'contexts/TableContext';
 import { StyledProps } from 'utils/style';
+
+import { useTable } from '../../table.context';
 
 // Types
 export type TableToolbarClassKey = 'root' | 'selected' | 'title';
@@ -50,13 +50,19 @@ const TableToolbar = (props: ToolbarProps) => {
   } = props;
 
   // Context
-  const { selectedCount } = useTableContext();
+  const { selectedCount } = useTable();
 
   // Render
   const styles = useStyles(props);
 
   return (
-    <MuiToolbar {...toolbar} classes={{ root: clsx(styles.root, { [styles.selected]: selectedCount > 0 }) }}>
+    <MuiToolbar {...toolbar}
+      classes={{
+        root: clsx(styles.root, {
+          [styles.selected]: selectedCount > 0
+        })
+      }}
+    >
       { (selectedCount > 0) ? (
         <Typography classes={{ root: styles.title }} color="inherit" variant="subtitle1">{selectedCount} sélectionné(s)</Typography>
       ) : (

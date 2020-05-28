@@ -3,11 +3,9 @@ import React, { ElementType, MouseEvent } from 'react';
 import { ExtendButtonBaseTypeMap } from '@material-ui/core';
 import { OverrideProps } from '@material-ui/core/OverridableComponent';
 
-import { useTableContext, Document } from 'contexts/TableContext';
-
-import {
-  ToolbarAction, ToolbarActionTypeMap, ToolbarActionClassKey
-} from 'components/basics/index';
+import { Document } from '../../models/document';
+import { useTable } from '../../table.context';
+import ToolbarAction, { ToolbarActionTypeMap, ToolbarActionClassKey } from '../ToolbarAction';
 
 // Types
 type When = "always" | "some" | "nothing"; // selected
@@ -40,7 +38,7 @@ const TableAction = <T extends Document, D extends ElementType = ToolbarActionTy
   } = props;
 
   // Contexts
-  const { filtered, selected, selectedCount } = useTableContext<T>();
+  const { filtered, selected, selectedCount } = useTable<T>();
 
   // Handlers
   const handleClick = onActivate ?

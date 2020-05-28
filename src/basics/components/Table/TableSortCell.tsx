@@ -5,8 +5,10 @@ import {
   TableCellProps
 } from '@material-ui/core';
 
-import { Document, useTableContext } from 'contexts/TableContext';
 import { OrderByField } from 'utils/sort';
+
+import { Document } from '../../models/document';
+import { useTable } from '../../table.context';
 
 // Types
 export interface TableSortCellProps<T extends Document> extends Omit<TableCellProps, 'sortDirection'> {
@@ -23,7 +25,7 @@ const TableSortCell = <T extends Document> (props: TableSortCellProps<T>) => {
   } = props;
 
   // Context
-  const { ordering, onOrderBy } = useTableContext<T>();
+  const { ordering, onOrderBy } = useTable<T>();
 
   // Render
   return (
@@ -38,7 +40,7 @@ const TableSortCell = <T extends Document> (props: TableSortCellProps<T>) => {
         { children }
       </TableSortLabel>
     </TableCell>
-  )
+  );
 };
 
 export default TableSortCell;

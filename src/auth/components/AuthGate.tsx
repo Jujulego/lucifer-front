@@ -63,9 +63,7 @@ const AuthGate = (props: AuthGateProps) => {
 
   // Render
   if (state.loading) {
-    return (
-      <></>
-    );
+    return null;
   }
 
   return (

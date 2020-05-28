@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   Table as MuiTable,
@@ -7,9 +7,12 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import TableContext, { Document, Order, Ordering, Paginator, SelectedState } from 'contexts/TableContext';
 import { Filter, toPredicate } from 'utils/filter';
+import { OrderByField } from 'utils/sort';
 import { StyledProps } from 'utils/style';
+
+import { Document } from '../../models/document';
+import { Order, Ordering, Paginator, SelectState, TableContext } from '../../table.context';
 
 // Styles
 const useStyles = makeStyles({
@@ -25,8 +28,8 @@ const useStyles = makeStyles({
 // Types
 export type TableClassKey = 'root' | MuiTableClassKey;
 export interface TableProps<T extends Document> extends MuiTableProps, StyledProps<TableClassKey> {
-  data: T[],
-  blacklist?: string[],
+  documents: T[],
+  blacklist?: Array<number | string>,
   toolbar?: ReactNode,
   pagination?: ReactNode,
   children?: ReactNode
@@ -36,27 +39,27 @@ export interface TableProps<T extends Document> extends MuiTableProps, StyledPro
 const Table = <T extends Document> (props: TableProps<T>) => {
   // Props
   const {
-    data, blacklist = [],
+    documents, blacklist = [],
     toolbar, pagination, classes,
     children,
     ...table
   } = props;
 
   // State
-  const [filter, setFilter]       = useState<Filter<T>>({});
-  const [ordering, setOrdering]   = useState<Ordering<T>>({ order: 'asc' });
-  const [selected, setSelected]   = useState<SelectedState>({});
-  const [paginator, setPaginator] = useState<Paginator | undefined>(undefined);
+  const [filter,    setFilter]    = useState<Filter<T>>({});
+  const [ordering,  setOrdering]  = useState<Ordering<T>>({ order: 'asc' });
+  const [selected,  setSelected]  = useState<SelectState>({});
+  const [paginator, setPaginator] = useState<Paginator>();
 
   // Effects
   useEffect(() => {
     setSelected({});
-  }, [data]);
+  }, [documents]);
 
   // Memos
   const filtered = useMemo(
-    () => data.filter(toPredicate(filter)),
-    [data, filter]
+    () => documents.filter(toPredicate(filter)),
+    [documents, filter]
   );
 
   const blacklistCount = useMemo(
@@ -65,30 +68,31 @@ const Table = <T extends Document> (props: TableProps<T>) => {
   );
 
   const selectedCount = useMemo(
-    () => filtered.reduce((acc, doc) => selected[doc.id] ? acc + 1 : acc, 0),
-    [filtered, selected]
+    () => filtered.reduce((count, doc: T) => selected[doc.id] ? count + 1 : count, 0),
+    [selected, filtered]
   );
 
-  // Render
-  const styles = useStyles(props);
   const selectedAll = selectedCount >= (filtered.length - blacklistCount);
 
-  const onOrderBy = (field: keyof T) => {
-    let order: Order = 'asc';
+  // Callbacks
+  const onOrderBy = useCallback((field: OrderByField<T>) => {
+    setOrdering(old => {
+      let order: Order = 'asc';
 
-    if (ordering.field === field && ordering.order === "asc") {
-      order = "desc";
-    }
+      if (old.field === field && old.order === 'asc') {
+        order = 'desc';
+      }
 
-    setOrdering({ field, order });
-  };
+      return { field, order };
+    });
+  }, [setOrdering]);
 
-  const onSelect = (id: string) => setSelected(old => ({ ...old, [id]: !old[id] }));
-  const onSelectAll = () => {
+  const onSelect = useCallback((id: number | string) => setSelected(old => ({ ...old, [id]: !old[id] })), [setSelected]);
+  const onSelectAll = useCallback(() => {
     if (selectedAll) {
       setSelected({});
     } else {
-      setSelected(filtered.reduce<SelectedState>((acc, doc) => {
+      setSelected(filtered.reduce<SelectState>((acc, doc) => {
         if (blacklist.indexOf(doc.id) === -1) {
           acc[doc.id] = true;
         }
@@ -96,22 +100,23 @@ const Table = <T extends Document> (props: TableProps<T>) => {
         return acc;
       }, {}));
     }
-  };
+  }, [blacklist, filtered, selectedAll]);
+  
+  // Render
+  const styles = useStyles(props);
 
   return (
     <TableContext.Provider
       value={{
-        blacklist, documents: data, filtered,
-        filter, ordering,
+        documents, blacklist, filtered,
+        filter, ordering, paginator,
         selected, selectedCount,
         selectableCount: filtered.length - blacklistCount,
         selectedAll: selectedCount > 0 && selectedAll,
-        paginator,
-        onSelect,
-        onSelectAll,
         onFilter: setFilter,
         onOrderBy,
-        onPaginate: setPaginator
+        onPaginate: setPaginator,
+        onSelect, onSelectAll,
       }}
     >
       { toolbar }

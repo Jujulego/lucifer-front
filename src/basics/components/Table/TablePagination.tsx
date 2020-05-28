@@ -5,10 +5,10 @@ import {
   TablePaginationClassKey as MuiTablePaginationClassKey,
   TablePaginationTypeMap as MuiTablePaginationTypeMap
 } from '@material-ui/core';
-
-import { useTableContext } from 'contexts/TableContext';
 import { TablePaginationBaseProps } from '@material-ui/core/TablePagination/TablePagination';
 import { OverrideProps } from '@material-ui/core/OverridableComponent';
+
+import { useTable } from '../../table.context';
 
 // Types
 type DefinedProps = 'count' | 'rowsPerPage' | 'page' | 'onChangePage' | 'onChangeRowsPerPage';
@@ -43,46 +43,45 @@ function getFirst(rppo: TablePaginationProps['rowsPerPageOptions'] = DEFAULT_RPP
 
 // Component
 const TablePagination = <D extends ElementType = DefaultElement> (props: { component: D } & TablePaginationProps<D>) => {
-    // Props
-    const {
-      rowsPerPageOptions = DEFAULT_RPPO
-    } = props;
+  // Props
+  const {
+    rowsPerPageOptions
+  } = props;
 
-    // State
-    const [page, setPage]       = useState(0);
-    const [rowsPerPage, setRPP] = useState(getFirst(rowsPerPageOptions));
+  // State
+  const [page, setPage]       = useState(0);
+  const [rowsPerPage, setRPP] = useState(getFirst(rowsPerPageOptions));
 
-    // Context
-    const { filtered, onPaginate } = useTableContext();
+  // Context
+  const { filtered, onPaginate } = useTable();
 
-    // Effects
-    useEffect(() => {
-      onPaginate({ page, rowsPerPage });
-    }, [onPaginate, page, rowsPerPage]);
+  // Effects
+  useEffect(() => {
+    onPaginate({ page, rowsPerPage });
+  }, [onPaginate, page, rowsPerPage]);
 
-    // Handlers
-    const handleChangeRPP = (event: ChangeEvent<HTMLInputElement>) => {
-      setRPP(parseInt(event.target.value, 10));
-      setPage(0);
-    };
-
-    const handleChangePage = (_: unknown, newPage: number) => {
-      setPage(newPage);
-    };
-
-    // Render
-    return (
-      <MuiTablePagination
-        {...props}
-        count={filtered.length}
-
-        page={page}
-        onChangePage={handleChangePage}
-
-        rowsPerPage={rowsPerPage}
-        onChangeRowsPerPage={handleChangeRPP}
-      />
-    );
+  // Handlers
+  const handleChangeRPP = (event: ChangeEvent<HTMLInputElement>) => {
+    setRPP(parseInt(event.target.value, 10));
+    setPage(0);
   };
+
+  const handleChangePage = (_: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  // Render
+  return (
+    <MuiTablePagination {...props}
+      count={filtered.length}
+
+      page={page}
+      onChangePage={handleChangePage}
+
+      rowsPerPage={rowsPerPage}
+      onChangeRowsPerPage={handleChangeRPP}
+    />
+  );
+};
 
 export default TablePagination;

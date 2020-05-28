@@ -7,16 +7,17 @@ import {
   TableRowProps as MuiTableRowProps
 } from '@material-ui/core';
 
-import { Document, useTableContext } from 'contexts/TableContext';
+import { Document } from '../../models/document';
+import { useTable } from '../../table.context';
 
 // Types
-export interface TableRowProps<T extends Document> extends Omit<MuiTableRowProps, 'selected' | 'onClick'> {
-  doc?: T,
+export interface TableRowProps extends Omit<MuiTableRowProps, 'selected' | 'onClick'> {
+  doc?: Document,
   children?: ReactNode
 }
 
 // Component
-const TableRow = <T extends Document> (props: TableRowProps<T>) => {
+const TableRow = (props: TableRowProps) => {
   // Props
   const {
     doc, children,
@@ -24,24 +25,24 @@ const TableRow = <T extends Document> (props: TableRowProps<T>) => {
   } = props;
 
   // Contexts
-  const ctx = useTableContext<T>();
+  const ctx = useTable();
 
   // Handlers
   const handleChange = doc ? () => ctx.onSelect(doc.id) : ctx.onSelectAll;
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-  };
+  }
 
   // Render
   const small = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down('sm'));
 
   const selectable = doc ? ctx.blacklist.indexOf(doc.id) === -1 : true;
   const selected = doc ? (ctx.selected[doc.id] || false) : ctx.selectedAll;
-  const indeterminate = !doc && ctx.selectedCount > 0 && !ctx.selectedAll;
+  const indeterminate = !doc && ctx.selectableCount > 0 && !ctx.selectedAll;
 
   return (
-    <MuiTableRow
-      {...row} selected={selectable && doc && selected}
+    <MuiTableRow {...row}
+      selected={selectable && doc && selected}
       onClick={(!selectable || !doc) ? undefined : handleChange}
     >
       { !small && (

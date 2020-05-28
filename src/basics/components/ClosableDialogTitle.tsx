@@ -13,7 +13,7 @@ import { StyledProps } from 'utils/style';
 export type ClosableDialogTitleClassKey = 'root' | 'title' | 'closeButton'
 export type ClosableDialogTitleProps = StyledProps<ClosableDialogTitleClassKey> & {
   children: ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 // Styles
@@ -34,7 +34,8 @@ const useStyles = makeStyles<Theme, ClosableDialogTitleClassKey>({
 const ClosableDialogTitle = (props: ClosableDialogTitleProps) => {
   // Props
   const {
-    children, onClose
+    children,
+    onClose = () => {}
   } = props;
 
   // Render

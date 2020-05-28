@@ -59,7 +59,7 @@ const AccountMenu = () => {
           <ListItemAvatar>
             <Avatar>
               { (user?.picture) ? (
-                <img src={user?.picture} />
+                <img alt="user avatar" src={user?.picture} />
               ) : (
                 <PersonIcon />
               ) }

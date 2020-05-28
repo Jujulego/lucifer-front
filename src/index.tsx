@@ -2,13 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { CookiesProvider } from 'react-cookie';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 
 import { StylesProvider } from '@material-ui/core';
 
 import 'configs';
 import * as serviceWorker from 'serviceWorker';
-import { persistor, store } from 'store';
+import { store } from 'store';
 
 import App from 'components/App';
 
@@ -17,9 +16,7 @@ ReactDOM.render((
   <StylesProvider injectFirst>
     <CookiesProvider>
       <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <App />
-        </PersistGate>
+        <App />
       </Provider>
     </CookiesProvider>
   </StylesProvider>

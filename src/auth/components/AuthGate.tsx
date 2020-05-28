@@ -1,16 +1,15 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import createAuth0Client, {
   Auth0Client,
   Auth0ClientOptions, LogoutOptions,
   PopupLoginOptions,
   RedirectLoginOptions
 } from '@auth0/auth0-spa-js';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { AppDispatch, AppState } from 'store';
 
-import { _loading, _login, _logout } from '../auth.actions';
-import { loginWithPopup, logout } from '../auth.thunks';
+import { loginWithPopup, logout, setupAuth } from '../auth.thunks';
 import { AuthContext, AuthContextProps } from '../auth.context';
 
 // Types
@@ -42,25 +41,8 @@ const AuthGate = (props: AuthGateProps) => {
       const client = await createAuth0Client(options);
       setAuth0(client);
 
-      // Is in callback ?
-      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-        const { appState } = await client.handleRedirectCallback();
-        onRedirectCallback(appState);
-      }
-
-      // Is logged ?
-      const isLogged = await client.isAuthenticated();
-
-      if (isLogged) {
-        const token = await client.getIdTokenClaims();
-        const user = await client.getUser();
-
-        dispatch(_login(token.__raw, user));
-      } else {
-        dispatch(_logout());
-      }
-
-      dispatch(_loading.false());
+      // Setup
+      await dispatch(setupAuth(client, onRedirectCallback));
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -69,9 +51,11 @@ const AuthGate = (props: AuthGateProps) => {
     loginWithPopup: useCallback(async (options: PopupLoginOptions = {}) => {
       if (auth0) await dispatch(loginWithPopup(auth0, options));
     }, [auth0, dispatch]),
+
     loginWithRedirect: useCallback(async (options: RedirectLoginOptions = {}) => {
       if (auth0) await auth0.loginWithRedirect(options);
     }, [auth0]),
+
     logout: useCallback(async (options: LogoutOptions = {}) => {
       if (auth0) await dispatch(logout(auth0, options));
     }, [auth0, dispatch])

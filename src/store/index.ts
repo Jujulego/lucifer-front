@@ -1,6 +1,5 @@
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { persistStore } from 'redux-persist';
 import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 import { AuthAction } from 'auth/auth.actions';
@@ -23,5 +22,3 @@ export const store = createStore(appReducer,
     applyMiddleware(thunk)
   )
 );
-
-export const persistor = persistStore(store);

@@ -1,6 +1,7 @@
 import { boolReducer } from 'utils/actions/bool';
 
 import { AUTH_LOADING, AUTH_LOGIN, AUTH_LOGOUT, AUTH_POPUP, AuthAction } from './auth.actions';
+import { User } from './models/user';
 
 // State
 interface CommonState {
@@ -12,7 +13,7 @@ interface CommonState {
 interface LoggedState {
   isLogged: true;
   token: string;
-  user: any;
+  user: User;
 }
 
 interface NotLoggedState {
@@ -50,7 +51,8 @@ export const reducer = (state: AuthState = initial, action: AuthAction): AuthSta
       return {
         ...state,
         isLogged: true,
-        token: action.token
+        token: action.token,
+        user: action.user
       };
 
     case AUTH_LOGOUT:

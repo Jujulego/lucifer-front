@@ -2,6 +2,8 @@ import { Action } from 'redux';
 
 import { BoolAction, bool_ac } from 'utils/actions/bool';
 
+import { User } from './models/user';
+
 // Constants
 export const AUTH_LOADING = 'AUTH_LOADING';
 export const AUTH_POPUP   = 'AUTH_POPUP';
@@ -18,8 +20,8 @@ export type AuthPopup = BoolAction<typeof AUTH_POPUP>;
 export const _popup = bool_ac<typeof AUTH_POPUP>(AUTH_POPUP);
 
 // - login
-export type AuthLoginAction = Action<typeof AUTH_LOGIN> & { token: string, user: any };
-export const _login = (token: string, user: any): AuthLoginAction => ({
+export type AuthLoginAction = Action<typeof AUTH_LOGIN> & { token: string, user: User };
+export const _login = (token: string, user: User): AuthLoginAction => ({
   type: AUTH_LOGIN, token, user
 });
 

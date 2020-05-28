@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { Router } from 'react-router';
 
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -8,8 +9,10 @@ import createTheme from 'theme';
 import useDarkTheme from 'utils/hooks/useDarkTheme';
 
 import AuthGate from 'auth/components/AuthGate';
+import AutoLogin from 'auth/components/AutoLogin';
 
 import Home from './Home';
+import AppBar from './AppBar';
 
 // Component
 const App = () => {
@@ -21,18 +24,19 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthGate
-        domain="dev-lucifer.eu.auth0.com"
-        client_id="EiFpapg4lwQb1jJGtVGv7pMx49QIgEaP"
-        redirect_uri={window.location.origin}
-        onRedirectCallback={(state: any) => history.push((state && state.targetUrl) || window.location.pathname)}
-      >
-        <Home />
-      </AuthGate>
-      {/*<AppBar>*/}
-      {/*  <Breadcrumbs />*/}
-      {/*</AppBar>*/}
-      {/*<ErrorSnackbar />*/}
+      <Router history={history}>
+        <AuthGate
+          domain="dev-lucifer.eu.auth0.com"
+          client_id="EiFpapg4lwQb1jJGtVGv7pMx49QIgEaP"
+          redirect_uri={window.location.origin}
+          onRedirectCallback={(state: any) => history.push((state && state.targetUrl) || window.location.pathname)}
+        >
+          <AutoLogin />
+          <AppBar>
+            <Home />
+          </AppBar>
+        </AuthGate>
+      </Router>
     </ThemeProvider>
   );
 };

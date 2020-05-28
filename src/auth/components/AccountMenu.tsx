@@ -23,10 +23,7 @@ const AccountMenu = () => {
   const location = useLocation();
 
   // Auth
-  const { logout } = useAuth();
-
-  // API
-  const user: any = undefined;
+  const { logout, user } = useAuth();
 
   // Effects
   useEffect(() => {
@@ -60,12 +57,18 @@ const AccountMenu = () => {
       >
         <ListItem>
           <ListItemAvatar>
-            <Avatar><PersonIcon /></Avatar>
+            <Avatar>
+              { (user?.picture) ? (
+                <img src={user?.picture} />
+              ) : (
+                <PersonIcon />
+              ) }
+            </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={user?.email} secondary={user?._id} />
+          <ListItemText primary={user?.nickname} secondary={user?.email} />
         </ListItem>
         <Divider />
-        <MenuItem component={Link} to={`/users/${user?._id}`} disabled={!user}>
+        <MenuItem component={Link} to={`/users/`} disabled={!user}>
           <ListItemIcon><EditIcon /></ListItemIcon>
           <ListItemText primary="Profil" />
         </MenuItem>

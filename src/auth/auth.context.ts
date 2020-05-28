@@ -23,7 +23,7 @@ const authDefaults: AuthContextProps = {
 };
 
 // Context
-export const AuthContext = createContext(authDefaults);
+export const AuthContext = createContext<AuthContextProps>(authDefaults);
 
 // Hook
 export function useAuth() {

@@ -1,40 +1,39 @@
 import React from 'react';
 import copy from 'copy-to-clipboard';
-import { cleanup, render, act, fireEvent } from '@testing-library/react';
+import { createShallow, createMount } from '@material-ui/core/test-utils';
 
 import CopyButton from '../components/CopyButton';
 
 // Mocks
 jest.mock('copy-to-clipboard');
 
-document.createRange = () => ({
-  setStart: () => {},
-  setEnd: () => {},
-  commonAncestorContainer: document.body,
+// Setup
+let mount: ReturnType<typeof createMount>;
+let shallow: ReturnType<typeof createShallow>;
+
+beforeAll(() => {
+  mount = createMount();
+  shallow = createShallow();
 });
 
-// Setup
+afterAll(() => {
+  mount.cleanUp();
+  jest.restoreAllMocks();
+});
+
 beforeEach(() => {
   (copy as jest.Mock).mockReset();
 });
 
-afterEach(() => {
-  cleanup();
-});
-
-afterAll(() => {
-  jest.restoreAllMocks();
-})
-
 // Tests
-it('should show a button', () => {
+it('should render correctly', () => {
   // Render
-  const { container } = render(
+  const wrapper = shallow(
     <CopyButton text={'test'} />
   );
 
   // Check elements
-  expect(container).toMatchSnapshot();
+  expect(wrapper).toMatchSnapshot();
 });
 
 it('should copy on click', () => {
@@ -42,16 +41,19 @@ it('should copy on click', () => {
   (copy as jest.Mock).mockImplementation(() => true);
 
   // Render
-  const { container } = render(
+  const wrapper = mount(
     <CopyButton
       text={'test'}
       onCopied={spy}
     />
   );
 
+  // Get button
+  const button = wrapper.find('button');
+  expect(button).toHaveLength(1);
+
   // Test event
-  const button = container.querySelector('button')!;
-  act(() => { fireEvent.click(button); });
+  button.simulate('click');
 
   expect(copy).toHaveBeenCalledTimes(1);
   expect(copy).toHaveBeenCalledWith('test', { format: 'text/plain' });

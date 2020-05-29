@@ -16,7 +16,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PeopleIcon from '@material-ui/icons/People';
 import StorageIcon from '@material-ui/icons/Storage';
 
-import AccountMenu from './auth/AccountMenu';
+import AccountMenu from 'auth/components/AccountMenu';
 import ThemeButton from './ThemeButton';
 
 // Styles
@@ -123,11 +123,11 @@ const AppBar = ({ children }: AppBarProps) => {
             <ListItemIcon><HomeIcon /></ListItemIcon>
             <ListItemText primary="Accueil" />
           </ListItem>
-          <ListItem button component={Link} to="/daemons">
+          <ListItem button component={Link} to="/daemons" disabled>
             <ListItemIcon><StorageIcon /></ListItemIcon>
             <ListItemText primary="Daemons" />
           </ListItem>
-          <ListItem button component={Link} to="/users">
+          <ListItem button component={Link} to="/users" disabled>
             <ListItemIcon><PeopleIcon /></ListItemIcon>
             <ListItemText primary="Utilisateurs" />
           </ListItem>

@@ -1,8 +1,10 @@
-import React from "react";
+import React from 'react';
 import { addDecorator } from '@storybook/react';
 import { CssBaseline, StylesProvider, ThemeProvider } from '@material-ui/core';
 
-import createTheme from '../src/theme';
+import 'configs';
+
+import createTheme from 'theme';
 
 // Theme
 const theme = createTheme(true);

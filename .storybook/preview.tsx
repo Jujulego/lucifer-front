@@ -4,7 +4,7 @@ import { CssBaseline, StylesProvider, ThemeProvider } from '@material-ui/core';
 
 import 'configs';
 
-import createTheme from 'theme';
+import createTheme from 'app.theme';
 
 // Theme
 const theme = createTheme(true);

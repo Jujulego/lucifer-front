@@ -5,7 +5,7 @@ import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 import history from 'app.history';
-import createTheme from 'theme';
+import createTheme from 'app.theme';
 import useDarkTheme from 'utils/hooks/useDarkTheme';
 
 import AuthGate from 'auth/components/AuthGate';

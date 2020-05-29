@@ -5,6 +5,7 @@ import { OverrideProps } from '@material-ui/core/OverridableComponent';
 
 import { Document } from '../../models/document';
 import { useTable } from '../../table.context';
+
 import ToolbarAction, { ToolbarActionTypeMap, ToolbarActionClassKey } from '../ToolbarAction';
 
 // Types

@@ -3,10 +3,10 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 import { AuthAction } from 'auth/auth.actions';
-import { ErrorsAction } from 'errors/errors.actions';
+import { ErrorsAction } from 'snack/errors.actions';
 
 import { reducer as auth } from 'auth/auth.reducer';
-import { reducer as errors } from 'errors/errors.reducer';
+import { reducer as errors } from 'snack/errors.reducer';
 
 // Types
 export type AppState = ReturnType<typeof appReducer>;

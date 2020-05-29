@@ -6,9 +6,9 @@
   "license": "MIT",
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.8.1",
-    "@material-ui/core": "^4.9.7",
+    "@material-ui/core": "^4.10.0",
     "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.43",
+    "@material-ui/lab": "^4.0.0-alpha.54",
     "axios": "^0.19.2",
     "clsx": "^1.1.0",
     "copy-to-clipboard": "^3.3.1",

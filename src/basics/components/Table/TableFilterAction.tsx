@@ -62,7 +62,7 @@ const TableFilterAction = <T extends Document = AnyDocument, D extends ElementTy
 
   // Memos
   const count = useMemo(
-    () => Object.tsKeys(filter).filter(removeEmptyFields(filter)).length,
+    () => Object.keys(filter).filter(key => removeEmptyFields(filter)(key as keyof Filter<T>)).length,
     [filter]
   );
 

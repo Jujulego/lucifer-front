@@ -23,7 +23,7 @@ const CopyButton = (props: CopyButtonProps) => {
   // Props
   const {
     text, format = "text/plain",
-    tooltip = "Copié",
+    tooltip = "Copié !",
     tooltipTimeout = 1500,
     onCopied, onClick,
     ...btn

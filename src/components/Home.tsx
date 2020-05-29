@@ -2,19 +2,19 @@ import React from 'react';
 
 import { Typography } from '@material-ui/core';
 
-import { useLoggedUser } from 'store/users/hooks';
+import { useAuth } from 'auth/auth.context';
 
 // Component
 const Home = () => {
-  // Redux
-  const user = useLoggedUser();
+  // Auth
+  const { user } = useAuth();
 
   // Render
   return (
     <>
-      <Typography>Bonjour { user && user.email }</Typography>
+      <Typography>Bonjour { user?.nickname } !</Typography>
     </>
-  )
+  );
 };
 
 export default Home;

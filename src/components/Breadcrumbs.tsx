@@ -1,7 +1,6 @@
 import React, { ReactNode, useMemo } from 'react';
 import { useLocation } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
-import { capitalize } from 'lodash';
 
 import {
   Breadcrumbs as MuiBreadcrumbs,
@@ -9,9 +8,6 @@ import {
   Paper, Toolbar
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-
-import { useDaemon } from 'store/daemons/hooks';
-import { useUser } from 'store/users/hooks';
 
 // Types
 interface Name { parts: string[], last: string }
@@ -24,18 +20,10 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-// Components
-const DaemonName = ({ last }: Name) => <>{ capitalize(useDaemon(last)?.name) || last }</>;
-const UserName = ({ last }: Name) => <>{ useUser(last)?.email || last }</>;
-
 // Pages
 const errorPages = ['/forbidden'];
 
 const pathNames: RouteName[] = [
-  { path: /\/daemons$/, name: () => 'Daemons' },
-  { path: /^\/daemons\/[0-9a-f]{24}$/i, name: (props) => <DaemonName {...props} /> },
-  { path: /^\/users$/, name: () => 'Utilisateurs' },
-  { path: /^\/users\/[0-9a-f]{24}$/i, name: (props) => <UserName {...props} /> },
 ];
 
 function getName(path: string): ReactNode {

@@ -1,5 +1,6 @@
 import React from 'react';
 import copy from 'copy-to-clipboard';
+import { act } from 'react-dom/test-utils';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 
 import CopyButton from '../components/CopyButton';
@@ -12,13 +13,16 @@ let mount: ReturnType<typeof createMount>;
 let shallow: ReturnType<typeof createShallow>;
 
 beforeAll(() => {
+  jest.useFakeTimers();
+
   mount = createMount();
   shallow = createShallow();
 });
 
 afterAll(() => {
-  mount.cleanUp();
   jest.restoreAllMocks();
+
+  mount.cleanUp();
 });
 
 beforeEach(() => {
@@ -43,7 +47,7 @@ it('should copy on click', () => {
   // Render
   const wrapper = mount(
     <CopyButton
-      text={'test'}
+      text='test' format='text/plain'
       onCopied={spy}
     />
   );
@@ -53,10 +57,13 @@ it('should copy on click', () => {
   expect(button).toHaveLength(1);
 
   // Test event
-  button.simulate('click');
+  act(() => {
+    button.simulate('click');
+    jest.runAllTimers();
+  });
 
   expect(copy).toHaveBeenCalledTimes(1);
   expect(copy).toHaveBeenCalledWith('test', { format: 'text/plain' });
 
   expect(spy).toHaveBeenCalledTimes(1);
-})
+});

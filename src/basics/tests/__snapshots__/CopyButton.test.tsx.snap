@@ -8,7 +8,7 @@ exports[`should render correctly 1`] = `
   onClose={[Function]}
   onOpen={[Function]}
   open={false}
-  title="Copié"
+  title="Copié !"
 >
   <WithStyles(ForwardRef(IconButton))
     onClick={[Function]}

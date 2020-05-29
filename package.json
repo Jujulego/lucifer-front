@@ -82,10 +82,6 @@
     ]
   },
   "jest": {
-    "collectCoverageFrom": [
-      "!src/configs/**",
-      "!**/*.story.tsx"
-    ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ]

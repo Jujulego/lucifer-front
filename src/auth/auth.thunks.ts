@@ -1,6 +1,6 @@
 import { Auth0Client, LogoutOptions, PopupLoginOptions } from '@auth0/auth0-spa-js';
 
-import { AppThunk } from 'store';
+import { AppThunk } from 'app.store';
 
 import { _loading, _login, _logout, _popup } from './auth.actions';
 

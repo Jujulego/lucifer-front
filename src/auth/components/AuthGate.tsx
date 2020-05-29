@@ -7,7 +7,7 @@ import createAuth0Client, {
   RedirectLoginOptions
 } from '@auth0/auth0-spa-js';
 
-import { AppDispatch, AppState } from 'store';
+import { AppDispatch, AppState } from 'app.store';
 
 import { loginWithPopup, logout, setupAuth } from '../auth.thunks';
 import { AuthContext, AuthContextProps } from '../auth.context';

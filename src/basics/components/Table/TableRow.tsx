@@ -38,7 +38,7 @@ const TableRow = (props: TableRowProps) => {
 
   const selectable = doc ? ctx.blacklist.indexOf(doc.id) === -1 : true;
   const selected = doc ? (ctx.selected[doc.id] || false) : ctx.selectedAll;
-  const indeterminate = !doc && ctx.selectableCount > 0 && !ctx.selectedAll;
+  const indeterminate = !doc && ctx.selectedCount > 0 && !ctx.selectedAll;
 
   return (
     <MuiTableRow {...row}

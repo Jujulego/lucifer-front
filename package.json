@@ -66,7 +66,7 @@
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },
-  "proxy": "http://chacha.capellari.net:8000/",
+  "proxy": "http://localhost:8000/",
   "eslintConfig": {
     "extends": "react-app"
   },

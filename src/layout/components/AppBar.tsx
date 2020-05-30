@@ -128,7 +128,7 @@ const AppBar = ({ children }: AppBarProps) => {
             <ListItemIcon><StorageIcon /></ListItemIcon>
             <ListItemText primary="Daemons" />
           </ListItem>
-          <ListItem button component={Link} to="/users" disabled>
+          <ListItem button component={Link} to="/users">
             <ListItemIcon><PeopleIcon /></ListItemIcon>
             <ListItemText primary="Utilisateurs" />
           </ListItem>

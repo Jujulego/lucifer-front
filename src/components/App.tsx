@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Router } from 'react-router';
+import { Route, Router, Switch } from 'react-router';
 
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -13,6 +13,7 @@ import AutoLogin from 'auth/components/AutoLogin';
 
 import Home from './Home';
 import AppBar from 'layout/components/AppBar';
+import UserTable from 'users/components/UserTable';
 
 // Component
 const App = () => {
@@ -33,7 +34,10 @@ const App = () => {
         >
           <AutoLogin />
           <AppBar>
-            <Home />
+            <Switch>
+              <Route path="/users" component={UserTable} />
+              <Route component={Home} />
+            </Switch>
           </AppBar>
         </AuthGate>
       </Router>

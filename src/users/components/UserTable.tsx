@@ -1,54 +1,52 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { TableCell, TableContainer, TableHead } from '@material-ui/core';
+import {
+  Card,
+  TableCell, TableContainer, TableHead
+} from '@material-ui/core';
+import { Refresh as RefreshIcon } from '@material-ui/icons';
 
-import { useAuth } from 'auth/auth.context';
 import useAPI from 'utils/hooks/useAPI';
 
-import { Table, TableBody, TableRow, TableSortCell } from 'basics/components';
+import { Table, TableBody, TableRow, TableSortCell, TableToolbar, ToolbarAction } from 'basics/components';
 
 import { User } from '../models/user';
 
 // Component
 const UserTable = () => {
-  // State
-  const [token, setToken] = useState('');
-
-  // Auth
-  const { getToken } = useAuth();
-
   // API
-  const { data: users = [] } = useAPI.get<User[]>('/api/users', {}, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-
-  // Effects
-  useEffect(() => {
-    (async () => {
-      setToken(await getToken());
-    })();
-  }, [getToken]);
+  const { data: users = [], reload } = useAPI.get<User[]>('/api/users');
 
   // Render
+  const toolbar = (
+    <TableToolbar title="Users">
+      <ToolbarAction tooltip="Refresh" onClick={() => reload()}>
+        <RefreshIcon />
+      </ToolbarAction>
+    </TableToolbar>
+  );
+
   return (
-    <TableContainer>
-      <Table documents={users}>
-        <TableHead>
-          <TableRow>
-            <TableSortCell<User> field="id">Id</TableSortCell>
-            <TableSortCell<User> field="email">Email</TableSortCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          { (doc: User) => (
-            <TableRow key={doc.id} doc={doc}>
-              <TableCell>{ doc.id }</TableCell>
-              <TableCell>{ doc.email }</TableCell>
+    <Card>
+      <TableContainer>
+        <Table documents={users} toolbar={toolbar}>
+          <TableHead>
+            <TableRow>
+              <TableSortCell<User> field="id">Id</TableSortCell>
+              <TableSortCell<User> field="email">Email</TableSortCell>
             </TableRow>
-          ) }
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            { (doc: User) => (
+              <TableRow key={doc.id} doc={doc}>
+                <TableCell>{ doc.id }</TableCell>
+                <TableCell>{ doc.email }</TableCell>
+              </TableRow>
+            ) }
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Card>
   );
 };
 

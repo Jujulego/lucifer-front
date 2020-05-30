@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import createAuth0Client, {
   Auth0Client,
@@ -6,8 +7,8 @@ import createAuth0Client, {
   RedirectLoginOptions
 } from '@auth0/auth0-spa-js';
 
+import { User } from '../models/user';
 import { AuthContext } from '../auth.context';
-import { User } from 'auth/models/user';
 
 // Types
 export interface AuthGateProps extends Auth0ClientOptions {
@@ -25,11 +26,11 @@ const AuthGate = (props: AuthGateProps) => {
   } = props;
 
   // State
-  const [auth0,    setAuth0]   = useState<Auth0Client>();
-  const [loading,  setLoading] = useState(true);
-  const [isLogged, setLogged]  = useState(false);
-  const [popup,    setPopup]   = useState(false);
-  const [user,     setUser]    = useState<User | null>(null);
+  const [auth0,   setAuth0]   = useState<Auth0Client>();
+  const [loading, setLoading] = useState(true);
+  const [isLogged, setLogged] = useState(false);
+  const [popup,   setPopup]   = useState(false);
+  const [user,    setUser]    = useState<User | null>(null);
 
   // Effects
   useEffect(() => {
@@ -52,6 +53,21 @@ const AuthGate = (props: AuthGateProps) => {
       setLoading(false);
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!auth0) return;
+    if (!isLogged) return;
+
+    // Setup axios interceptor
+    const id = axios.interceptors.request.use(async config => {
+      const token = await auth0.getTokenSilently();
+      config.headers.authorization = `Bearer ${token}`;
+
+      return config;
+    });
+
+    return () => axios.interceptors.request.eject(id);
+  }, [auth0, isLogged]);
 
   // Callbacks
   const getToken = useCallback(async (options: GetTokenSilentlyOptions = {}) => {

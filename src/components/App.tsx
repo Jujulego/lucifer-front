@@ -6,6 +6,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 
 import history from 'app.history';
 import createTheme from 'app.theme';
+import authConfig from 'configs/auth';
 import useDarkTheme from 'layout/theme.hooks';
 
 import AuthGate from 'auth/components/AuthGate';
@@ -27,8 +28,9 @@ const App = () => {
       <CssBaseline />
       <Router history={history}>
         <AuthGate
-          domain="dev-lucifer.eu.auth0.com"
-          client_id="EiFpapg4lwQb1jJGtVGv7pMx49QIgEaP"
+          domain={authConfig.domain}
+          client_id={authConfig.clientId}
+          audience={authConfig.audience}
           redirect_uri={window.location.origin}
           onRedirectCallback={(state: any) => history.push((state && state.targetUrl) || window.location.pathname)}
         >

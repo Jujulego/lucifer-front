@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TableCell, TableContainer, TableHead } from '@material-ui/core';
 
@@ -11,13 +11,23 @@ import { User } from '../models/user';
 
 // Component
 const UserTable = () => {
+  // State
+  const [token, setToken] = useState('');
+
   // Auth
-  const { token } = useAuth();
+  const { getToken } = useAuth();
 
   // API
   const { data: users = [] } = useAPI.get<User[]>('/api/users', {}, {
     headers: { Authorization: `Bearer ${token}` }
   });
+
+  // Effects
+  useEffect(() => {
+    (async () => {
+      setToken(await getToken());
+    })();
+  }, [getToken]);
 
   // Render
   return (

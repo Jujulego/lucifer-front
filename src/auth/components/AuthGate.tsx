@@ -1,16 +1,13 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import createAuth0Client, {
   Auth0Client,
-  Auth0ClientOptions, LogoutOptions,
+  Auth0ClientOptions, GetTokenSilentlyOptions, LogoutOptions,
   PopupLoginOptions,
   RedirectLoginOptions
 } from '@auth0/auth0-spa-js';
 
-import { AppDispatch, AppState } from 'app.store';
-
-import { loginWithPopup, logout, setupAuth } from '../auth.thunks';
-import { AuthContext, AuthContextProps } from '../auth.context';
+import { AuthContext } from '../auth.context';
+import { User } from 'auth/models/user';
 
 // Types
 export interface AuthGateProps extends Auth0ClientOptions {
@@ -28,11 +25,11 @@ const AuthGate = (props: AuthGateProps) => {
   } = props;
 
   // State
-  const [auth0, setAuth0] = useState<Auth0Client>();
-
-  // Redux
-  const dispatch = useDispatch<AppDispatch>();
-  const state = useSelector((state: AppState) => state.auth);
+  const [auth0,    setAuth0]   = useState<Auth0Client>();
+  const [loading,  setLoading] = useState(true);
+  const [isLogged, setLogged]  = useState(false);
+  const [popup,    setPopup]   = useState(false);
+  const [user,     setUser]    = useState<User | null>(null);
 
   // Effects
   useEffect(() => {
@@ -41,34 +38,79 @@ const AuthGate = (props: AuthGateProps) => {
       const client = await createAuth0Client(options);
       setAuth0(client);
 
-      // Setup
-      await dispatch(setupAuth(client, onRedirectCallback));
+      // Is in callback ?
+      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+        const { appState } = await client.handleRedirectCallback();
+        onRedirectCallback(appState);
+      }
+
+      // Load state
+      const logged = await client.isAuthenticated();
+      if (logged) setUser(await client.getUser());
+
+      setLogged(logged);
+      setLoading(false);
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Callbacks
-  const context: AuthContextProps = { ...state,
-    loginWithPopup: useCallback(async (options: PopupLoginOptions = {}) => {
-      if (auth0) await dispatch(loginWithPopup(auth0, options));
-    }, [auth0, dispatch]),
+  const getToken = useCallback(async (options: GetTokenSilentlyOptions = {}) => {
+    if (!auth0) return '';
 
-    loginWithRedirect: useCallback(async (options: RedirectLoginOptions = {}) => {
-      if (auth0) await auth0.loginWithRedirect(options);
-    }, [auth0]),
+    return await auth0.getTokenSilently(options);
+  }, [auth0]);
 
-    logout: useCallback(async (options: LogoutOptions = {}) => {
-      if (auth0) await dispatch(logout(auth0, options));
-    }, [auth0, dispatch])
-  };
+  const loginWithPopup = useCallback(async (options: PopupLoginOptions = {}) => {
+    if (!auth0) return;
+    setPopup(true);
+
+    try {
+      // Login
+      await auth0.loginWithPopup(options);
+
+      // Update state
+      if (await auth0.isAuthenticated()) {
+        setLogged(true);
+        setUser(await auth0.getUser());
+      } else {
+        setLogged(false);
+        setUser(null);
+      }
+    } finally {
+      setPopup(false);
+    }
+  }, [auth0]);
+
+  const loginWithRedirect = useCallback(async (options: RedirectLoginOptions = {}) => {
+    if (!auth0) return;
+
+    // Login
+    await auth0.loginWithRedirect(options);
+  }, [auth0]);
+
+  const logout = useCallback(async (options: LogoutOptions = {}) => {
+    if (!auth0) return;
+
+    // Logout
+    await auth0.logout(options);
+
+    // Update state
+    setLogged(false);
+    setUser(null);
+  }, [auth0]);
 
   // Render
-  if (state.loading) {
-    return null;
-  }
-
   return (
-    <AuthContext.Provider value={context as any}>
-      { children }
+    <AuthContext.Provider
+      value={{
+        isLogged, popup, user,
+
+        getToken,
+        loginWithPopup, loginWithRedirect,
+        logout
+      }}
+    >
+      { (!loading) && children }
     </AuthContext.Provider>
   );
 };

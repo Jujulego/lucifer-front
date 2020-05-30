@@ -17,6 +17,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import StorageIcon from '@material-ui/icons/Storage';
 
 import AccountMenu from 'auth/components/AccountMenu';
+
 import ThemeButton from './ThemeButton';
 
 // Styles

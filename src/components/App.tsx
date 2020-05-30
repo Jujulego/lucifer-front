@@ -6,13 +6,13 @@ import { ThemeProvider } from '@material-ui/core/styles';
 
 import history from 'app.history';
 import createTheme from 'app.theme';
-import useDarkTheme from 'utils/hooks/useDarkTheme';
+import useDarkTheme from 'layout/theme.hooks';
 
 import AuthGate from 'auth/components/AuthGate';
 import AutoLogin from 'auth/components/AutoLogin';
 
 import Home from './Home';
-import AppBar from './AppBar';
+import AppBar from 'layout/components/AppBar';
 
 // Component
 const App = () => {

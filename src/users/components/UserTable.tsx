@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import { Check as CheckIcon } from '@material-ui/icons';
 import { Refresh as RefreshIcon } from '@material-ui/icons';
-import { Theme, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import useAPI from 'utils/hooks/useAPI';
 
@@ -27,7 +27,7 @@ import {
 import { User } from '../models/user';
 
 // Styles
-const useStyles = makeStyles(({ spacing }: Theme) => ({
+const useStyles = makeStyles(({ spacing }) => ({
   verified: {
     marginTop: -spacing(.5),
     marginBottom: -spacing(.5),

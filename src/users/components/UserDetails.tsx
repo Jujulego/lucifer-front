@@ -9,8 +9,8 @@ export interface UserDetailsProps {
 }
 
 // Components
-const UserDetails = ({ user }: UserDetailsProps) => (
+const UserDetails = React.memo(({ user }: UserDetailsProps) => (
   <Typography>{ user.name }</Typography>
-);
+));
 
 export default UserDetails;

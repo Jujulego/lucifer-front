@@ -96,7 +96,7 @@ const UserPage = () => {
           </Grid>
         </Grid>
         <Tabs variant="fullWidth" value={page} onChange={() => {}}>
-          <LinkTab value="details" label="Details" />
+          <LinkTab value="details" label="Détails" />
           <Tab value="daemons" label="Daemons" disabled />
         </Tabs>
       </Paper>

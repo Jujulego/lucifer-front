@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import {
   Card,
-  Link,
+  Link, Paper,
   TableCell, TableContainer, TableHead,
   Tooltip
 } from '@material-ui/core';
@@ -47,49 +47,49 @@ const UserTable = () => {
   const styles = useStyles();
 
   const toolbar = (
-    <TableToolbar title="Utilisateurs">
-      <ToolbarAction tooltip="Rafraîchir" onClick={() => reload()}>
-        <RefreshIcon />
-      </ToolbarAction>
-    </TableToolbar>
+    <Paper square>
+      <TableToolbar title="Utilisateurs">
+        <ToolbarAction tooltip="Rafraîchir" onClick={() => reload()}>
+          <RefreshIcon />
+        </ToolbarAction>
+      </TableToolbar>
+    </Paper>
   );
 
   return (
-    <Card>
-      <TableContainer>
-        <Table documents={users} toolbar={toolbar}>
-          <TableHead>
-            <TableRow>
-              <TableSortCell<User> field="name">Nom</TableSortCell>
-              <TableSortCell<User> field="email">Email</TableSortCell>
-              <TableSortCell<User> field="lastLogin">Dernière connexion</TableSortCell>
+    <TableContainer>
+      <Table documents={users} toolbar={toolbar}>
+        <TableHead>
+          <TableRow>
+            <TableSortCell<User> field="name">Nom</TableSortCell>
+            <TableSortCell<User> field="email">Email</TableSortCell>
+            <TableSortCell<User> field="lastLogin">Dernière connexion</TableSortCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          { (usr: User) => (
+            <TableRow key={usr.id} doc={usr}>
+              <TableCell>
+                <Link component={RouterLink} to={`${url}/${usr.id}`}>
+                  { usr.name }
+                </Link>
+              </TableCell>
+              <TableCell>
+                { usr.email }
+                { usr.emailVerified && (
+                  <Tooltip title='Vérifié'>
+                    <CheckIcon classes={{ root: styles.verified }} color='primary' />
+                  </Tooltip>
+                ) }
+              </TableCell>
+              <TableCell>
+                <RelativeDate date={usr.lastLogin} mode='from' />
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            { (usr: User) => (
-              <TableRow key={usr.id} doc={usr}>
-                <TableCell>
-                  <Link component={RouterLink} to={`${url}/${usr.id}`}>
-                    { usr.name }
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  { usr.email }
-                  { usr.emailVerified && (
-                    <Tooltip title='Vérifié'>
-                      <CheckIcon classes={{ root: styles.verified }} color='primary' />
-                    </Tooltip>
-                  ) }
-                </TableCell>
-                <TableCell>
-                  <RelativeDate date={usr.lastLogin} mode='from' />
-                </TableCell>
-              </TableRow>
-            ) }
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Card>
+          ) }
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

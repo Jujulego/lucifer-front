@@ -46,13 +46,13 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing, zIndex }: Theme) 
     maxHeight: '100vh',
     flexGrow: 1,
 
-    padding: spacing(3),
+    // padding: spacing(3),
     overflow: 'auto',
 
     backgroundColor: palette.background.default,
 
     [breakpoints.down('sm')]: {
-      padding: spacing(1)
+      // padding: spacing(1)
     }
   }
 }));

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router';
 
-import DaemonTable from './DaemonTable';
+import AllDaemonTable from '../containers/AllDaemonTable';
 
 // Component
 const DaemonRouter = () => {
@@ -11,7 +11,7 @@ const DaemonRouter = () => {
   // Render
   return (
     <Switch>
-      <Route path={path} component={DaemonTable} />
+      <Route path={path} component={AllDaemonTable} />
     </Switch>
   );
 };

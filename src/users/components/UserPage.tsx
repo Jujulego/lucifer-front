@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, useParams, useRouteMatch } from 'react-router';
+import { useParams, useRouteMatch } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { Avatar, Grid, IconButton, Paper, Tab, Tabs, Typography } from '@material-ui/core';
@@ -9,21 +9,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import useAPI from 'utils/hooks/useAPI';
 import { initials } from 'utils/string';
 
+import DaemonTable from 'daemons/components/DaemonTable';
+
 import { User } from '../models/user';
 
 import UserDetails from './UserDetails';
 
 // Styles
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
-  header: {
-    margin: -spacing(3),
-    marginBottom: spacing(3),
-
-    [breakpoints.down('sm')]: {
-      margin: -spacing(1),
-      marginBottom: spacing(1),
-    }
-  },
   user: {
     padding: spacing(3),
 
@@ -54,19 +47,33 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 }));
 
 // Utils
-const LinkTab = (props: { value: string, label: string }) => {
+interface LinkTabProps {
+  value: string;
+  label: string;
+}
+
+const LinkTab = (props: LinkTabProps) => {
+  const { value } = props;
   const { url } = useRouteMatch();
+  const { page } = useParams();
 
   return (
-    <Tab component={RouterLink} to={`${url}/${props.value}`} {...props} />
+    <Tab {...props}
+      component={RouterLink}
+      to={page ? url.replace(page, value) : `${url}/${value}`}
+    />
   );
 };
 
 // Component
+interface UserParams {
+  id: string;
+  page: string;
+}
+
 const UserPage = () => {
   // Router
-  const { path } = useRouteMatch();
-  const { id, page = 'details' } = useParams();
+  const { id, page = 'details' } = useParams<UserParams>();
 
   // API
   const { data: user, reload } = useAPI.get<User>(`/api/users/${id}`);
@@ -78,7 +85,7 @@ const UserPage = () => {
 
   return (
     <>
-      <Paper className={styles.header} square>
+      <Paper square>
         <Grid className={styles.user} container alignItems="center">
           <Grid item xs="auto">
             <Avatar className={styles.avatar} alt={user.name} src={user.picture}>
@@ -97,12 +104,15 @@ const UserPage = () => {
         </Grid>
         <Tabs variant="fullWidth" value={page} onChange={() => {}}>
           <LinkTab value="details" label="Détails" />
-          <Tab value="daemons" label="Daemons" disabled />
+          <LinkTab value="daemons" label="Daemons" />
         </Tabs>
       </Paper>
-      <Switch>
-        <Route path={[`${path}`, `${path}/details`]}><UserDetails user={user} /></Route>
-      </Switch>
+      { (page === 'daemons') && (
+        <DaemonTable daemons={user.daemons || []} />
+      ) }
+      { (page === 'details') && (
+        <UserDetails user={user} />
+      ) }
     </>
   );
 };

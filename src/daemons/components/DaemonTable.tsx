@@ -1,49 +1,47 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Card, TableCell, TableContainer, TableHead } from '@material-ui/core';
-import { Refresh as RefreshIcon } from '@material-ui/icons';
+import { Link, TableCell, TableContainer, TableHead } from '@material-ui/core';
 
-import useAPI from 'utils/hooks/useAPI';
-
-import { Table, TableBody, TableRow, TableSortCell, TableToolbar, ToolbarAction } from 'basics/components';
+import { Table, TableBody, TableRow, TableSortCell } from 'basics/components';
 
 import { Daemon } from '../models/daemon';
 
+// Props
+export interface DaemonTableProps {
+  daemons: Daemon[],
+  toolbar?: ReactNode
+}
+
 // Component
-const DaemonTable = () => {
-  // API
-  const { data: daemons = [], reload } = useAPI.get<Daemon[]>('/api/daemons');
+const DaemonTable = (props: DaemonTableProps) => {
+  // Props
+  const { daemons, toolbar } = props;
 
   // Render
-  const toolbar = (
-    <TableToolbar title="Daemons">
-      <ToolbarAction tooltip="Rafraîchir" onClick={reload}>
-        <RefreshIcon />
-      </ToolbarAction>
-    </TableToolbar>
-  );
-
   return (
-    <Card>
-      <TableContainer>
-        <Table documents={daemons} toolbar={toolbar}>
-          <TableHead>
-            <TableRow>
-              <TableSortCell<Daemon> field="id">Identifiant</TableSortCell>
-              <TableSortCell<Daemon> field="ownerId">Propriétaire</TableSortCell>
+    <TableContainer>
+      <Table documents={daemons} toolbar={toolbar}>
+        <TableHead>
+          <TableRow>
+            <TableSortCell<Daemon> field="id">Identifiant</TableSortCell>
+            <TableSortCell<Daemon> field="ownerId">Propriétaire</TableSortCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          { (dmn: Daemon) => (
+            <TableRow key={dmn.id} doc={dmn}>
+              <TableCell>{ dmn.id }</TableCell>
+              <TableCell>
+                <Link component={RouterLink} to={`/users/${dmn.ownerId}/daemons`}>
+                  { dmn.ownerId }
+                </Link>
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            { (dmn: Daemon) => (
-              <TableRow key={dmn.id} doc={dmn}>
-                <TableCell>{ dmn.id }</TableCell>
-                <TableCell>{ dmn.ownerId }</TableCell>
-              </TableRow>
-            ) }
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Card>
+          ) }
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

@@ -12,8 +12,8 @@ const UserRouter = () => {
   // Render
   return (
     <Switch>
-      <Route path={[`${path}/:id`, `${path}/:id/:page`]} component={UserPage} />
-      <Route path={path} component={UserTable} />
+      <Route path={[`${path}/:id/:page`, `${path}/:id`]} component={UserPage} />
+      <Route path={path} exact component={UserTable} />
     </Switch>
   );
 };

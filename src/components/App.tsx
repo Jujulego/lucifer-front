@@ -14,7 +14,7 @@ import AutoLogin from 'auth/components/AutoLogin';
 
 import Home from './Home';
 import AppBar from 'layout/components/AppBar';
-import UserTable from 'users/components/UserTable';
+import UserRouter from 'users/components/UserRouter';
 
 // Component
 const App = () => {
@@ -37,7 +37,7 @@ const App = () => {
           <AutoLogin />
           <AppBar>
             <Switch>
-              <Route path="/users" component={UserTable} />
+              <Route path="/users" component={UserRouter} />
               <Route component={Home} />
             </Switch>
           </AppBar>

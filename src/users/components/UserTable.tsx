@@ -1,11 +1,16 @@
 import React from 'react';
+import { useRouteMatch } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import {
   Card,
-  TableCell, TableContainer, TableHead, Theme, Tooltip
+  Link,
+  TableCell, TableContainer, TableHead,
+  Tooltip
 } from '@material-ui/core';
 import { Check as CheckIcon } from '@material-ui/icons';
 import { Refresh as RefreshIcon } from '@material-ui/icons';
+import { Theme, makeStyles } from '@material-ui/core/styles';
 
 import useAPI from 'utils/hooks/useAPI';
 
@@ -20,7 +25,6 @@ import {
 } from 'basics/components';
 
 import { User } from '../models/user';
-import { makeStyles } from '@material-ui/core/styles';
 
 // Styles
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -33,6 +37,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 // Component
 const UserTable = () => {
+  // Router
+  const { url } = useRouteMatch();
+
   // API
   const { data: users = [], reload } = useAPI.get<User[]>('/api/users');
 
@@ -61,7 +68,11 @@ const UserTable = () => {
           <TableBody>
             { (usr: User) => (
               <TableRow key={usr.id} doc={usr}>
-                <TableCell>{ usr.name }</TableCell>
+                <TableCell>
+                  <Link component={RouterLink} to={`${url}/${usr.id}`}>
+                    { usr.name }
+                  </Link>
+                </TableCell>
                 <TableCell>
                   { usr.email }
                   { usr.emailVerified && (

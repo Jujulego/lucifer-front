@@ -46,13 +46,13 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing, zIndex }: Theme) 
     maxHeight: '100vh',
     flexGrow: 1,
 
-    padding: spacing(3),
+    // padding: spacing(3),
     overflow: 'auto',
 
     backgroundColor: palette.background.default,
 
     [breakpoints.down('sm')]: {
-      padding: spacing(1)
+      // padding: spacing(1)
     }
   }
 }));
@@ -124,7 +124,7 @@ const AppBar = ({ children }: AppBarProps) => {
             <ListItemIcon><HomeIcon /></ListItemIcon>
             <ListItemText primary="Accueil" />
           </ListItem>
-          <ListItem button component={Link} to="/daemons" disabled>
+          <ListItem button component={Link} to="/daemons">
             <ListItemIcon><StorageIcon /></ListItemIcon>
             <ListItemText primary="Daemons" />
           </ListItem>

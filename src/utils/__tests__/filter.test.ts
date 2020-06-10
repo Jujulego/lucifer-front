@@ -7,84 +7,81 @@ interface Object {
   tags: string[]
 }
 
+// Tested list
+const list: Object[] = [
+  { name: "banana", count: 5,  tags: ["fruit",  "yellow"] },
+  { name: "dice",   count: 2,  tags: ["object", "white"]  },
+  { name: "duck",   count: 5,  tags: ["animal", "yellow"] },
+  { name: "berry",  count: 15, tags: ["fruit",  "blue"]   },
+];
+
 // Tests
-describe("utils/filter", () => {
-  // Tested list
-  const list: Object[] = [
-    { name: "banana", count: 5,  tags: ["fruit",  "yellow"] },
-    { name: "dice",   count: 2,  tags: ["object", "white"]  },
-    { name: "duck",   count: 5,  tags: ["animal", "yellow"] },
-    { name: "berry",  count: 15, tags: ["fruit",  "blue"]   },
-  ];
+test('empty filter', () => {
+  const f: Filter<Object> = {};
 
-  // Tests
-  test("empty filter", () => {
-    const f: Filter<Object> = {};
+  // Predicate
+  const predicate = toPredicate<Object>(f);
+  expect(predicate(list[0])).toBeTruthy();
 
-    // Predicate
-    const predicate = toPredicate<Object>(f);
-    expect(predicate(list[0])).toBeTruthy();
+  // On list
+  const result = filter(list, f);
+  expect(result).toEqual(list);
+});
 
-    // On list
-    const result = filter(list, f);
-    expect(result).toEqual(list);
-  });
+test('value filter', () => {
+  const f: Filter<Object> = { name: "dice" };
 
-  test("value filter", () => {
-    const f: Filter<Object> = { name: "dice" };
+  // Predicate
+  const predicate = toPredicate<Object>(f);
+  expect(predicate(list[0])).toBeFalsy();
+  expect(predicate(list[1])).toBeTruthy();
 
-    // Predicate
-    const predicate = toPredicate<Object>(f);
-    expect(predicate(list[0])).toBeFalsy();
-    expect(predicate(list[1])).toBeTruthy();
+  // On list
+  const result = filter(list, f);
+  expect(result).toHaveLength(1);
+  expect(result).toContainEqual(list[1]);
+});
 
-    // On list
-    const result = filter(list, f);
-    expect(result).toHaveLength(1);
-    expect(result).toContainEqual(list[1]);
-  });
+test('array filter', () => {
+  const f: Filter<Object> = { count: [2, 15] };
 
-  test("array filter", () => {
-    const f: Filter<Object> = { count: [2, 15] };
+  // Predicate
+  const predicate = toPredicate<Object>(f);
+  expect(predicate(list[0])).toBeFalsy();
+  expect(predicate(list[1])).toBeTruthy();
 
-    // Predicate
-    const predicate = toPredicate<Object>(f);
-    expect(predicate(list[0])).toBeFalsy();
-    expect(predicate(list[1])).toBeTruthy();
+  // On list
+  const result = filter(list, f);
+  expect(result).toHaveLength(2);
+  expect(result).toContainEqual(list[1]);
+  expect(result).toContainEqual(list[3]);
+});
 
-    // On list
-    const result = filter(list, f);
-    expect(result).toHaveLength(2);
-    expect(result).toContainEqual(list[1]);
-    expect(result).toContainEqual(list[3]);
-  });
+test('tag filter (string)', () => {
+  const f: Filter<Object> = { tags: "fruit" };
 
-  test("tag filter (string)", () => {
-    const f: Filter<Object> = { tags: "fruit" };
+  // Predicate
+  const predicate = toPredicate<Object>(f);
+  expect(predicate(list[0])).toBeTruthy();
+  expect(predicate(list[1])).toBeFalsy();
 
-    // Predicate
-    const predicate = toPredicate<Object>(f);
-    expect(predicate(list[0])).toBeTruthy();
-    expect(predicate(list[1])).toBeFalsy();
+  // On list
+  const result = filter(list, f);
+  expect(result).toHaveLength(2);
+  expect(result).toContainEqual(list[0]);
+  expect(result).toContainEqual(list[3]);
+});
 
-    // On list
-    const result = filter(list, f);
-    expect(result).toHaveLength(2);
-    expect(result).toContainEqual(list[0]);
-    expect(result).toContainEqual(list[3]);
-  });
+test('tag filter (array)', () => {
+  const f: Filter<Object> = { tags: ["yellow", "fruit"] };
 
-  test("tag filter (array)", () => {
-    const f: Filter<Object> = { tags: ["yellow", "fruit"] };
+  // Predicate
+  const predicate = toPredicate<Object>(f);
+  expect(predicate(list[0])).toBeTruthy();
+  expect(predicate(list[1])).toBeFalsy();
 
-    // Predicate
-    const predicate = toPredicate<Object>(f);
-    expect(predicate(list[0])).toBeTruthy();
-    expect(predicate(list[1])).toBeFalsy();
-
-    // On list
-    const result = filter(list, f);
-    expect(result).toHaveLength(1);
-    expect(result).toContainEqual(list[0]);
-  });
+  // On list
+  const result = filter(list, f);
+  expect(result).toHaveLength(1);
+  expect(result).toContainEqual(list[0]);
 });

@@ -11,10 +11,11 @@ import useDarkTheme from 'layout/theme.hooks';
 
 import AuthGate from 'auth/components/AuthGate';
 import AutoLogin from 'auth/components/AutoLogin';
+import DaemonRouter from 'daemons/components/DaemonRouter';
+import AppBar from 'layout/components/AppBar';
+import UserRouter from 'users/components/UserRouter';
 
 import Home from './Home';
-import AppBar from 'layout/components/AppBar';
-import UserTable from 'users/components/UserTable';
 
 // Component
 const App = () => {
@@ -37,7 +38,8 @@ const App = () => {
           <AutoLogin />
           <AppBar>
             <Switch>
-              <Route path="/users" component={UserTable} />
+              <Route path="/daemons" component={DaemonRouter} />
+              <Route path="/users" component={UserRouter} />
               <Route component={Home} />
             </Switch>
           </AppBar>

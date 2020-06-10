@@ -64,7 +64,7 @@ const UserHeader = (props: UserHeaderProps) => {
         <Typography variant="subtitle1" color="textSecondary">{ user.email }</Typography>
       </Grid>
       <Grid className={styles.action} item xs="auto">
-        <IconButton onClick={() => { onReload() }}>
+        <IconButton onClick={() => { onReload(); }}>
           <RefreshIcon />
         </IconButton>
       </Grid>

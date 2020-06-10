@@ -1,5 +1,10 @@
+import { User } from 'users/models/user';
+
 // Model
 export interface Daemon {
   id: string;
-  ownerId?: string;
+  name?: string;
+  owner?: User;
+  dependencies: Daemon[];
+  dependents: Daemon[];
 }

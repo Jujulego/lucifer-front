@@ -6,11 +6,11 @@ export interface User {
   email:      string;
   emailVerified: boolean;
   name:       string;
+  nickname:   string;
   username?:  string;
-  nickname?:  string;
   givenName?: string;
   familyName?: string;
-  createdAt:  string;
+  createdAt?: string;
   updatedAt?: string;
   picture:    string;
   lastIp?:    string;

@@ -24,17 +24,17 @@ const DaemonTable = (props: DaemonTableProps) => {
       <Table documents={daemons} toolbar={toolbar}>
         <TableHead>
           <TableRow>
-            <TableSortCell<Daemon> field="id">Identifiant</TableSortCell>
-            <TableSortCell<Daemon> field="ownerId">Propriétaire</TableSortCell>
+            <TableSortCell<Daemon> field={dmn => dmn.name || dmn.id}>Nom</TableSortCell>
+            <TableSortCell<Daemon> field={dmn => dmn.owner?.name}>Propriétaire</TableSortCell>
           </TableRow>
         </TableHead>
         <TableBody>
           { (dmn: Daemon) => (
             <TableRow key={dmn.id} doc={dmn}>
-              <TableCell>{ dmn.id }</TableCell>
+              <TableCell>{ dmn.name || dmn.id }</TableCell>
               <TableCell>
-                <Link component={RouterLink} to={`/users/${dmn.ownerId}/daemons`}>
-                  { dmn.ownerId }
+                <Link component={RouterLink} to={`/users/${dmn.owner?.id}/daemons`}>
+                  { dmn.owner?.name }
                 </Link>
               </TableCell>
             </TableRow>

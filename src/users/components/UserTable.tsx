@@ -3,7 +3,6 @@ import { useRouteMatch } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 
 import {
-  Card,
   Link, Paper,
   TableCell, TableContainer, TableHead,
   Tooltip

@@ -6,26 +6,30 @@ import { Link, TableCell, TableContainer, TableHead } from '@material-ui/core';
 import { Table, TableBody, TableRow, TableSortCell } from 'basics/components';
 
 import { Daemon } from '../models/daemon';
+import { User } from 'users/models/user';
 
 // Props
 export interface DaemonTableProps {
-  daemons: Daemon[],
-  toolbar?: ReactNode
+  daemons: Daemon[];
+  defaultOwner?: User;
+  toolbar?: ReactNode;
 }
 
 // Component
 const DaemonTable = (props: DaemonTableProps) => {
   // Props
-  const { daemons, toolbar } = props;
+  const { daemons, defaultOwner, toolbar } = props;
 
   // Render
+  const owner = (daemon: Daemon) => daemon.owner || defaultOwner;
+
   return (
     <TableContainer>
       <Table documents={daemons} toolbar={toolbar}>
         <TableHead>
           <TableRow>
             <TableSortCell<Daemon> field={dmn => dmn.name || dmn.id}>Nom</TableSortCell>
-            <TableSortCell<Daemon> field={dmn => dmn.owner?.name}>Propriétaire</TableSortCell>
+            <TableSortCell<Daemon> field={dmn => owner(dmn)?.name}>Propriétaire</TableSortCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -33,8 +37,8 @@ const DaemonTable = (props: DaemonTableProps) => {
             <TableRow key={dmn.id} doc={dmn}>
               <TableCell>{ dmn.name || dmn.id }</TableCell>
               <TableCell>
-                <Link component={RouterLink} to={`/users/${dmn.owner?.id}/daemons`}>
-                  { dmn.owner?.name }
+                <Link component={RouterLink} to={`/users/${owner(dmn)?.id}/daemons`}>
+                  { owner(dmn)?.name }
                 </Link>
               </TableCell>
             </TableRow>

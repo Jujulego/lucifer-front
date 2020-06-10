@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, Paper } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { Refresh as RefreshIcon } from '@material-ui/icons';
 
 import useAPI from 'utils/hooks/useAPI';

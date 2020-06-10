@@ -29,6 +29,9 @@ const useStyles = makeStyles({
   },
   endAdorned: {
     paddingRight: 0
+  },
+  zeroMinWidth: {
+    minWidth: 0
   }
 });
 
@@ -36,6 +39,7 @@ const useStyles = makeStyles({
 export type LabelledTextClassKey = 'root' | 'label' | 'content' | 'endAdornment';
 export type LabelledTextProps = StyledProps<LabelledTextClassKey> & {
   label: string;
+  zeroMinWidth?: boolean;
   endAdornment?: ReactNode;
   children: ReactNode;
 }
@@ -44,6 +48,7 @@ export type LabelledTextProps = StyledProps<LabelledTextClassKey> & {
 const LabelledText = React.memo((props: LabelledTextProps) => {
   const {
     label, endAdornment,
+    zeroMinWidth = false,
     children
   } = props;
 
@@ -53,7 +58,7 @@ const LabelledText = React.memo((props: LabelledTextProps) => {
   return (
     <div className={styles.root}>
       <Typography className={styles.label} variant='caption'>{ label }</Typography>
-      <div className={clsx(styles.content, { [styles.endAdorned]: !!endAdornment })}>
+      <div className={clsx(styles.content, { [styles.endAdorned]: !!endAdornment, [styles.zeroMinWidth]: zeroMinWidth })}>
         { children }
       </div>
       { endAdornment }

@@ -2,11 +2,11 @@ import React, { ReactNode } from 'react';
 
 import { Grid, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { Check as CheckIcon } from '@material-ui/icons';
+
+import { LabelledText, RelativeDate } from 'basics/components';
 
 import { User } from '../models/user';
-import { Check as CheckIcon } from '@material-ui/icons';
-import LabelledText from 'basics/components/LabelledText';
-import { RelativeDate } from 'basics/components';
 
 // Styles
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({

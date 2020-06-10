@@ -1,17 +1,20 @@
 import React from 'react';
 
-import { Grid, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth } from 'auth/auth.context';
 import { useAuthToken } from 'auth/auth.hooks';
 
-import { CopyButton } from 'basics/components';
+import { CopyButton, LabelledText } from 'basics/components';
 
 // Styles
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
     padding: spacing(2),
+  },
+  title: {
+    marginBottom: spacing(2)
   }
 }));
 
@@ -26,15 +29,13 @@ const Home = () => {
 
   return (
     <div className={styles.root}>
-      <Typography>Bonjour { user?.nickname } !</Typography>
-      <Grid container wrap="nowrap" alignItems="center" spacing={2}>
-        <Grid item xs zeroMinWidth>
-          <Typography noWrap>{ token }</Typography>
-        </Grid>
-        <Grid item xs="auto">
-          <CopyButton text={token} />
-        </Grid>
-      </Grid>
+      <Typography className={styles.title} variant="h5">Bonjour { user?.nickname } !</Typography>
+      <LabelledText
+        label="Token" zeroMinWidth
+        endAdornment={<CopyButton text={token} />}
+      >
+        <Typography noWrap>{ token }</Typography>
+      </LabelledText>
     </div>
   );
 };

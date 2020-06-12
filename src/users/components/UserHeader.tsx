@@ -10,7 +10,7 @@ import { User } from '../models/user';
 
 // Styles
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
-  user: {
+  root: {
     padding: spacing(3),
 
     [breakpoints.down('sm')]: {
@@ -41,7 +41,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 
 // Types
 export interface UserHeaderProps {
-  user: User,
+  user: User;
   onReload: () => void;
 }
 
@@ -53,7 +53,7 @@ const UserHeader = (props: UserHeaderProps) => {
   const styles = useStyles();
 
   return (
-    <Grid className={styles.user} container alignItems="center">
+    <Grid className={styles.root} container alignItems="center">
       <Grid item xs="auto">
         <Avatar className={styles.avatar} alt={user.name} src={user.picture}>
           { initials(user.name) }

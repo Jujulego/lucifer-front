@@ -1,11 +1,21 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
-import { Button, Dialog, DialogActions, DialogContent, TextField } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  TextField
+} from '@material-ui/core';
 
 import { ClosableDialogTitle } from 'basics/components';
 
 import { CreateDaemon } from '../models/daemon';
+import UserSelect from 'users/components/UserSelect';
 
 // Types
 export interface AddDaemonDialogProps {
@@ -22,7 +32,7 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
   } = props;
 
   // Form
-  const { errors, register, handleSubmit } = useForm<CreateDaemon>();
+  const { errors, control, register, handleSubmit } = useForm<CreateDaemon>();
 
   // Callbacks
   const handleAdd = (data: CreateDaemon) => {
@@ -49,6 +59,16 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
           name="name" inputRef={register}
           error={!!errors.name} helperText={errors.name?.message}
         />
+        <FormControl fullWidth error={!!errors.ownerId}>
+          <InputLabel>Propriétaire</InputLabel>
+          <Controller
+            name="ownerId"
+            control={control} as={UserSelect}
+          />
+          { errors.ownerId && (
+            <FormHelperText>{ errors.ownerId.message }</FormHelperText>
+          ) }
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button color="secondary" onClick={() => onClose()}>Annuler</Button>

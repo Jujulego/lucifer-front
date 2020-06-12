@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Fab, FormControl, FormHelperText, Grid, InputLabel, TextField, Zoom } from '@material-ui/core';
@@ -47,7 +47,15 @@ const DaemonDetails = (props: DaemonDetailsProps) => {
   const { daemon, onUpdate } = props;
 
   // Form
-  const { errors, control, register, handleSubmit } = useForm<UpdateDaemon>();
+  const { errors, control, register, reset, handleSubmit, formState } = useForm<UpdateDaemon>();
+
+  // Effects
+  useEffect(() => {
+    reset({
+      name: daemon.name,
+      ownerId: daemon.owner?.id
+    });
+  }, [reset, daemon])
 
   // Render
   const styles = useStyles();
@@ -58,17 +66,16 @@ const DaemonDetails = (props: DaemonDetailsProps) => {
         <GridItem>
           <TextField
             label="Nom" variant="outlined" fullWidth
-            name="name" defaultValue={daemon.name} inputRef={register}
+            name="name" inputRef={register}
             error={!!errors.name} helperText={errors.name?.message}
           />
         </GridItem>
         <GridItem>
-          <FormControl fullWidth error={!!errors.ownerId}>
+          <FormControl fullWidth error={!!errors.ownerId} variant="outlined">
             <InputLabel>Propriétaire</InputLabel>
             <Controller
               name="ownerId"
               control={control} as={UserSelect}
-              defaultValue={daemon.owner?.id}
             />
             { errors.ownerId && (
               <FormHelperText>{ errors.ownerId.message }</FormHelperText>
@@ -77,7 +84,10 @@ const DaemonDetails = (props: DaemonDetailsProps) => {
         </GridItem>
       </Grid>
       <Zoom in>
-        <Fab className={styles.save} color="primary" type="submit">
+        <Fab
+          className={styles.save} color="primary"
+          type="submit" disabled={!formState.dirty}
+        >
           <SaveIcon />
         </Fab>
       </Zoom>

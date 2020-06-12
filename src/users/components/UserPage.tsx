@@ -8,8 +8,7 @@ import useAPI from 'utils/hooks/useAPI';
 
 import DaemonTable from 'daemons/components/DaemonTable';
 
-import { User } from '../models/user';
-
+import { UpdateUser, User } from '../models/user';
 import UserDetails from './UserDetails';
 import UserHeader from 'users/components/UserHeader';
 
@@ -43,7 +42,17 @@ const UserPage = () => {
   const { id, page = 'details' } = useParams<UserParams>();
 
   // API
-  const { data: user, reload } = useAPI.get<User>(`/api/users/${id}`);
+  const { data: user, reload, update } = useAPI.get<User>(`/api/users/${id}`);
+  const { send: put } = useAPI.put<UpdateUser, User>(`/api/users/${id}`);
+
+  // Callbacks
+  const handleUpdate = async (data: UpdateUser) => {
+    const usr = await put(data);
+
+    if (usr) {
+      update(usr);
+    }
+  }
 
   // Render
   if (!user) return null;
@@ -61,7 +70,7 @@ const UserPage = () => {
         <DaemonTable daemons={user.daemons || []} defaultOwner={user} />
       ) }
       { (page === 'details') && (
-        <UserDetails user={user} />
+        <UserDetails user={user} onUpdate={handleUpdate} />
       ) }
     </>
   );

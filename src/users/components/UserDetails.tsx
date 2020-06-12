@@ -1,12 +1,13 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { Grid, Tooltip } from '@material-ui/core';
+import { Fab, Grid, TextField, Tooltip, Zoom } from '@material-ui/core';
+import { Check as CheckIcon, Save as SaveIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { Check as CheckIcon } from '@material-ui/icons';
 
 import { LabelledText, RelativeDate } from 'basics/components';
 
-import { User } from '../models/user';
+import { UpdateUser, User } from '../models/user';
 
 // Styles
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -16,6 +17,11 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     [breakpoints.down('sm')]: {
       padding: spacing(2),
     }
+  },
+  save: {
+    position: 'absolute',
+    bottom: spacing(2),
+    right: spacing(2)
   }
 }));
 
@@ -32,35 +38,51 @@ const GridItem = ({ children }: GridItemProps) => (
 
 // Types
 export interface UserDetailsProps {
-  user: User
+  user: User;
+  onUpdate: (update: UpdateUser) => void;
 }
 
 // Component
 const UserDetails = React.memo((props: UserDetailsProps) => {
-  const { user } = props;
+  const { user, onUpdate } = props;
+
+  // Form
+  const { errors, register, reset, handleSubmit, formState } = useForm<UpdateUser>();
+
+  // Effects
+  useEffect(() => {
+    reset({
+      name: user.name,
+      email: user.email
+    });
+  }, [reset, user]);
 
   // Render
   const styles = useStyles();
 
   return (
-    <div className={styles.root}>
+    <form className={styles.root} onSubmit={handleSubmit(onUpdate)}>
       <Grid container spacing={2}>
         <GridItem>
-          <LabelledText label="Nom">
-            { user.name }
-          </LabelledText>
+          <TextField
+            label="Nom" variant="outlined" fullWidth
+            name="name" inputRef={register}
+            error={!!errors.name} helperText={errors.name?.message}
+          />
         </GridItem>
         <GridItem>
-          <LabelledText
-            label="Email"
-            endAdornment={ user.emailVerified && (
-              <Tooltip title="Vérifié">
-                <CheckIcon color="primary" />
-              </Tooltip>
-            )}
-          >
-            { user.email }
-          </LabelledText>
+          <TextField
+            label="Email" variant="outlined" fullWidth
+            name="email" inputRef={register}
+            error={!!errors.email} helperText={errors.email?.message}
+            InputProps={{
+              endAdornment: user.emailVerified && (
+                <Tooltip title="Vérifié">
+                  <CheckIcon color="primary" />
+                </Tooltip>
+              )
+            }}
+          />
         </GridItem>
         <GridItem>
           <LabelledText label="Dernière connexion">
@@ -68,7 +90,15 @@ const UserDetails = React.memo((props: UserDetailsProps) => {
           </LabelledText>
         </GridItem>
       </Grid>
-    </div>
+      <Zoom in>
+        <Fab
+          className={styles.save} color="primary"
+          type="submit" disabled={!formState.dirty}
+        >
+          <SaveIcon />
+        </Fab>
+      </Zoom>
+    </form>
   );
 });
 

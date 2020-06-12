@@ -18,3 +18,8 @@ export interface User {
   blocked?:   boolean;
   daemons?:   Daemon[];
 }
+
+export interface UpdateUser {
+  name?:  string;
+  email?: string;
+}

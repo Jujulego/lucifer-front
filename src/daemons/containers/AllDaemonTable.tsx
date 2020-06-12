@@ -14,7 +14,7 @@ import DaemonTable from '../components/DaemonTable';
 // Component
 const AllDaemonTable = () => {
   // State
-  const [adding, setAdding] = useState(true);
+  const [adding, setAdding] = useState(false);
 
   // API
   const { data: daemons = [], reload, update } = useAPI.get<Daemon[]>('/api/daemons');

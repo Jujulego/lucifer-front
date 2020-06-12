@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Grid, IconButton, Typography } from '@material-ui/core';
+import { Grid, IconButton, Link, Typography } from '@material-ui/core';
 import { Refresh as RefreshIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -42,7 +43,13 @@ const DaemonHeader = (props: DaemonHeaderProps) => {
     <Grid className={styles.root} container alignItems="center">
       <Grid item xs zeroMinWidth>
         <Typography variant="h5" noWrap>Daemon { daemon.name || daemon.id }</Typography>
-        <Typography variant="subtitle1" color="textSecondary">{ daemon.owner?.name }</Typography>
+        <Typography variant="subtitle1" color="textSecondary">
+          { daemon.owner && (
+            <Link component={RouterLink} to={`/users/${daemon.owner.id}/daemons`} color="inherit">
+              { daemon.owner.name }
+            </Link>
+          ) }
+        </Typography>
       </Grid>
       <Grid className={styles.action} item xs="auto">
         <IconButton onClick={onReload}>

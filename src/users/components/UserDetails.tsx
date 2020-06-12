@@ -35,7 +35,7 @@ export interface UserDetailsProps {
   user: User
 }
 
-// Components
+// Component
 const UserDetails = React.memo((props: UserDetailsProps) => {
   const { user } = props;
 

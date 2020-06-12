@@ -9,8 +9,12 @@ export interface Daemon {
   dependents: Daemon[];
 }
 
-// Utils
 export interface CreateDaemon {
+  name?: string;
+  ownerId?: string;
+}
+
+export interface UpdateDaemon {
   name?: string;
   ownerId?: string;
 }

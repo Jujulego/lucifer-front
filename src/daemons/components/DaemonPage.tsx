@@ -6,8 +6,9 @@ import { Paper, Tab, Tabs } from '@material-ui/core';
 
 import useAPI from 'utils/hooks/useAPI';
 
-import { Daemon } from '../models/daemon';
+import { Daemon, UpdateDaemon } from '../models/daemon';
 import DaemonHeader from './DaemonHeader';
+import DaemonDetails from './DaemonDetails';
 
 // Utils
 interface LinkTabProps {
@@ -39,7 +40,17 @@ const DaemonPage = () => {
   const { id, page = 'details' } = useParams<DaemonParams>();
 
   // API
-  const { data: daemon, reload } = useAPI.get<Daemon>(`/api/daemons/${id}`);
+  const { data: daemon, reload, update } = useAPI.get<Daemon>(`/api/daemons/${id}`);
+  const { send: put } = useAPI.put<UpdateDaemon, Daemon>(`/api/daemons/${id}`);
+
+  // Callbacks
+  const handleUpdate = async (data: UpdateDaemon) => {
+    const dmn = await put(data);
+
+    if (dmn) {
+      update(dmn);
+    }
+  }
 
   // Render
   if (!daemon) return null;
@@ -53,7 +64,7 @@ const DaemonPage = () => {
           <Tab value="dependencies" label="Dépendances" disabled />
         </Tabs>
       </Paper>
-      { daemon.name || daemon.id }
+      <DaemonDetails daemon={daemon} onUpdate={handleUpdate} />
     </>
   );
 };

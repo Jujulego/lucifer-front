@@ -12,17 +12,33 @@ function toGetter<T>(field: OrderByField<T>): FieldGetter<T> {
 
 export function asc<T>(a: T, b: T, orderBy: OrderByField<T>) {
   const getter = toGetter(orderBy);
+  const va = getter(a);
+  const vb = getter(b);
 
-  if (getter(b) > getter(a)) return -1;
-  if (getter(b) < getter(a)) return 1;
+  // String case
+  if (typeof va === 'string' && typeof vb === 'string') {
+    return va.localeCompare(vb);
+  }
+
+  // Global case
+  if (vb > va) return -1;
+  if (vb < va) return 1;
   return 0;
 }
 
 export function desc<T>(a: T, b: T, orderBy: OrderByField<T>) {
   const getter = toGetter(orderBy);
+  const va = getter(a);
+  const vb = getter(b);
 
-  if (getter(b) < getter(a)) return -1;
-  if (getter(b) > getter(a)) return 1;
+  // String case
+  if (typeof va === 'string' && typeof vb === 'string') {
+    return -va.localeCompare(vb);
+  }
+
+  // Global case
+  if (vb < va) return -1;
+  if (vb > va) return 1;
   return 0;
 }
 

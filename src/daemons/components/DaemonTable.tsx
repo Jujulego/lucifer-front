@@ -37,9 +37,11 @@ const DaemonTable = (props: DaemonTableProps) => {
             <TableRow key={dmn.id} doc={dmn}>
               <TableCell>{ dmn.name || dmn.id }</TableCell>
               <TableCell>
-                <Link component={RouterLink} to={`/users/${owner(dmn)?.id}/daemons`}>
-                  { owner(dmn)?.name }
-                </Link>
+                { owner(dmn) && (
+                  <Link component={RouterLink} to={`/users/${owner(dmn)?.id}/daemons`}>
+                    { owner(dmn)?.name }
+                  </Link>
+                ) }
               </TableCell>
             </TableRow>
           ) }

@@ -8,3 +8,9 @@ export interface Daemon {
   dependencies: Daemon[];
   dependents: Daemon[];
 }
+
+// Utils
+export interface CreateDaemon {
+  name?: string;
+  ownerId?: string;
+}

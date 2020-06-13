@@ -9,7 +9,7 @@ import {
   useFormControl
 } from '@material-ui/core';
 
-import apiHooks from 'basics/api.hooks';
+import useAPI from 'basics/api.hooks';
 import { User } from 'users/models/user';
 
 // Utils
@@ -29,7 +29,7 @@ const UserSelect = (props: UserSelectProps) => {
   const required = props.required || ctx?.required;
 
   // API
-  const { data: users, loading } = apiHooks.get<User[]>('/api/users');
+  const { data: users, loading } = useAPI.get<User[]>('/api/users');
 
   // Render
   return (

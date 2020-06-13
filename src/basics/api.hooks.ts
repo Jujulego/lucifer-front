@@ -8,7 +8,7 @@ import { useCache } from './cache.context';
 // Types
 type Updator<R> = (data?: R) => R;
 export type APIState<R> = { data?: R, loading: boolean };
-export type APIPromise<R> = Promise<R | undefined> & { cancel: () => void };
+export type APIPromise<R> = Promise<R> & { cancel: () => void };
 
 export type APIGetRequestConfig = Omit<AxiosRequestConfig, 'cancelToken'> & { load?: boolean };
 export type APIGetRequestGenerator<P extends object, R> = (source: CancelTokenSource) => Promise<AxiosResponse<R>>;
@@ -49,7 +49,6 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
     generator(source)
       .then((res) => {
         setState({ data: res.data, loading: false });
-        setCache(res.data);
       })
       .catch((error) => {
         if (axios.isCancel(error)) return;
@@ -59,6 +58,10 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
     // Cancel
     return () => { source.cancel(); };
   }, [generator, reload, setCache]);
+
+  useEffect(() => {
+    if (state.data) setCache(state.data);
+  }, [state.data, setCache]);
 
   return {
     ...state,
@@ -215,7 +218,7 @@ export function useAPIPatch<D, R = any, P extends object = object> (url: string,
 }
 
 // Namespaces
-const apiHooks = {
+const useAPI = {
   get:     useAPIGet,
   delete:  useAPIDelete,
   head:    useAPIHead,
@@ -225,4 +228,4 @@ const apiHooks = {
   patch:   useAPIPatch
 };
 
-export default apiHooks;
+export default useAPI;

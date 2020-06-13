@@ -11,7 +11,7 @@ import { Check as CheckIcon } from '@material-ui/icons';
 import { Refresh as RefreshIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
-import apiHooks from 'basics/api.hooks';
+import useAPI from 'basics/api.hooks';
 
 import {
   RelativeDate,
@@ -40,7 +40,7 @@ const UserTable = () => {
   const { url } = useRouteMatch();
 
   // API
-  const { data: users = [], reload } = apiHooks.get<User[]>('/api/users');
+  const { data: users = [], reload } = useAPI.get<User[]>('/api/users');
 
   // Render
   const styles = useStyles();

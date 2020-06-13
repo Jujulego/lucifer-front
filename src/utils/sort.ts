@@ -1,6 +1,6 @@
 // Types
 export type FieldGetter<T> = ((obj: T) => any);
-export type OrderByField<T> = keyof T | FieldGetter<T>;
+export type OrderByField<T> = (T extends Object ? keyof T : any) | FieldGetter<T>;
 
 export type Comparator<T> = (a: T, b: T) => number;
 

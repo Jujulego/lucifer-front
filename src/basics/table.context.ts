@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react';
 import { Filter } from 'utils/filter';
 import { OrderByField } from 'utils/sort';
 
-import { AnyDocument, Document } from './models/document';
+import { Document } from './models/document';
 
 // Types
 export type SelectState = {
@@ -41,12 +41,8 @@ export interface TableContextProps<T extends Document> {
   onPaginate: (paginator: Paginator) => void;
 }
 
-interface TableContextDefaults extends TableContextProps<AnyDocument> {
-  onOrderBy: (field: any) => void;
-}
-
 // Defaults
-const tableDefaults: TableContextDefaults = {
+const tableDefaults: TableContextProps<any> = {
   blacklist: [],
   documents: [],
   filter: {}, filtered: [],
@@ -67,6 +63,6 @@ const tableDefaults: TableContextDefaults = {
 export const TableContext = createContext(tableDefaults);
 
 // Hook
-export function useTable<T extends Document = AnyDocument>(): TableContextProps<T> {
+export function useTable<T extends Document = any>(): TableContextProps<T> {
   return useContext(TableContext);
 }

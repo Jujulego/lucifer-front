@@ -39,7 +39,7 @@ const DaemonPage = () => {
   const { id, page = 'details' } = useParams<DaemonParams>();
 
   // API
-  const { data: daemon, reload } = useAPI.get<Daemon>(`/api/daemons/${id}`);
+  const { data: daemon, loading, reload } = useAPI.get<Daemon>(`/api/daemons/${id}`);
 
   // Render
   if (!daemon) return null;
@@ -47,7 +47,7 @@ const DaemonPage = () => {
   return (
     <>
       <Paper square>
-        <DaemonHeader daemon={daemon} onReload={reload} />
+        <DaemonHeader daemon={daemon} loading={loading} onReload={reload} />
         <Tabs variant="fullWidth" value={page} onChange={() => {}}>
           <LinkTab value="details" label="Détails" />
           <Tab value="dependencies" label="Dépendances" disabled />

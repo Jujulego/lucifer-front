@@ -43,7 +43,7 @@ const UserPage = () => {
   const { id, page = 'details' } = useParams<UserParams>();
 
   // API
-  const { data: user, reload } = useAPI.get<User>(`/api/users/${id}`);
+  const { data: user, loading, reload } = useAPI.get<User>(`/api/users/${id}`);
 
   // Render
   if (!user) return null;
@@ -51,7 +51,7 @@ const UserPage = () => {
   return (
     <>
       <Paper square>
-        <UserHeader user={user} onReload={reload} />
+        <UserHeader user={user} loading={loading} onReload={reload} />
         <Tabs variant="fullWidth" value={page} onChange={() => {}}>
           <LinkTab value="details" label="Détails" />
           <LinkTab value="daemons" label="Daemons" />

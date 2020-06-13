@@ -16,6 +16,9 @@ export * from './CopyFab';
 export { default as LabelledText } from './LabelledText';
 export * from './LabelledText';
 
+export { default as RefreshButton } from './RefreshButton';
+export * from './RefreshButton';
+
 export { default as RelativeDate } from './RelativeDate';
 export * from './RelativeDate';
 

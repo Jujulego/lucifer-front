@@ -15,7 +15,7 @@ import { StyledProps } from 'utils/style';
 
 // Types
 export type CopyFabClassKey = FabClassKey | 'succeed';
-export type CopyFabProps = Omit<FabProps, 'classes'> & StyledProps<CopyFabClassKey> & {
+export type CopyFabProps = Omit<FabProps, 'classes' | 'children'> & StyledProps<CopyFabClassKey> & {
   text: string;
   format?: string;
 

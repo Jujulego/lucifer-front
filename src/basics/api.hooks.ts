@@ -31,7 +31,7 @@ export type APIPostReturn<D, P extends object, R> = APIState<R> & {
 // Base hooks
 function useGetRequest<R, P extends object = object>(generator: APIGetRequestGenerator<P, R>, cacheId: string, load: boolean = true): APIGetReturn<R> {
   // Cache
-  const { data, setCache } = useCache(cacheId);
+  const { data, setCache } = useCache<R>(cacheId);
 
   // State
   const [reload, setReload] = useState(load ? 1 : 0);

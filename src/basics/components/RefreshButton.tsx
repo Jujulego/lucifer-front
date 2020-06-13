@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { CircularProgress, Fade, IconButton } from '@material-ui/core';
+import { CircularProgress, Fade, IconButton, IconButtonProps } from '@material-ui/core';
 import { Refresh as RefreshIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Styles
 const useStyles = makeStyles({
-  root: {
+  label: {
     display: 'grid',
     justifyItems: 'center',
 
@@ -17,21 +17,28 @@ const useStyles = makeStyles({
 });
 
 // Types
-export interface RefreshButtonProps {
+export type RefreshButtonProps = IconButtonProps & {
   refreshing: boolean;
-  onClick?: () => void;
 }
 
 // Component
 const RefreshButton = (props: RefreshButtonProps) => {
-  const { refreshing, onClick } = props;
+  const {
+    disabled, refreshing,
+    onClick,
+    ...btn
+  } = props;
 
   // Render
   const styles = useStyles();
 
   return (
-    <IconButton className={styles.root} onClick={onClick} disabled={refreshing}>
-      <Fade in={refreshing}>
+    <IconButton {...btn}
+      classes={{ label: styles.label }}
+      disabled={disabled || refreshing}
+      onClick={onClick}
+    >
+      <Fade in={refreshing} unmountOnExit mountOnEnter>
         <CircularProgress size={24} />
       </Fade>
       <Fade in={!refreshing}>

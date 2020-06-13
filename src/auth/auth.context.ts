@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useDebugValue } from 'react';
 import { PopupLoginOptions, RedirectLoginOptions, LogoutOptions, GetTokenSilentlyOptions } from '@auth0/auth0-spa-js';
 
 import { User } from './models/user';
@@ -32,5 +32,8 @@ export const AuthContext = createContext<AuthContextProps>(authDefaults);
 
 // Hook
 export function useAuth() {
-  return useContext(AuthContext);
+  const ctx = useContext(AuthContext);
+  useDebugValue(ctx, ctx => ctx.isLogged ? `logged as ${ctx.user?.name}` : 'not logged');
+
+  return ctx;
 }

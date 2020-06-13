@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useDebugValue, useEffect, useState } from 'react';
 
 import useChanged from 'utils/hooks/useChanged';
 
@@ -144,6 +144,7 @@ function usePostRequest<D, R = any, P extends object = object>(generator: APIPos
 
 // API Hooks
 export function useAPIGet<R, P extends object = object> (url: string, params?: P, config: APIGetRequestConfig = {}): APIGetReturn<R> {
+  useDebugValue(url);
   const { load, ...rconfig } = config;
 
   // Callbacks
@@ -156,6 +157,7 @@ export function useAPIGet<R, P extends object = object> (url: string, params?: P
 }
 
 export function useAPIHead<R, P extends object = object> (url: string, params?: P, config: APIGetRequestConfig = {}): APIGetReturn<R> {
+  useDebugValue(url);
   const { load, ...rconfig } = config;
 
   // Callbacks
@@ -168,6 +170,7 @@ export function useAPIHead<R, P extends object = object> (url: string, params?: 
 }
 
 export function useAPIOptions<R, P extends object = object> (url: string, params?: P, config: APIGetRequestConfig = {}): APIGetReturn<R> {
+  useDebugValue(url);
   const { load, ...rconfig } = config;
 
   // Callbacks
@@ -180,6 +183,8 @@ export function useAPIOptions<R, P extends object = object> (url: string, params
 }
 
 export function useAPIDelete<R = any, P extends object = object> (url: string, params?: P, config?: APIPostRequestConfig): APIDeleteReturn<P, R> {
+  useDebugValue(url);
+
   // Callbacks
   const generator = useCallback((source: CancelTokenSource, _url?: string, _params?: P) =>
       axios.delete<R>(_url || url, { ...config, params: { ...params, ..._params }, cancelToken: source.token }),
@@ -190,6 +195,8 @@ export function useAPIDelete<R = any, P extends object = object> (url: string, p
 }
 
 export function useAPIPost<D, R = any, P extends object = object> (url: string, params?: P, config?: APIPostRequestConfig): APIPostReturn<D, P, R> {
+  useDebugValue(url);
+
   // Callbacks
   const generator = useCallback((data: D, source: CancelTokenSource, _url?: string, _params?: P) =>
     axios.post<R>(_url || url, data, { ...config, params: { ...params, ..._params }, cancelToken: source.token }),
@@ -200,6 +207,8 @@ export function useAPIPost<D, R = any, P extends object = object> (url: string, 
 }
 
 export function useAPIPut<D, R = any, P extends object = object> (url: string, params?: P, config?: APIPostRequestConfig): APIPostReturn<D, P, R> {
+  useDebugValue(url);
+
   // Callbacks
   const generator = useCallback((data: D, source: CancelTokenSource, _url?: string, _params?: P) =>
     axios.put<R>(_url || url, data, { ...config, params: { ...params, ..._params }, cancelToken: source.token }),
@@ -210,6 +219,8 @@ export function useAPIPut<D, R = any, P extends object = object> (url: string, p
 }
 
 export function useAPIPatch<D, R = any, P extends object = object> (url: string, params?: P, config?: APIPostRequestConfig): APIPostReturn<D, P, R> {
+  useDebugValue(url);
+
   // Callbacks
   const generator = useCallback((data: D, source: CancelTokenSource, _url?: string, _params?: P) =>
     axios.patch<R>(_url || url, data, { ...config, params: { ...params, ..._params }, cancelToken: source.token }),

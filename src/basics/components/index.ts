@@ -1,6 +1,9 @@
 export * from './Fields';
 export * from './Table';
 
+export { default as Cache } from './Cache';
+export * from './Cache';
+
 export { default as ClosableDialogTitle } from './ClosableDialogTitle';
 export * from './ClosableDialogTitle';
 
@@ -12,6 +15,9 @@ export * from './CopyFab';
 
 export { default as LabelledText } from './LabelledText';
 export * from './LabelledText';
+
+export { default as RefreshButton } from './RefreshButton';
+export * from './RefreshButton';
 
 export { default as RelativeDate } from './RelativeDate';
 export * from './RelativeDate';

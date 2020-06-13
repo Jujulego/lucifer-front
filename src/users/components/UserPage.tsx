@@ -4,13 +4,13 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { Paper, Tab, Tabs } from '@material-ui/core';
 
-import useAPI from 'utils/hooks/useAPI';
+import useAPI from 'basics/api.hooks';
 
 import DaemonTable from 'daemons/components/DaemonTable';
 
 import { UpdateUser, User } from '../models/user';
 import UserDetails from './UserDetails';
-import UserHeader from 'users/components/UserHeader';
+import UserHeader from './UserHeader';
 
 // Utils
 interface LinkTabProps {
@@ -42,16 +42,13 @@ const UserPage = () => {
   const { id, page = 'details' } = useParams<UserParams>();
 
   // API
-  const { data: user, reload, update } = useAPI.get<User>(`/api/users/${id}`);
+  const { data: user, loading, reload, update } = useAPI.get<User>(`/api/users/${id}`);
   const { send: put } = useAPI.put<UpdateUser, User>(`/api/users/${id}`);
 
   // Callbacks
   const handleUpdate = async (data: UpdateUser) => {
     const usr = await put(data);
-
-    if (usr) {
-      update(usr);
-    }
+    update(usr);
   }
 
   // Render
@@ -60,7 +57,7 @@ const UserPage = () => {
   return (
     <>
       <Paper square>
-        <UserHeader user={user} onReload={reload} />
+        <UserHeader user={user} loading={loading} onReload={reload} />
         <Tabs variant="fullWidth" value={page} onChange={() => {}}>
           <LinkTab value="details" label="Détails" />
           <LinkTab value="daemons" label="Daemons" />

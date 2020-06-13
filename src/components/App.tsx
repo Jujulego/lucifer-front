@@ -9,6 +9,7 @@ import createTheme from 'app.theme';
 import authConfig from 'configs/auth';
 import useDarkTheme from 'layout/theme.hooks';
 
+import { Cache } from 'basics/components';
 import AuthGate from 'auth/components/AuthGate';
 import AutoLogin from 'auth/components/AutoLogin';
 import DaemonRouter from 'daemons/components/DaemonRouter';
@@ -36,13 +37,15 @@ const App = () => {
           onRedirectCallback={(state: any) => history.push((state && state.targetUrl) || window.location.pathname)}
         >
           <AutoLogin />
-          <AppBar>
-            <Switch>
-              <Route path="/daemons" component={DaemonRouter} />
-              <Route path="/users" component={UserRouter} />
-              <Route component={Home} />
-            </Switch>
-          </AppBar>
+          <Cache>
+            <AppBar>
+              <Switch>
+                <Route path="/daemons" component={DaemonRouter} />
+                <Route path="/users" component={UserRouter} />
+                <Route component={Home} />
+              </Switch>
+            </AppBar>
+          </Cache>
         </AuthGate>
       </Router>
     </ThemeProvider>

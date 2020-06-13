@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Avatar, Grid, IconButton, Typography } from '@material-ui/core';
-import { Refresh as RefreshIcon } from '@material-ui/icons';
+import { Avatar, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { initials } from 'utils/string';
+import { RefreshButton } from 'basics/components';
 
 import { User } from '../models/user';
 
@@ -42,12 +42,13 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 // Types
 export interface UserHeaderProps {
   user: User;
+  loading: boolean;
   onReload: () => void;
 }
 
 // Component
 const UserHeader = (props: UserHeaderProps) => {
-  const { user, onReload } = props;
+  const { user, loading, onReload } = props;
 
   // Render
   const styles = useStyles();
@@ -64,9 +65,7 @@ const UserHeader = (props: UserHeaderProps) => {
         <Typography variant="subtitle1" color="textSecondary">{ user.email }</Typography>
       </Grid>
       <Grid className={styles.action} item xs="auto">
-        <IconButton onClick={() => { onReload(); }}>
-          <RefreshIcon />
-        </IconButton>
+        <RefreshButton refreshing={loading} onClick={onReload} />
       </Grid>
     </Grid>
   );

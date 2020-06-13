@@ -9,8 +9,9 @@ import {
   useFormControl
 } from '@material-ui/core';
 
-import useAPI from 'utils/hooks/useAPI';
-import { User } from 'users/models/user';
+import useAPI from 'basics/api.hooks';
+
+import { User } from '../models/user';
 
 // Utils
 const SmallProgress = (props: CircularProgressProps) => <CircularProgress {...props} size={20} />;

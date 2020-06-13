@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { Grid, IconButton, Link, Typography } from '@material-ui/core';
-import { Refresh as RefreshIcon } from '@material-ui/icons';
+import { Grid, Link, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { RefreshButton } from 'basics/components';
 
 import { Daemon } from '../models/daemon';
 
@@ -29,12 +30,13 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 // Types
 export interface DaemonHeaderProps {
   daemon: Daemon;
+  loading: boolean;
   onReload: () => void;
 }
 
 // Component
 const DaemonHeader = (props: DaemonHeaderProps) => {
-  const { daemon, onReload } = props;
+  const { daemon, loading, onReload } = props;
 
   // Render
   const styles = useStyles();
@@ -52,9 +54,7 @@ const DaemonHeader = (props: DaemonHeaderProps) => {
         </Typography>
       </Grid>
       <Grid className={styles.action} item xs="auto">
-        <IconButton onClick={onReload}>
-          <RefreshIcon />
-        </IconButton>
+        <RefreshButton refreshing={loading} onClick={onReload} />
       </Grid>
     </Grid>
   );

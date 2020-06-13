@@ -8,19 +8,18 @@ import {
   Tooltip
 } from '@material-ui/core';
 import { Check as CheckIcon } from '@material-ui/icons';
-import { Refresh as RefreshIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
-import useAPI from 'utils/hooks/useAPI';
+import useAPI from 'basics/api.hooks';
 
 import {
+  RefreshButton,
   RelativeDate,
   Table,
   TableBody,
   TableRow,
   TableSortCell,
-  TableToolbar,
-  ToolbarAction
+  TableToolbar
 } from 'basics/components';
 
 import { User } from '../models/user';
@@ -40,7 +39,7 @@ const UserTable = () => {
   const { url } = useRouteMatch();
 
   // API
-  const { data: users = [], reload } = useAPI.get<User[]>('/api/users');
+  const { data: users = [], loading, reload } = useAPI.get<User[]>('/api/users');
 
   // Render
   const styles = useStyles();
@@ -48,9 +47,7 @@ const UserTable = () => {
   const toolbar = (
     <Paper square>
       <TableToolbar title="Utilisateurs">
-        <ToolbarAction tooltip="Rafraîchir" onClick={() => reload()}>
-          <RefreshIcon />
-        </ToolbarAction>
+        <RefreshButton refreshing={loading} onClick={reload} />
       </TableToolbar>
     </Paper>
   );

@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { Paper, Tab, Tabs } from '@material-ui/core';
 
-import useAPI from 'utils/hooks/useAPI';
+import useAPI from 'basics/api.hooks';
 
 import { Daemon, UpdateDaemon } from '../models/daemon';
 import DaemonHeader from './DaemonHeader';
@@ -40,16 +40,13 @@ const DaemonPage = () => {
   const { id, page = 'details' } = useParams<DaemonParams>();
 
   // API
-  const { data: daemon, reload, update } = useAPI.get<Daemon>(`/api/daemons/${id}`);
+  const { data: daemon, loading, reload, update } = useAPI.get<Daemon>(`/api/daemons/${id}`);
   const { send: put } = useAPI.put<UpdateDaemon, Daemon>(`/api/daemons/${id}`);
 
   // Callbacks
   const handleUpdate = async (data: UpdateDaemon) => {
     const dmn = await put(data);
-
-    if (dmn) {
-      update(dmn);
-    }
+    update(dmn);
   }
 
   // Render
@@ -58,7 +55,7 @@ const DaemonPage = () => {
   return (
     <>
       <Paper square>
-        <DaemonHeader daemon={daemon} onReload={reload} />
+        <DaemonHeader daemon={daemon} loading={loading} onReload={reload} />
         <Tabs variant="fullWidth" value={page} onChange={() => {}}>
           <LinkTab value="details" label="Détails" />
           <Tab value="dependencies" label="Dépendances" disabled />

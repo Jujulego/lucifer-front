@@ -1,9 +1,12 @@
 import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
 
-import { Snackbar } from '@material-ui/core';
+import { Snackbar, Slide, SlideProps } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
 import { ErrorsContext, ErrorState } from '../errors.context';
+
+// Utils
+const SnackSlide = (props: SlideProps) => <Slide {...props} direction="right" />;
 
 // Component
 const ErrorsSnackbar = () => {
@@ -39,8 +42,9 @@ const ErrorsSnackbar = () => {
   // Render
   return (
     <Snackbar
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       open={open} autoHideDuration={6000}
+      TransitionComponent={SnackSlide}
       onClose={handleClose}
       onExited={handleExited}
     >

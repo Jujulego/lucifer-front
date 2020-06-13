@@ -7,7 +7,7 @@ export interface CacheState<R = any> {
 
 export interface CacheContextProps {
   cache: { [id: string]: CacheState; };
-  set: <R> (id: string, data: R) => void;
+  setCache: <R> (id: string, data: R) => void;
 }
 
 export interface CacheProps<R> extends CacheState<R> {
@@ -17,7 +17,7 @@ export interface CacheProps<R> extends CacheState<R> {
 // Defaults
 const cacheDefaults: CacheContextProps = {
   cache: {},
-  set: () => {}
+  setCache: () => {}
 };
 
 // Context
@@ -25,10 +25,10 @@ export const CacheContext = createContext(cacheDefaults);
 
 // Hook
 export function useCache<R>(id: string): CacheProps<R> {
-  const { cache, set } = useContext(CacheContext);
+  const { cache, setCache } = useContext(CacheContext);
 
   return {
     ...cache[id],
-    setCache: useCallback((data: R) => set(id, data), [set, id])
+    setCache: useCallback((data: R) => setCache(id, data), [setCache, id])
   };
 }

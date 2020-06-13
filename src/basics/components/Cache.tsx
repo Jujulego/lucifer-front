@@ -26,7 +26,7 @@ const Cache = (props: CacheProps) => {
   // Render
   return (
     <CacheContext.Provider
-      value={{ cache, set }}
+      value={{ cache, setCache: set }}
     >
       { children }
     </CacheContext.Provider>

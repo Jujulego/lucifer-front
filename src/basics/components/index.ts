@@ -1,6 +1,9 @@
 export * from './Fields';
 export * from './Table';
 
+export { default as Cache } from './Cache';
+export * from './Cache';
+
 export { default as ClosableDialogTitle } from './ClosableDialogTitle';
 export * from './ClosableDialogTitle';
 

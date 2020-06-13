@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { IconButton, Paper } from '@material-ui/core';
 import { Add as AddIcon, Refresh as RefreshIcon } from '@material-ui/icons';
 
-import useAPI from 'utils/hooks/useAPI';
+import apiHooks from 'basics/api.hooks';
 
 import { TableToolbar, ToolbarAction } from 'basics/components';
 
@@ -17,8 +17,8 @@ const AllDaemonTable = () => {
   const [adding, setAdding] = useState(false);
 
   // API
-  const { data: daemons = [], reload, update } = useAPI.get<Daemon[]>('/api/daemons');
-  const { send: add } = useAPI.post<CreateDaemon, Daemon>('/api/daemons');
+  const { data: daemons = [], reload, update } = apiHooks.get<Daemon[]>('/api/daemons');
+  const { send: add } = apiHooks.post<CreateDaemon, Daemon>('/api/daemons');
 
   // Callbacks
   const handleAdd = async (data: CreateDaemon) => {

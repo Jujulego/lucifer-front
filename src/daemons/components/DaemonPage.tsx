@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { Paper, Tab, Tabs } from '@material-ui/core';
 
-import useAPI from 'utils/hooks/useAPI';
+import apiHooks from 'basics/api.hooks';
 
 import { Daemon } from '../models/daemon';
 import DaemonHeader from './DaemonHeader';
@@ -39,7 +39,7 @@ const DaemonPage = () => {
   const { id, page = 'details' } = useParams<DaemonParams>();
 
   // API
-  const { data: daemon, reload } = useAPI.get<Daemon>(`/api/daemons/${id}`);
+  const { data: daemon, reload } = apiHooks.get<Daemon>(`/api/daemons/${id}`);
 
   // Render
   if (!daemon) return null;

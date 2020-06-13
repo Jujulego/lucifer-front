@@ -1,7 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
-import useChanged from './useChanged';
+import useChanged from 'utils/hooks/useChanged';
+
+import { useCache } from './cache.context';
 
 // Types
 type Updator<R> = (data?: R) => R;
@@ -27,10 +29,13 @@ export type APIPostReturn<D, P extends object, R> = APIState<R> & {
 }
 
 // Base hooks
-function useGetRequest<R, P extends object = object>(generator: APIGetRequestGenerator<P, R>, load: boolean = true): APIGetReturn<R> {
+function useGetRequest<R, P extends object = object>(generator: APIGetRequestGenerator<P, R>, cacheId: string, load: boolean = true): APIGetReturn<R> {
+  // Cache
+  const { data, setCache } = useCache(cacheId);
+
   // State
   const [reload, setReload] = useState(load ? 1 : 0);
-  const [state, setState] = useState<APIState<R>>({ loading: true });
+  const [state, setState] = useState<APIState<R>>({ data, loading: true });
 
   // Effect
   useEffect(() => {
@@ -44,6 +49,7 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
     generator(source)
       .then((res) => {
         setState({ data: res.data, loading: false });
+        setCache(res.data);
       })
       .catch((error) => {
         if (axios.isCancel(error)) return;
@@ -52,7 +58,7 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
 
     // Cancel
     return () => { source.cancel(); };
-  }, [generator, reload]);
+  }, [generator, reload, setCache]);
 
   return {
     ...state,
@@ -141,7 +147,7 @@ export function useAPIGet<R, P extends object = object> (url: string, params?: P
     [url, useChanged(params), useChanged(rconfig)] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  return useGetRequest(generator, config.load);
+  return useGetRequest(generator, `api-get:${url}`, config.load);
 }
 
 export function useAPIHead<R, P extends object = object> (url: string, params?: P, config: APIGetRequestConfig = {}): APIGetReturn<R> {
@@ -153,7 +159,7 @@ export function useAPIHead<R, P extends object = object> (url: string, params?: 
     [url, useChanged(params), useChanged(rconfig)] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  return useGetRequest(generator, config?.load);
+  return useGetRequest(generator, `api-head:${url}`, config?.load);
 }
 
 export function useAPIOptions<R, P extends object = object> (url: string, params?: P, config: APIGetRequestConfig = {}): APIGetReturn<R> {
@@ -165,7 +171,7 @@ export function useAPIOptions<R, P extends object = object> (url: string, params
     [url, useChanged(params), useChanged(rconfig)] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  return useGetRequest(generator, config?.load);
+  return useGetRequest(generator, `api-options:${url}`, config?.load);
 }
 
 export function useAPIDelete<R = any, P extends object = object> (url: string, params?: P, config?: APIPostRequestConfig): APIDeleteReturn<P, R> {
@@ -209,7 +215,7 @@ export function useAPIPatch<D, R = any, P extends object = object> (url: string,
 }
 
 // Namespaces
-const useAPI = {
+const apiHooks = {
   get:     useAPIGet,
   delete:  useAPIDelete,
   head:    useAPIHead,
@@ -219,4 +225,4 @@ const useAPI = {
   patch:   useAPIPatch
 };
 
-export default useAPI;
+export default apiHooks;

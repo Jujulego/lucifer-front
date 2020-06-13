@@ -53,7 +53,7 @@ const ErrorsSnackbar = () => {
           severity='error' elevation={6} variant='filled'
           onClose={handleClose}
         >
-          #{ error.id }: { error.error?.toString() }
+          #{ error.id } - { error.error?.toString() }
         </Alert>
       ) }
     </Snackbar>

@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { ErrorsContext, ErrorState } from 'snack/errors.context';
 
@@ -33,7 +33,14 @@ const CatchErrors = (props: ErrorsProps) => {
       rep => rep,
       error => {
         if (error && !axios.isCancel(error)) {
-          addError(error);
+          if (error.isAxiosError) {
+            const { status, data } = error.response as AxiosResponse;
+            const msg = (data.message ? data.message : data).toString();
+
+            addError(`${status}: ${msg}`);
+          } else {
+            addError(error);
+          }
         }
 
         return Promise.reject(error);

@@ -11,11 +11,19 @@ import {
   InputLabel,
   TextField
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { ClosableDialogTitle } from 'basics/components';
 
 import { CreateDaemon } from '../models/daemon';
 import UserSelect from 'users/components/UserSelect';
+
+// Styles
+const useStyles = makeStyles(({ spacing }) => ({
+  field: {
+    marginBottom: spacing(2)
+  }
+}));
 
 // Types
 export interface AddDaemonDialogProps {
@@ -41,6 +49,8 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
   }
 
   // Render
+  const styles = useStyles();
+
   return (
     <Dialog
       maxWidth="xs" fullWidth
@@ -55,15 +65,21 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
       <ClosableDialogTitle onClose={() => onClose()}>Nouveau daemon</ClosableDialogTitle>
       <DialogContent>
         <TextField
-          label="Nom" fullWidth
+          className={styles.field}
+          variant="outlined" fullWidth
           name="name" inputRef={register}
+          label="Nom"
           error={!!errors.name} helperText={errors.name?.message}
         />
-        <FormControl fullWidth error={!!errors.ownerId}>
+        <FormControl
+          variant="outlined" fullWidth className={styles.field}
+          error={!!errors.ownerId}
+        >
           <InputLabel>Propriétaire</InputLabel>
           <Controller
             name="ownerId"
             control={control} as={UserSelect}
+            label="Propriétaire"
           />
           { errors.ownerId && (
             <FormHelperText>{ errors.ownerId.message }</FormHelperText>

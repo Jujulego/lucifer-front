@@ -16,7 +16,7 @@ export type ToolbarActionTypeMap<
   D extends ElementType = 'button'
 > = ExtendButtonBaseTypeMap<{
   props: P & Omit<IconButtonTypeMap<P, D>['props'], 'color'> & {
-    tooltip: string,
+    tooltip?: string,
     tooltipProps?: Omit<TooltipProps, 'title'>
   };
   defaultComponent: D;
@@ -45,6 +45,8 @@ const ToolbarAction: ExtendButtonBase<ToolbarActionTypeMap> = <D extends Element
   );
 
   if (disabled) return btn;
+  if (!tooltip) return btn;
+
   return (
     <Tooltip {...tooltipProps} title={tooltip}>
       { btn }

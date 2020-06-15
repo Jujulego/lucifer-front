@@ -9,7 +9,7 @@ import useAPI from 'basics/api.hooks';
 import DaemonTable from 'daemons/components/DaemonTable';
 
 import { UpdateUser, User } from '../models/user';
-import UserDetails from './UserDetails';
+import UserDetailsTab from 'users/components/UserDetailsTab';
 import UserHeader from './UserHeader';
 
 // Utils
@@ -52,8 +52,6 @@ const UserPage = () => {
   }
 
   // Render
-  if (!user) return null;
-
   return (
     <>
       <Paper square>
@@ -63,11 +61,12 @@ const UserPage = () => {
           <LinkTab value="daemons" label="Daemons" />
         </Tabs>
       </Paper>
+      <UserDetailsTab
+        user={user} show={page === 'details'}
+        onUpdate={handleUpdate}
+      />
       { (page === 'daemons') && (
-        <DaemonTable daemons={user.daemons || []} defaultOwner={user} />
-      ) }
-      { (page === 'details') && (
-        <UserDetails user={user} onUpdate={handleUpdate} />
+        <DaemonTable daemons={user?.daemons || []} defaultOwner={user} />
       ) }
     </>
   );

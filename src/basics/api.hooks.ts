@@ -65,6 +65,10 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
     if (state.data) setCache(state.data);
   }, [state.data, setCache]);
 
+  useEffect(() => {
+    setState(old => ({ ...old, data }));
+  }, [cacheId]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return {
     ...state,
     update: useCallback((data: R | Updator<R>) => {

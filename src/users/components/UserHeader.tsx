@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Avatar, Grid, Typography } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { initials } from 'utils/string';
@@ -41,7 +42,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 
 // Types
 export interface UserHeaderProps {
-  user: User;
+  user?: User;
   loading: boolean;
   onReload: () => void;
 }
@@ -56,13 +57,21 @@ const UserHeader = (props: UserHeaderProps) => {
   return (
     <Grid className={styles.root} container alignItems="center">
       <Grid item xs="auto">
-        <Avatar className={styles.avatar} alt={user.name} src={user.picture}>
-          { initials(user.name) }
-        </Avatar>
+        { user ? (
+          <Avatar className={styles.avatar} alt={user.name} src={user.picture}>
+            { initials(user.name) }
+          </Avatar>
+        ) : (
+          <Skeleton variant="circle" className={styles.avatar} />
+        ) }
       </Grid>
       <Grid className={styles.username} item xs>
-        <Typography variant="h5">{ user.name }</Typography>
-        <Typography variant="subtitle1" color="textSecondary">{ user.email }</Typography>
+        <Typography variant="h5">
+          { user ? user.name : <Skeleton width="50%" /> }
+        </Typography>
+        <Typography variant="subtitle1" color="textSecondary">
+          { user ? user.email : <Skeleton width="30%" /> }
+        </Typography>
       </Grid>
       <Grid className={styles.action} item xs="auto">
         <RefreshButton refreshing={loading} onClick={onReload} />

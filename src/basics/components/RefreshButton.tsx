@@ -34,7 +34,7 @@ const RefreshButton = (props: RefreshButtonProps) => {
 
   return (
     <IconButton {...btn}
-      classes={{ label: styles.label }}
+      classes={{ label: styles.label }} color="inherit"
       disabled={disabled || refreshing}
       onClick={onClick}
     >

@@ -53,7 +53,7 @@ const GridItem = ({ children }: GridItemProps) => (
 export interface DaemonDetailsProps {
   daemon?: Daemon;
   show?: boolean;
-  onUpdate: (update: UpdateDaemon) => Promise<void>;
+  onUpdate: (update: UpdateDaemon) => Promise<any>;
 }
 
 // Component

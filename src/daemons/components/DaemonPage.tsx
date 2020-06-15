@@ -4,11 +4,9 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { Paper, Tab, Tabs } from '@material-ui/core';
 
-import useAPI from 'basics/api.hooks';
-
-import { Daemon, UpdateDaemon } from '../models/daemon';
+import { useDaemon } from '../daemons.hooks';
 import DaemonHeader from './DaemonHeader';
-import DaemonDetailsTab from 'daemons/components/DaemonDetailsTab';
+import DaemonDetailsTab from './DaemonDetailsTab';
 
 // Utils
 interface LinkTabProps {
@@ -40,14 +38,7 @@ const DaemonPage = () => {
   const { id, page = 'details' } = useParams<DaemonParams>();
 
   // API
-  const { data: daemon, loading, reload, update } = useAPI.get<Daemon>(`/api/daemons/${id}`);
-  const { send: put } = useAPI.put<UpdateDaemon, Daemon>(`/api/daemons/${id}`);
-
-  // Callbacks
-  const handleUpdate = async (data: UpdateDaemon) => {
-    const dmn = await put(data);
-    update(dmn);
-  }
+  const { daemon, loading, reload, update } = useDaemon(id);
 
   // Render
   return (
@@ -59,7 +50,7 @@ const DaemonPage = () => {
           <Tab value="dependencies" label="Dépendances" disabled />
         </Tabs>
       </Paper>
-      <DaemonDetailsTab show daemon={daemon} onUpdate={handleUpdate} />
+      <DaemonDetailsTab show daemon={daemon} onUpdate={update} />
     </>
   );
 };

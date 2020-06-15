@@ -4,12 +4,11 @@ import { DialogContent, DialogTitle, List, ListItem, ListItemText, Paper } from 
 import { Add as AddIcon, Delete as DeleteIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
-import useAPI from 'basics/api.hooks';
-
 import { ConfirmDialog, RefreshButton, TableAction, TableToolbar } from 'basics/components';
 import { useConfirm } from 'basics/confirm.hooks';
 
-import { CreateDaemon, Daemon } from '../models/daemon';
+import { Daemon } from '../models/daemon';
+import { useDaemons } from '../daemons.hooks';
 import AddDaemonDialog from '../components/AddDaemonDialog';
 import DaemonTable from '../components/DaemonTable';
 
@@ -29,22 +28,12 @@ const AllDaemonTable = () => {
   const { confirm, state: dialog } = useConfirm<Daemon[]>([]);
 
   // API
-  const { data: daemons = [], loading, reload, update } = useAPI.get<Daemon[]>('/api/daemons');
-  const { send: add } = useAPI.post<CreateDaemon, Daemon>('/api/daemons');
-  const { send: del } = useAPI.delete<Daemon>('/api/daemons');
+  const { daemons = [], loading, reload, create, remove } = useDaemons();
 
   // Callbacks
-  const handleAdd = async (data: CreateDaemon) => {
-    const dmn = await add(data);
-    update((old = []) => [...old, dmn]);
-  };
-
   const handleDelete = async (dmns: Daemon[]) => {
     if (await confirm(dmns)) {
-      const ids = dmns.map(dmn => dmn.id);
-
-      await del({ ids });
-      update((old = []) => old.filter(dmn => !ids.includes(dmn.id)));
+      await remove(dmns.map(dmn => dmn.id))
     }
   };
 
@@ -76,7 +65,7 @@ const AllDaemonTable = () => {
       <DaemonTable daemons={daemons} toolbar={toolbar} />
       <AddDaemonDialog
         open={adding} onClose={() => setAdding(false)}
-        onAdd={handleAdd}
+        onAdd={create}
       />
       <ConfirmDialog state={dialog} fullWidth maxWidth="xs">
         { dmns => (

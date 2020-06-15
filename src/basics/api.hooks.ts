@@ -19,7 +19,7 @@ export type APIGetReturn<R> = APIState<R> & {
 
 export type APIDeleteRequestGenerator<P extends object, R> = (source: CancelTokenSource, url?: string, params?: P) => Promise<AxiosResponse<R>>;
 export type APIDeleteReturn<P extends object, R> = APIState<R> & {
-  send: (arg1?: string | P, arg2?: P) => APIPromise<R>,
+  send: ((params?: P) => APIPromise<R>) & ((url: string, params?: P) => APIPromise<R>)
 }
 
 export type APIPostRequestConfig = Omit<AxiosRequestConfig, 'cancelToken'>;

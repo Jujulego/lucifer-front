@@ -2,7 +2,16 @@ import React, { ReactNode, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import clsx from 'clsx';
 
-import { Fab, FormControl, FormHelperText, Grid, InputLabel, TextField, Zoom } from '@material-ui/core';
+import {
+  CircularProgress,
+  Fab,
+  FormControl,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  TextField,
+  Zoom
+} from '@material-ui/core';
 import { Save as SaveIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -44,7 +53,7 @@ const GridItem = ({ children }: GridItemProps) => (
 export interface DaemonDetailsProps {
   daemon?: Daemon;
   show?: boolean;
-  onUpdate: (update: UpdateDaemon) => void;
+  onUpdate: (update: UpdateDaemon) => Promise<void>;
 }
 
 // Component
@@ -95,11 +104,14 @@ const DaemonDetailsTab = (props: DaemonDetailsProps) => {
       <Zoom in={show}>
         <Fab
           className={styles.save} color="primary"
-          type="submit" disabled={!formState.dirty}
+          type="submit" disabled={!formState.dirty || formState.isSubmitting}
         >
           <SaveIcon />
         </Fab>
       </Zoom>
+      { formState.isSubmitting && (
+        <CircularProgress className={styles.save} size={56} />
+      ) }
     </form>
   );
 }

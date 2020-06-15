@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
 
-import { Fab, Grid, TextField, Tooltip, Zoom } from '@material-ui/core';
+import { CircularProgress, Fab, Grid, TextField, Tooltip, Zoom } from '@material-ui/core';
 import { Check as CheckIcon, Save as SaveIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -105,11 +105,14 @@ const UserDetailsTab = (props: UserDetailsProps) => {
       <Zoom in={show}>
         <Fab
           className={styles.save} color="primary"
-          type="submit" disabled={!formState.dirty}
+          type="submit" disabled={!formState.dirty || formState.isSubmitting}
         >
           <SaveIcon />
         </Fab>
       </Zoom>
+      { formState.isSubmitting && (
+        <CircularProgress className={styles.save} size={56} />
+      ) }
     </form>
   );
 };

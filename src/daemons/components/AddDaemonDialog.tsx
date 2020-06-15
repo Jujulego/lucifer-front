@@ -13,10 +13,11 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { User } from 'users/models/user';
 import { ClosableDialogTitle } from 'basics/components';
+import UserSelect from 'users/components/UserSelect';
 
 import { CreateDaemon } from '../models/daemon';
-import UserSelect from 'users/components/UserSelect';
 
 // Styles
 const useStyles = makeStyles(({ spacing }) => ({
@@ -28,6 +29,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 // Types
 export interface AddDaemonDialogProps {
   open: boolean;
+  owner?: User;
   onClose: () => void;
   onAdd: (data: CreateDaemon) => void;
 }
@@ -35,8 +37,8 @@ export interface AddDaemonDialogProps {
 // Component
 const AddDaemonDialog = (props: AddDaemonDialogProps) => {
   const {
-    open, onClose,
-    onAdd
+    owner,
+    open, onClose, onAdd
   } = props;
 
   // Form
@@ -77,7 +79,7 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
         >
           <InputLabel>Propriétaire</InputLabel>
           <Controller
-            name="ownerId"
+            name="ownerId" defaultValue={owner?.id} disabled={!!owner}
             control={control} as={UserSelect}
             label="Propriétaire"
           />

@@ -18,7 +18,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
       padding: spacing(2),
     }
   },
-  action: {
+  actions: {
     alignSelf: 'flex-start',
 
     '& > button': {
@@ -60,7 +60,7 @@ const DaemonHeader = (props: DaemonHeaderProps) => {
           ) }
         </Typography>
       </Grid>
-      <Grid className={styles.action} item xs="auto">
+      <Grid className={styles.actions} item xs="auto">
         <RefreshButton refreshing={loading} onClick={onReload} />
       </Grid>
     </Grid>

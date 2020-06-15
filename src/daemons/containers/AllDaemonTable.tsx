@@ -44,7 +44,6 @@ const AllDaemonTable = () => {
     <Paper square>
       <TableToolbar title="Daemons">
         <TableAction
-          when="nothing"
           onClick={() => setAdding(true)}
         >
           <AddIcon />

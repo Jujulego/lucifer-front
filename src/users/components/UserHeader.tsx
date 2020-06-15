@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { MouseEvent, ReactNode, useMemo, useState } from 'react';
 
-import { Avatar, Grid, Typography } from '@material-ui/core';
+import { Avatar, Grid, Menu, MenuItem, Typography } from '@material-ui/core';
+import { MoreVert as MoreIcon } from '@material-ui/icons';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { initials } from 'utils/string';
-import { RefreshButton } from 'basics/components';
+import { RefreshButton, ToolbarAction } from 'basics/components';
 
 import { User } from '../models/user';
 
@@ -21,7 +22,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   username: {
     marginLeft: spacing(2)
   },
-  action: {
+  actions: {
     alignSelf: 'flex-start',
 
     '& > button': {
@@ -44,12 +45,17 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 export interface UserHeaderProps {
   user?: User;
   loading: boolean;
+  actions?: ReactNode;
   onReload: () => void;
 }
 
 // Component
 const UserHeader = (props: UserHeaderProps) => {
-  const { user, loading, onReload } = props;
+  const {
+    user, loading,
+    actions,
+    onReload
+  } = props;
 
   // Render
   const styles = useStyles();
@@ -73,7 +79,8 @@ const UserHeader = (props: UserHeaderProps) => {
           { user ? user.email : <Skeleton width="30%" /> }
         </Typography>
       </Grid>
-      <Grid className={styles.action} item xs="auto">
+      <Grid className={styles.actions} item xs="auto">
+        { actions }
         <RefreshButton refreshing={loading} onClick={onReload} />
       </Grid>
     </Grid>

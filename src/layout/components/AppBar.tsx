@@ -21,7 +21,7 @@ import AccountMenu from 'auth/components/AccountMenu';
 import ThemeButton from './ThemeButton';
 
 // Styles
-const useStyles = makeStyles(({ breakpoints, palette, spacing, zIndex }: Theme) => ({
+const useStyles = makeStyles(({ palette, spacing, zIndex }: Theme) => ({
   root: {
     display: 'flex'
   },
@@ -46,14 +46,9 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing, zIndex }: Theme) 
     maxHeight: '100vh',
     flexGrow: 1,
 
-    // padding: spacing(3),
     overflow: 'auto',
 
-    backgroundColor: palette.background.default,
-
-    [breakpoints.down('sm')]: {
-      // padding: spacing(1)
-    }
+    backgroundColor: palette.background.default
   }
 }));
 

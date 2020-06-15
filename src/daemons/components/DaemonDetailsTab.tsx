@@ -82,8 +82,8 @@ const DaemonDetailsTab = (props: DaemonDetailsProps) => {
       <Grid container spacing={2}>
         <GridItem>
           <TextField
-            label="Nom" variant="outlined" fullWidth
             name="name" inputRef={register}
+            label="Nom" variant="outlined" fullWidth
             error={!!errors.name} helperText={errors.name?.message}
           />
         </GridItem>

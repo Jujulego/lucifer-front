@@ -79,28 +79,30 @@ const DaemonDetailsTab = (props: DaemonDetailsProps) => {
 
   return (
     <form className={clsx(styles.root, { [styles.hidden]: !show })} onSubmit={handleSubmit(onUpdate)}>
-      <Grid container spacing={2}>
-        <GridItem>
-          <TextField
-            name="name" inputRef={register}
-            label="Nom" variant="outlined" fullWidth
-            error={!!errors.name} helperText={errors.name?.message}
-          />
-        </GridItem>
-        <GridItem>
-          <FormControl fullWidth error={!!errors.ownerId} variant="outlined">
-            <InputLabel>Propriétaire</InputLabel>
-            <Controller
-              name="ownerId"
-              control={control} as={UserSelect}
-              label="Propriétaire"
+      { (show && daemon) && (
+        <Grid container spacing={2}>
+          <GridItem>
+            <TextField
+              name="name" inputRef={register}
+              label="Nom" variant="outlined" fullWidth
+              error={!!errors.name} helperText={errors.name?.message}
             />
-            { errors.ownerId && (
-              <FormHelperText>{ errors.ownerId.message }</FormHelperText>
-            ) }
-          </FormControl>
-        </GridItem>
-      </Grid>
+          </GridItem>
+          <GridItem>
+            <FormControl fullWidth error={!!errors.ownerId} variant="outlined">
+              <InputLabel>Propriétaire</InputLabel>
+              <Controller
+                name="ownerId"
+                control={control} as={UserSelect}
+                label="Propriétaire"
+              />
+              { errors.ownerId && (
+                <FormHelperText>{ errors.ownerId.message }</FormHelperText>
+              ) }
+            </FormControl>
+          </GridItem>
+        </Grid>
+      ) }
       <Zoom in={show}>
         <Fab
           className={styles.save} color="primary"

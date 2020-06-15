@@ -8,7 +8,7 @@ import useAPI from 'basics/api.hooks';
 
 import { Daemon, UpdateDaemon } from '../models/daemon';
 import DaemonHeader from './DaemonHeader';
-import DaemonDetails from './DaemonDetails';
+import DaemonDetailsTab from 'daemons/components/DaemonDetailsTab';
 
 // Utils
 interface LinkTabProps {
@@ -50,8 +50,6 @@ const DaemonPage = () => {
   }
 
   // Render
-  if (!daemon) return null;
-
   return (
     <>
       <Paper square>
@@ -61,7 +59,7 @@ const DaemonPage = () => {
           <Tab value="dependencies" label="Dépendances" disabled />
         </Tabs>
       </Paper>
-      <DaemonDetails daemon={daemon} onUpdate={handleUpdate} />
+      <DaemonDetailsTab show daemon={daemon} onUpdate={handleUpdate} />
     </>
   );
 };

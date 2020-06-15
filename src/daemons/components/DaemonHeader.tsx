@@ -2,6 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { Grid, Link, Typography } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { RefreshButton } from 'basics/components';
@@ -29,7 +30,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 
 // Types
 export interface DaemonHeaderProps {
-  daemon: Daemon;
+  daemon?: Daemon;
   loading: boolean;
   onReload: () => void;
 }
@@ -44,12 +45,18 @@ const DaemonHeader = (props: DaemonHeaderProps) => {
   return (
     <Grid className={styles.root} container alignItems="center">
       <Grid item xs zeroMinWidth>
-        <Typography variant="h5" noWrap>Daemon { daemon.name || daemon.id }</Typography>
+        <Typography variant="h5" noWrap>
+          { daemon ? `Daemon ${ daemon.name || daemon.id }` : <Skeleton width="60%" /> }
+        </Typography>
         <Typography variant="subtitle1" color="textSecondary">
-          { daemon.owner && (
-            <Link component={RouterLink} to={`/users/${daemon.owner.id}/daemons`} color="inherit">
-              { daemon.owner.name }
-            </Link>
+          { daemon ?
+            (daemon.owner && (
+              <Link component={RouterLink} to={`/users/${daemon.owner.id}/daemons`} color="inherit">
+                { daemon.owner.name }
+              </Link>
+            )
+          ) : (
+            <Skeleton width="40%" />
           ) }
         </Typography>
       </Grid>

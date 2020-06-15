@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import clsx from 'clsx';
 
 import { Fab, FormControl, FormHelperText, Grid, InputLabel, TextField, Zoom } from '@material-ui/core';
 import { Save as SaveIcon } from '@material-ui/icons';
@@ -17,6 +18,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     [breakpoints.down('sm')]: {
       padding: spacing(2),
     }
+  },
+  hidden: {
+    padding: 0
   },
   save: {
     position: 'absolute',
@@ -38,13 +42,17 @@ const GridItem = ({ children }: GridItemProps) => (
 
 // Types
 export interface DaemonDetailsProps {
-  daemon: Daemon;
+  daemon?: Daemon;
+  show?: boolean;
   onUpdate: (update: UpdateDaemon) => void;
 }
 
 // Component
-const DaemonDetails = (props: DaemonDetailsProps) => {
-  const { daemon, onUpdate } = props;
+const DaemonDetailsTab = (props: DaemonDetailsProps) => {
+  const {
+    daemon, show = false,
+    onUpdate
+  } = props;
 
   // Form
   const { errors, control, register, reset, handleSubmit, formState } = useForm<UpdateDaemon>();
@@ -52,16 +60,16 @@ const DaemonDetails = (props: DaemonDetailsProps) => {
   // Effects
   useEffect(() => {
     reset({
-      name: daemon.name,
-      ownerId: daemon.owner?.id
+      name: daemon?.name,
+      ownerId: daemon?.owner?.id
     });
-  }, [reset, daemon])
+  }, [reset, daemon]);
 
   // Render
   const styles = useStyles();
 
   return (
-    <form className={styles.root} onSubmit={handleSubmit(onUpdate)}>
+    <form className={clsx(styles.root, { [styles.hidden]: !show })} onSubmit={handleSubmit(onUpdate)}>
       <Grid container spacing={2}>
         <GridItem>
           <TextField
@@ -84,7 +92,7 @@ const DaemonDetails = (props: DaemonDetailsProps) => {
           </FormControl>
         </GridItem>
       </Grid>
-      <Zoom in>
+      <Zoom in={show}>
         <Fab
           className={styles.save} color="primary"
           type="submit" disabled={!formState.dirty}
@@ -96,4 +104,4 @@ const DaemonDetails = (props: DaemonDetailsProps) => {
   );
 }
 
-export default DaemonDetails;
+export default DaemonDetailsTab;

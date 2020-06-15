@@ -1,20 +1,32 @@
 import React, { useState } from 'react';
 
-import { Paper } from '@material-ui/core';
+import { DialogContent, DialogTitle, List, ListItem, ListItemText, Paper } from '@material-ui/core';
 import { Add as AddIcon, Delete as DeleteIcon } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
 
 import useAPI from 'basics/api.hooks';
 
-import { RefreshButton, TableAction, TableToolbar } from 'basics/components';
+import { ConfirmDialog, RefreshButton, TableAction, TableToolbar } from 'basics/components';
+import { useConfirm } from 'basics/confirm.hooks';
 
 import { CreateDaemon, Daemon } from '../models/daemon';
 import AddDaemonDialog from '../components/AddDaemonDialog';
 import DaemonTable from '../components/DaemonTable';
 
+// Styles
+const useStyles = makeStyles({
+  content: {
+    padding: 0
+  }
+});
+
 // Component
 const AllDaemonTable = () => {
   // State
   const [adding, setAdding] = useState(false);
+
+  // Utils
+  const { confirm, state: dialog } = useConfirm<Daemon[]>([]);
 
   // API
   const { data: daemons = [], loading, reload, update } = useAPI.get<Daemon[]>('/api/daemons');
@@ -28,13 +40,17 @@ const AllDaemonTable = () => {
   };
 
   const handleDelete = async (dmns: Daemon[]) => {
-    const ids = dmns.map(dmn => dmn.id);
+    if (await confirm(dmns)) {
+      const ids = dmns.map(dmn => dmn.id);
 
-    await del({ ids });
-    update((old = []) => old.filter(dmn => !ids.includes(dmn.id)));
+      await del({ ids });
+      update((old = []) => old.filter(dmn => !ids.includes(dmn.id)));
+    }
   };
 
   // Render
+  const styles = useStyles();
+
   const toolbar = (
     <Paper square>
       <TableToolbar title="Daemons">
@@ -62,6 +78,22 @@ const AllDaemonTable = () => {
         open={adding} onClose={() => setAdding(false)}
         onAdd={handleAdd}
       />
+      <ConfirmDialog state={dialog} fullWidth maxWidth="xs">
+        { dmns => (
+          <>
+            <DialogTitle>Supprimer { dmns.length } daemons ?</DialogTitle>
+            <DialogContent className={styles.content} dividers>
+              <List>
+                { dmns.map(dmn => (
+                  <ListItem key={dmn.id}>
+                    <ListItemText primary={dmn.name} secondary={dmn.id} />
+                  </ListItem>
+                )) }
+              </List>
+            </DialogContent>
+          </>
+        ) }
+      </ConfirmDialog>
     </>
   );
 };

@@ -113,7 +113,7 @@ const DaemonDetailsTab = (props: DaemonDetailsProps) => {
         <CircularProgress className={styles.save} size={56} />
       ) }
     </form>
-  );
-}
+  )
+};
 
 export default DaemonDetailsTab;

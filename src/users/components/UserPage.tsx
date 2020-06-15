@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useRouteMatch } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { Paper, Tab, Tabs } from '@material-ui/core';
+import { Fade, Paper, Tab, Tabs } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
 import useAPI from 'basics/api.hooks';
@@ -73,10 +73,12 @@ const UserPage = () => {
           user={user} loading={loading}
           onReload={reload}
 
-          actions={(page === 'daemons') && (
-            <ToolbarAction tooltip="Créer un daemon" onClick={() => setAddingDaemon(true)}>
-              <AddIcon />
-            </ToolbarAction>
+          actions={(
+            <Fade in={(page === 'daemons')}>
+              <ToolbarAction tooltip="Créer un daemon" onClick={() => setAddingDaemon(true)}>
+                <AddIcon />
+              </ToolbarAction>
+            </Fade>
           )}
         />
         <Tabs variant="fullWidth" value={page} onChange={() => {}}>

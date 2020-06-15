@@ -1,0 +1,20 @@
+#  Note to self, syntax can be found here:
+#  https://en.wikipedia.org/wiki/Regular_expression#Syntax
+
+#  () defines a value to be saved in memory, \1 calles that value in order. ie: \1 \2
+#  + will join strings but the values must match on either side
+#  . Matches any single character
+#  \ will 'excape' a character. So the \. makes the period mean a period
+
+runtime: nodejs12
+
+handlers:
+  - url: /(.*\.(css|js|gif|png|jpg|jpeg))
+    secure: always
+    static_files: build/\1
+    upload: build/(.*\.(css|js|gif|png|jpg|jpeg))
+
+  - url: .*
+    secure: always
+    static_files: build/index.html
+    upload: build/index.html

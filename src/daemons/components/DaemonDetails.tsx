@@ -76,6 +76,7 @@ const DaemonDetails = (props: DaemonDetailsProps) => {
             <Controller
               name="ownerId"
               control={control} as={UserSelect}
+              label="Propriétaire"
             />
             { errors.ownerId && (
               <FormHelperText>{ errors.ownerId.message }</FormHelperText>
@@ -93,6 +94,6 @@ const DaemonDetails = (props: DaemonDetailsProps) => {
       </Zoom>
     </form>
   );
-};
+}
 
 export default DaemonDetails;

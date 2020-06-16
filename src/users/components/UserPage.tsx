@@ -5,17 +5,15 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Fade, Paper, Tab, Tabs } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
-import useAPI from 'basics/api.hooks';
+import { ToolbarAction } from 'basics/components';
 
+import { useDaemonsArray } from 'daemons/daemons.hooks';
 import DaemonTable from 'daemons/components/DaemonTable';
 import AddDaemonDialog from 'daemons/components/AddDaemonDialog';
 
-import { UpdateUser, User } from '../models/user';
+import { useUser } from '../users.hooks';
 import UserDetailsTab from './UserDetailsTab';
 import UserHeader from './UserHeader';
-import { CreateDaemon } from 'daemons/models/daemon';
-import { useDaemonsAPI } from 'daemons/daemons.hooks';
-import { ToolbarAction } from 'basics/components';
 
 // Utils
 interface LinkTabProps {
@@ -50,20 +48,10 @@ const UserPage = () => {
   const [addingDaemon, setAddingDaemon] = useState(false);
 
   // API
-  const { data: user, loading, reload, update } = useAPI.get<User>(`/api/users/${id}`);
-  const { send: put } = useAPI.put<UpdateUser, User>(`/api/users/${id}`);
-  const { send: createDaemon } = useDaemonsAPI.create();
-
-  // Callbacks
-  const handleUpdate = async (data: UpdateUser) => {
-    const usr = await put(data);
-    update(usr);
-  }
-
-  const handleAddDaemon = async (data: CreateDaemon) => {
-    const dmn = await createDaemon(data);
-    update(old => ({ ...old!, daemons: old!.daemons ? [...old!.daemons, dmn] : [dmn] }));
-  }
+  const { user, loading, reload, put, update } = useUser(id);
+  const { create: createDaemon } = useDaemonsArray(user?.daemons,
+    (up) => update(old => ({ ...old!, daemons: up(old?.daemons) }))
+  );
 
   // Render
   return (
@@ -88,7 +76,7 @@ const UserPage = () => {
       </Paper>
       <UserDetailsTab
         user={user} show={page === 'details'}
-        onUpdate={handleUpdate}
+        onUpdate={put}
       />
       { (page === 'daemons') && (
         <DaemonTable daemons={user?.daemons || []} defaultOwner={user} />
@@ -96,7 +84,7 @@ const UserPage = () => {
       <AddDaemonDialog
         open={addingDaemon} owner={user}
         onClose={() => setAddingDaemon(false)}
-        onAdd={handleAddDaemon}
+        onAdd={createDaemon}
       />
     </>
   );

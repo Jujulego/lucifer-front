@@ -9,6 +9,12 @@ import * as serviceWorker from 'serviceWorker';
 
 import App from 'components/App';
 
+import axios from 'axios';
+axios.interceptors.response.use(async (c) => {
+  await new Promise(r => setTimeout(r, 5000));
+  return c;
+})
+
 // Application
 ReactDOM.render((
   <StylesProvider injectFirst>

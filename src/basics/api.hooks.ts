@@ -2,11 +2,11 @@ import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axi
 import { useCallback, useDebugValue, useEffect, useState } from 'react';
 
 import useChanged from 'utils/hooks/useChanged';
+import { Updator } from 'utils/types';
 
 import { useCache } from './cache.context';
 
 // Types
-type Updator<R> = (data?: R) => R;
 export type APIState<R> = { data?: R, loading: boolean };
 export type APIPromise<R> = Promise<R> & { cancel: () => void };
 

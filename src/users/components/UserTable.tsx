@@ -2,15 +2,9 @@ import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 
-import {
-  Link, Paper,
-  TableCell, TableContainer, TableHead,
-  Tooltip
-} from '@material-ui/core';
+import { Link, Paper, TableCell, TableContainer, TableHead, Tooltip } from '@material-ui/core';
 import { Check as CheckIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-
-import useAPI from 'basics/api.hooks';
 
 import {
   RefreshButton,
@@ -23,6 +17,7 @@ import {
 } from 'basics/components';
 
 import { User } from '../models/user';
+import { useUsers } from 'users/users.hooks';
 
 // Styles
 const useStyles = makeStyles(({ spacing }) => ({
@@ -39,7 +34,7 @@ const UserTable = () => {
   const { url } = useRouteMatch();
 
   // API
-  const { data: users = [], loading, reload } = useAPI.get<User[]>('/api/users');
+  const { users = [], loading, reload } = useUsers();
 
   // Render
   const styles = useStyles();

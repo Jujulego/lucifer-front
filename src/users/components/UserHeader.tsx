@@ -1,12 +1,11 @@
-import React, { MouseEvent, ReactNode, useMemo, useState } from 'react';
+import React, { ReactNode } from 'react';
 
-import { Avatar, Grid, Menu, MenuItem, Typography } from '@material-ui/core';
-import { MoreVert as MoreIcon } from '@material-ui/icons';
+import { Avatar, Grid, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { initials } from 'utils/string';
-import { RefreshButton, ToolbarAction } from 'basics/components';
+import { RefreshButton } from 'basics/components';
 
 import { User } from '../models/user';
 

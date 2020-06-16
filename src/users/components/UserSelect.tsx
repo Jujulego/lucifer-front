@@ -9,9 +9,7 @@ import {
   useFormControl
 } from '@material-ui/core';
 
-import useAPI from 'basics/api.hooks';
-
-import { User } from '../models/user';
+import { useUsers } from '../users.hooks';
 
 // Utils
 const SmallProgress = (props: CircularProgressProps) => <CircularProgress {...props} size={20} />;
@@ -30,7 +28,7 @@ const UserSelect = (props: UserSelectProps) => {
   const required = props.required || ctx?.required;
 
   // API
-  const { data: users, loading } = useAPI.get<User[]>('/api/users');
+  const { users, loading } = useUsers();
 
   // Render
   return (

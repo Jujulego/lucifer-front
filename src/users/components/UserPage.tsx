@@ -63,7 +63,10 @@ const UserPage = () => {
 
           actions={(
             <Fade in={(page === 'daemons')}>
-              <ToolbarAction tooltip="Créer un daemon" onClick={() => setAddingDaemon(true)}>
+              <ToolbarAction
+                tooltip="Créer un daemon" disabled={loading}
+                onClick={() => setAddingDaemon(true)}
+              >
                 <AddIcon />
               </ToolbarAction>
             </Fade>

@@ -51,9 +51,9 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
         setState({ data: res.data, loading: false });
       })
       .catch((error) => {
-        setState(old => ({ ...old, loading: false }));
-
         if (axios.isCancel(error)) return;
+
+        setState(old => ({ ...old, loading: false }));
         throw error;
       });
 

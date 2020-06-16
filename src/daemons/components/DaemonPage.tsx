@@ -7,7 +7,7 @@ import { Paper, Tab, Tabs } from '@material-ui/core';
 import { useDaemon } from '../daemons.hooks';
 import DaemonHeader from './DaemonHeader';
 import DaemonDetailsTab from './DaemonDetailsTab';
-import DaemonTable from 'daemons/components/DaemonTable';
+import DaemonDependenciesTab from './DaemonDependenciesTab';
 
 // Utils
 interface LinkTabProps {
@@ -55,8 +55,8 @@ const DaemonPage = () => {
         daemon={daemon} show={page === 'details'}
         onUpdate={update}
       />
-      { (page === 'dependencies') && (
-        <DaemonTable daemons={daemon?.dependencies || []} />
+      { (page === 'dependencies' && daemon) && (
+        <DaemonDependenciesTab daemon={daemon} onUpdate={update} />
       ) }
     </>
   );

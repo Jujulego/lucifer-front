@@ -17,4 +17,5 @@ export interface CreateDaemon {
 export interface UpdateDaemon {
   name?: string;
   ownerId?: string;
+  dependencies?: string[];
 }

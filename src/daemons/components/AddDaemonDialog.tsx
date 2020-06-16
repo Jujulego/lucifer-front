@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import {
-  Button,
+  Button, CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -23,6 +23,14 @@ import { CreateDaemon } from '../models/daemon';
 const useStyles = makeStyles(({ spacing }) => ({
   field: {
     marginBottom: spacing(2)
+  },
+  wrapper: {
+    position: 'relative'
+  },
+  progress: {
+    position: 'absolute',
+    top: 'calc(50% - 12px)',
+    left: 'calc(50% - 12px)',
   }
 }));
 
@@ -31,7 +39,7 @@ export interface AddDaemonDialogProps {
   open: boolean;
   owner?: User;
   onClose: () => void;
-  onAdd: (data: CreateDaemon) => void;
+  onAdd: (data: CreateDaemon) => Promise<any>;
 }
 
 // Component
@@ -42,11 +50,17 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
   } = props;
 
   // Form
-  const { errors, control, register, handleSubmit } = useForm<CreateDaemon>();
+  const { errors, control, register, handleSubmit, formState } = useForm<CreateDaemon>();
 
   // Callbacks
-  const handleAdd = (data: CreateDaemon) => {
-    onAdd(data);
+  const handleClose = () => {
+    if (!formState.isSubmitting) {
+      onClose();
+    }
+  }
+
+  const handleAdd = async (data: CreateDaemon) => {
+    await onAdd(data);
     onClose();
   }
 
@@ -57,14 +71,14 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
     <Dialog
       maxWidth="xs" fullWidth
       open={open}
-      onClose={() => onClose()}
+      onClose={handleClose}
 
       PaperProps={{
         component: 'form',
         onSubmit: handleSubmit(handleAdd)
       }}
     >
-      <ClosableDialogTitle onClose={() => onClose()}>Nouveau daemon</ClosableDialogTitle>
+      <ClosableDialogTitle onClose={handleClose}>Nouveau daemon</ClosableDialogTitle>
       <DialogContent>
         <TextField
           className={styles.field}
@@ -89,8 +103,25 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" onClick={() => onClose()}>Annuler</Button>
-        <Button color="primary" type="submit">Créer</Button>
+        <Button
+          color="secondary"
+          disabled={formState.isSubmitting}
+          onClick={handleClose}
+        >
+          Annuler
+        </Button>
+        <div className={styles.wrapper}>
+          <Button
+            color="primary"
+            disabled={formState.isSubmitting}
+            type="submit"
+          >
+            Créer
+          </Button>
+          { formState.isSubmitting && (
+            <CircularProgress className={styles.progress} size={24} />
+          ) }
+        </div>
       </DialogActions>
     </Dialog>
   );

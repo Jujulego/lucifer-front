@@ -3,6 +3,7 @@ import { useParams, useRouteMatch } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { Paper, Tab, Tabs } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { useDaemon } from '../daemons.hooks';
 import DaemonHeader from './DaemonHeader';
@@ -28,6 +29,14 @@ const LinkTab = (props: LinkTabProps) => {
   );
 };
 
+// Styles
+const useStyles = makeStyles(({ zIndex }) => ({
+  paper: {
+    position: 'relative',
+    zIndex: zIndex.drawer - 1
+  }
+}));
+
 // Component
 interface DaemonParams {
   id: string;
@@ -42,9 +51,11 @@ const DaemonPage = () => {
   const { daemon, loading, reload, update } = useDaemon(id);
 
   // Render
+  const styles = useStyles();
+
   return (
     <>
-      <Paper square>
+      <Paper square className={styles.paper}>
         <DaemonHeader daemon={daemon} loading={loading} onReload={reload} />
         <Tabs variant="fullWidth" value={page} onChange={() => {}}>
           <LinkTab value="details" label="Détails" />

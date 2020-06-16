@@ -6,7 +6,7 @@ const COEFF = 0.09;
 
 // Utils
 export function background(palette: Palette, level: number) {
-  if (palette.type === "light") {
+  if (palette.type === "light" && level > 0) {
     return darken(palette.background.default, level * COEFF);
   } else {
     return lighten(palette.background.default, level * COEFF);

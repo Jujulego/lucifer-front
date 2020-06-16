@@ -35,10 +35,15 @@ const DaemonSelect = (props: DaemonSelectProps) => {
   const { daemons, loading } = useDaemons();
 
   // Memos
+  const sorted = useMemo(
+    () => daemons?.sort((a, b) => (a.name || a.id).localeCompare(b.name || b.id)),
+    [daemons]
+  );
+
   const filtered = useMemo(
-    () => blacklist ? daemons?.filter(dmn => !blacklist.find(blk => blk.id === dmn.id)) : daemons,
-    [daemons, blacklist]
-  )
+    () => blacklist ? sorted?.filter(dmn => !blacklist.find(blk => blk.id === dmn.id)) : sorted,
+    [sorted, blacklist]
+  );
 
   // Render
   return (

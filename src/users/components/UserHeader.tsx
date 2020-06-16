@@ -23,19 +23,16 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
   actions: {
     alignSelf: 'flex-start',
-
-    '& > button': {
-      marginTop:   -spacing(1),
-      marginRight: -spacing(1)
-    }
+    marginTop:   -spacing(1),
+    marginRight: -spacing(1)
   },
   avatar: {
     height: spacing(9),
-    width: spacing(9),
+    width:  spacing(9),
 
     [breakpoints.down('sm')]: {
       height: spacing(8),
-      width: spacing(8),
+      width:  spacing(8),
     }
   }
 }));

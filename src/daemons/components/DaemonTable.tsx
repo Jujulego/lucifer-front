@@ -29,7 +29,7 @@ const DaemonTable = (props: DaemonTableProps) => {
         <TableHead>
           <TableRow>
             <TableSortCell<Daemon> field={dmn => dmn.name || dmn.id}>Nom</TableSortCell>
-            <TableSortCell<Daemon> field={dmn => owner(dmn)?.name}>Propriétaire</TableSortCell>
+            <TableSortCell<Daemon> field={dmn => owner(dmn)?.name || ""}>Propriétaire</TableSortCell>
           </TableRow>
         </TableHead>
         <TableBody>

@@ -1,12 +1,9 @@
-import React, { Fragment, useMemo, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  Divider, FormControl, IconButton, InputLabel,
+  CircularProgress,
+  Divider, IconButton,
   List,
   ListItem,
   ListItemIcon, ListItemSecondaryAction,
@@ -15,7 +12,7 @@ import {
 import { Add as AddIcon, Remove as RemoveIcon } from '@material-ui/icons';
 
 import { Daemon, UpdateDaemon } from '../models/daemon';
-import DaemonSelect from './DaemonSelect';
+import AddDaemonDependencyDialog from './AddDaemonDependencyDialog';
 
 // Types
 export interface DaemonDependenciesProps {
@@ -29,27 +26,32 @@ const DaemonDependenciesTab = (props: DaemonDependenciesProps) => {
 
   // State
   const [adding, setAdding] = useState(false);
-  const [dependency, setDependency] = useState<string>();
+  const [removing, setRemoving] = useState<Record<string, boolean>>({});
 
   // Memos
   const ids = useMemo(() => daemon.dependencies.map(dmn => dmn.id), [daemon.dependencies]);
 
-  // Handlers
-  const handleAdd = async () => {
-    if (dependency) {
-      await onUpdate({
-        dependencies: [...ids, dependency]
+  // Effects
+  useEffect(() => {
+    const update = {
+      dependencies: ids.filter(id => !removing[id])
+    };
+
+    onUpdate(update)
+      .finally(() => {
+        setRemoving(old => {
+          update.dependencies.forEach(id => {
+            old[id] = false;
+          });
+
+          return old;
+        })
       });
-    }
+  }, [removing]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    setAdding(false);
-    setDependency(undefined);
-  };
-
+  // Handlers
   const handleRemove = async (id: string) => {
-    await onUpdate({
-      dependencies: ids.filter(dmn => dmn !== id)
-    });
+    setRemoving(old => ({ ...old, [id]: true }));
   };
 
   // Render
@@ -59,13 +61,20 @@ const DaemonDependenciesTab = (props: DaemonDependenciesProps) => {
         { daemon.dependencies.map(dmn => (
           <Fragment key={dmn.id}>
             <ListItem
-              button
+              button disabled={removing[dmn.id]}
               component={RouterLink} to={`/daemons/${dmn.id}/dependencies`}
             >
               <ListItemText primary={dmn.name || dmn.id} />
               <ListItemSecondaryAction>
-                <IconButton edge="end" onClick={() => handleRemove(dmn.id)}>
-                  <RemoveIcon />
+                <IconButton
+                  edge="end" disabled={removing[dmn.id]}
+                  onClick={() => handleRemove(dmn.id)}
+                >
+                  { (removing[dmn.id]) ? (
+                    <CircularProgress size={24} />
+                  ) : (
+                    <RemoveIcon />
+                  ) }
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
@@ -79,26 +88,10 @@ const DaemonDependenciesTab = (props: DaemonDependenciesProps) => {
           <ListItemText primary="Ajouter" />
         </ListItem>
       </List>
-      <Dialog open={adding} onClose={() => setAdding(false)}>
-        <DialogContent>
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel>Dépendance</InputLabel>
-            <DaemonSelect
-              label="Dépendance" value={dependency}
-              blacklist={[daemon, ...daemon.dependencies]}
-              onChange={(event) => setDependency(event.target.value as string)}
-            />
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button color="secondary" onClick={() => setAdding(false)}>
-            Annuler
-          </Button>
-          <Button color="primary" onClick={handleAdd}>
-            Ajouter
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <AddDaemonDependencyDialog
+        open={adding} onClose={() => setAdding(false)}
+        daemon={daemon} onAdd={onUpdate}
+      />
     </>
   );
 };

@@ -8,16 +8,12 @@ import {
   DialogContent,
   FormControl,
   FormHelperText,
-  InputLabel,
-  TextField
+  InputLabel
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { User } from 'users/models/user';
-import { ClosableDialogTitle } from 'basics/components';
-import UserSelect from 'users/components/UserSelect';
-
-import { CreateDaemon } from '../models/daemon';
+import { Daemon, UpdateDaemon } from '../models/daemon';
+import DaemonSelect from './DaemonSelect';
 
 // Styles
 const useStyles = makeStyles(({ spacing }) => ({
@@ -35,22 +31,27 @@ const useStyles = makeStyles(({ spacing }) => ({
 }));
 
 // Types
-export interface AddDaemonDialogProps {
+interface FormState {
+  dependency: string
+}
+
+export interface AddDaemonDependencyDialogProps {
   open: boolean;
-  owner?: User;
   onClose: () => void;
-  onAdd: (data: CreateDaemon) => Promise<any>;
+
+  daemon: Daemon;
+  onAdd: (data: UpdateDaemon) => Promise<any>;
 }
 
 // Component
-const AddDaemonDialog = (props: AddDaemonDialogProps) => {
+const AddDaemonDependencyDialog = (props: AddDaemonDependencyDialogProps) => {
   const {
-    owner,
-    open, onClose, onAdd
+    open, onClose,
+    daemon, onAdd
   } = props;
 
   // Form
-  const { errors, control, register, handleSubmit, formState } = useForm<CreateDaemon>();
+  const { errors, control, handleSubmit, formState } = useForm<FormState>();
 
   // Callbacks
   const handleClose = () => {
@@ -59,8 +60,11 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
     }
   }
 
-  const handleAdd = async (data: CreateDaemon) => {
-    await onAdd(data);
+  const handleAdd = async ({ dependency }: FormState) => {
+    await onAdd({
+      dependencies: [...daemon.dependencies.map(dmn => dmn.id), dependency]
+    });
+
     onClose();
   }
 
@@ -77,27 +81,20 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
         onSubmit: handleSubmit(handleAdd)
       }}
     >
-      <ClosableDialogTitle onClose={handleClose}>Nouveau daemon</ClosableDialogTitle>
       <DialogContent>
-        <TextField
-          className={styles.field}
-          variant="outlined" fullWidth
-          name="name" inputRef={register}
-          label="Nom"
-          error={!!errors.name} helperText={errors.name?.message}
-        />
         <FormControl
           variant="outlined" fullWidth className={styles.field}
-          error={!!errors.ownerId}
+          error={!!errors.dependency}
         >
-          <InputLabel>Propriétaire</InputLabel>
+          <InputLabel>Dépendance</InputLabel>
           <Controller
-            name="ownerId" defaultValue={owner?.id} disabled={!!owner}
-            control={control} as={UserSelect}
-            label="Propriétaire"
+            name="dependency"
+            control={control} as={DaemonSelect}
+            label="Dépendance"
+            blacklist={[daemon, ...daemon.dependencies]}
           />
-          { errors.ownerId && (
-            <FormHelperText>{ errors.ownerId.message }</FormHelperText>
+          { errors.dependency && (
+            <FormHelperText>{ errors.dependency.message }</FormHelperText>
           ) }
         </FormControl>
       </DialogContent>
@@ -115,7 +112,7 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
             disabled={formState.isSubmitting}
             type="submit"
           >
-            Créer
+            Ajouter
           </Button>
           { formState.isSubmitting && (
             <CircularProgress className={styles.progress} size={24} />
@@ -126,4 +123,4 @@ const AddDaemonDialog = (props: AddDaemonDialogProps) => {
   );
 };
 
-export default AddDaemonDialog;
+export default AddDaemonDependencyDialog;

@@ -9,7 +9,7 @@ import { useDaemon } from '../daemons.hooks';
 import DaemonHeader from './DaemonHeader';
 import DaemonDetailsTab from './DaemonDetailsTab';
 import DaemonDependenciesTab from './DaemonDependenciesTab';
-import DaemonConfigTab from 'daemons/components/DaemonConfigTab';
+import ConfigTab from 'daemons/components/config/ConfigTab';
 
 // Utils
 interface LinkTabProps {
@@ -72,7 +72,7 @@ const DaemonPage = () => {
         <DaemonDependenciesTab daemon={daemon} onUpdate={update} />
       ) }
       { (page === 'config') && (
-        <DaemonConfigTab daemonId={id} />
+        <ConfigTab daemonId={id} />
       ) }
     </>
   );

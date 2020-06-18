@@ -10,6 +10,7 @@ import DaemonHeader from './DaemonHeader';
 import DaemonDetailsTab from './DaemonDetailsTab';
 import DaemonDependenciesTab from './DaemonDependenciesTab';
 import ConfigTab from 'daemons/components/config/ConfigTab';
+import { useDaemonConfig } from 'daemons/config.hooks';
 
 // Utils
 interface LinkTabProps {
@@ -50,6 +51,16 @@ const DaemonPage = () => {
 
   // API
   const { daemon, loading, reload, update } = useDaemon(id);
+  const {
+    config = null, loading: loadingConfig,
+    reload: reloadConfig,
+    create: createConfig
+  } = useDaemonConfig(id);
+
+  // Handlers
+  const handleReload = async () => {
+    await Promise.all([reload(), reloadConfig()]);
+  };
 
   // Render
   const styles = useStyles();
@@ -57,7 +68,7 @@ const DaemonPage = () => {
   return (
     <>
       <Paper square className={styles.paper}>
-        <DaemonHeader daemon={daemon} loading={loading} onReload={reload} />
+        <DaemonHeader daemon={daemon} loading={loading} onReload={handleReload} />
         <Tabs variant="fullWidth" value={page} onChange={() => {}}>
           <LinkTab value="details" label="Détails" />
           <LinkTab value="dependencies" label="Dépendances" />
@@ -72,7 +83,11 @@ const DaemonPage = () => {
         <DaemonDependenciesTab daemon={daemon} onUpdate={update} />
       ) }
       { (page === 'config') && (
-        <ConfigTab daemonId={id} />
+        <ConfigTab
+          daemonId={id}
+          config={config} loading={loadingConfig}
+          onCreate={createConfig}
+        />
       ) }
     </>
   );

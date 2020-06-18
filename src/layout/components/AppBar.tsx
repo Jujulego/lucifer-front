@@ -43,9 +43,12 @@ const useStyles = makeStyles(({ palette, spacing, zIndex }: Theme) => ({
     zIndex: zIndex.drawer
   },
   content: {
+    height: '100vh',
     maxHeight: '100vh',
     flexGrow: 1,
 
+    display: 'flex',
+    flexDirection: 'column',
     overflow: 'auto',
 
     backgroundColor: palette.background.default

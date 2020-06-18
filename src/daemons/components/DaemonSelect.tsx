@@ -54,7 +54,7 @@ const DaemonSelect = (props: DaemonSelectProps) => {
     >
       { !required && (
         <MenuItem value=''>
-          <em>Pas d'utilisateur</em>
+          <em>Aucun daemon</em>
         </MenuItem>
       ) }
       { (!daemons && value) && (

@@ -51,7 +51,7 @@ const AddDaemonDependencyDialog = (props: AddDaemonDependencyDialogProps) => {
   } = props;
 
   // Form
-  const { errors, control, handleSubmit, formState } = useForm<FormState>();
+  const { errors, control, handleSubmit, formState } = useForm<FormState>({ mode: 'onChange' });
 
   // Callbacks
   const handleClose = () => {
@@ -90,10 +90,11 @@ const AddDaemonDependencyDialog = (props: AddDaemonDependencyDialogProps) => {
           <Controller
             name="dependency"
             control={control} as={DaemonSelect}
-            label="Dépendance"
+            rules={{ required: true }}
+            label="Dépendance" required
             blacklist={[daemon, ...daemon.dependencies]}
           />
-          { errors.dependency && (
+          { errors.dependency?.message && (
             <FormHelperText>{ errors.dependency.message }</FormHelperText>
           ) }
         </FormControl>
@@ -109,7 +110,7 @@ const AddDaemonDependencyDialog = (props: AddDaemonDependencyDialogProps) => {
         <div className={styles.wrapper}>
           <Button
             color="primary"
-            disabled={formState.isSubmitting}
+            disabled={formState.isSubmitting || !formState.isValid}
             type="submit"
           >
             Ajouter

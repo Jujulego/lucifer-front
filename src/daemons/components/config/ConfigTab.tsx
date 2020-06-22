@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { CreateConfig, DaemonConfig } from '../../models/config';
 import AddConfig from './AddConfig';
+import DockerConfigTab from './DockerConfigTab';
 
 // Styles
 const useStyles = makeStyles(({ zIndex }) => ({
@@ -22,7 +23,7 @@ const useStyles = makeStyles(({ zIndex }) => ({
 export interface DaemonConfigTabProps {
   daemonId: string;
   config: DaemonConfig | null;
-  loading: boolean;
+  loading: boolean; show?: boolean;
 
   onCreate: (data: CreateConfig) => Promise<any>
 }
@@ -31,7 +32,8 @@ export interface DaemonConfigTabProps {
 const ConfigTab = (props: DaemonConfigTabProps) => {
   const {
     daemonId,
-    config, loading, onCreate
+    config, loading, show = false,
+    onCreate
   } = props;
 
   // Render
@@ -45,10 +47,12 @@ const ConfigTab = (props: DaemonConfigTabProps) => {
 
   return (
     <div className={styles.root}>
-      <>{ config?.id }</>
       <Backdrop className={styles.backdrop} open={loading}>
         <CircularProgress color="inherit" />
       </Backdrop>
+      { (config?.type === 'docker') && (
+        <DockerConfigTab config={config} show={show} />
+      ) }
     </div>
   );
 };

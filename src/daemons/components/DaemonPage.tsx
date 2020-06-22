@@ -82,13 +82,11 @@ const DaemonPage = () => {
       { (page === 'dependencies' && daemon) && (
         <DaemonDependenciesTab daemon={daemon} onUpdate={update} />
       ) }
-      { (page === 'config') && (
-        <ConfigTab
-          daemonId={id}
-          config={config} loading={loadingConfig}
-          onCreate={createConfig}
-        />
-      ) }
+      <ConfigTab
+        daemonId={id} config={config}
+        loading={loadingConfig} show={page === 'config'}
+        onCreate={createConfig}
+      />
     </>
   );
 };

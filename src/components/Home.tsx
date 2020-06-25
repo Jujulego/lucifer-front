@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Typography } from '@material-ui/core';
+import { Chip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth } from 'auth/auth.context';
-import { useAuthToken } from 'auth/auth.hooks';
+import { useAuthToken, usePermissions } from 'auth/auth.hooks';
 
 import { CopyButton, LabelledText } from 'basics/components';
 
@@ -14,7 +14,14 @@ const useStyles = makeStyles(({ spacing }) => ({
     padding: spacing(2),
   },
   title: {
-    marginBottom: spacing(2)
+    marginBottom: spacing(4)
+  },
+  chip: {
+    marginRight: spacing(1),
+
+    '&:last-child': {
+      marginRight: 0
+    }
   }
 }));
 
@@ -22,6 +29,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 const Home = () => {
   // Auth
   const { user } = useAuth();
+  const { permissions = [] } = usePermissions();
   const token = useAuthToken();
 
   // Render
@@ -35,6 +43,11 @@ const Home = () => {
         endAdornment={<CopyButton text={token} />}
       >
         <Typography noWrap>{ token }</Typography>
+      </LabelledText>
+      <LabelledText label="Permissions">
+        { permissions.map(perm => (
+          <Chip key={perm} className={styles.chip} label={perm} />
+        )) }
       </LabelledText>
     </div>
   );

@@ -7,7 +7,7 @@ import createAuth0Client, {
   RedirectLoginOptions
 } from '@auth0/auth0-spa-js';
 
-import { User } from '../models/user';
+import { AuthUser } from '../models/user';
 import { AuthContext } from '../auth.context';
 
 // Types
@@ -30,7 +30,7 @@ const AuthGate = (props: AuthGateProps) => {
   const [loading, setLoading] = useState(true);
   const [isLogged, setLogged] = useState(false);
   const [popup,   setPopup]   = useState(false);
-  const [user,    setUser]    = useState<User | null>(null);
+  const [user,    setUser]    = useState<AuthUser | null>(null);
 
   // Effects
   useEffect(() => {
@@ -48,7 +48,11 @@ const AuthGate = (props: AuthGateProps) => {
 
         // Load state
         const logged = await client.isAuthenticated();
-        if (logged) setUser(await client.getUser());
+        if (logged) {
+          const user = await client.getUser();
+
+          setUser({ ...user, id: user.sub });
+        }
 
         setLogged(logged);
         setLoading(false);
@@ -90,8 +94,10 @@ const AuthGate = (props: AuthGateProps) => {
 
       // Update state
       if (await auth0.isAuthenticated()) {
+        const user = await auth0.getUser();
+
         setLogged(true);
-        setUser(await auth0.getUser());
+        setUser({ ...user, id: user.sub });
       } else {
         setLogged(false);
         setUser(null);

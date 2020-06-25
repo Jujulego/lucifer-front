@@ -1,13 +1,13 @@
 import { createContext, useContext, useDebugValue } from 'react';
 import { PopupLoginOptions, RedirectLoginOptions, LogoutOptions, GetTokenSilentlyOptions } from '@auth0/auth0-spa-js';
 
-import { User } from './models/user';
+import { AuthUser } from './models/user';
 
 // Type
 export type AuthContextProps = {
   isLogged: boolean;
   popup: boolean;
-  user: User | null;
+  user: AuthUser | null;
 
   getToken: (options?: GetTokenSilentlyOptions) => Promise<string>;
   loginWithPopup: (options?: PopupLoginOptions) => Promise<void>;

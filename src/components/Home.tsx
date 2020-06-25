@@ -29,7 +29,7 @@ const Home = () => {
 
   return (
     <div className={styles.root}>
-      <Typography className={styles.title} variant="h5">Bonjour { user?.nickname } !</Typography>
+      <Typography className={styles.title} variant="h5">Bonjour { user?.name } !</Typography>
       <LabelledText
         label="Token" zeroMinWidth
         endAdornment={<CopyButton text={token} />}

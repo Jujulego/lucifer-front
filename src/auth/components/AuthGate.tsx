@@ -35,22 +35,26 @@ const AuthGate = (props: AuthGateProps) => {
   // Effects
   useEffect(() => {
     (async () => {
-      // Create client
-      const client = await createAuth0Client(options);
-      setAuth0(client);
+      try {
+        // Create client
+        const client = await createAuth0Client(options);
+        setAuth0(client);
 
-      // Is in callback ?
-      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-        const { appState } = await client.handleRedirectCallback();
-        onRedirectCallback(appState);
+        // Is in callback ?
+        if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+          const { appState } = await client.handleRedirectCallback();
+          onRedirectCallback(appState);
+        }
+
+        // Load state
+        const logged = await client.isAuthenticated();
+        if (logged) setUser(await client.getUser());
+
+        setLogged(logged);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
       }
-
-      // Load state
-      const logged = await client.isAuthenticated();
-      if (logged) setUser(await client.getUser());
-
-      setLogged(logged);
-      setLoading(false);
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

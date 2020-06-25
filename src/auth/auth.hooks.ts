@@ -3,7 +3,11 @@ import { useState, useEffect } from 'react';
 
 import useAPI from 'basics/api.hooks';
 
+import { AuthUser } from './models/user';
 import { useAuth } from './auth.context';
+
+// Types
+export type AllowCallback = (user: AuthUser | null) => boolean;
 
 // Namespace
 export const useAuthAPI = {
@@ -35,4 +39,14 @@ export function usePermissions() {
     permissions, loading,
     reload
   };
+}
+
+export function useNeedScope(scope: string, allow?: AllowCallback) {
+  // Auth
+  const { user } = useAuth();
+  const { permissions = [] } = usePermissions();
+
+  // Allow
+  if (allow && allow(user)) return true;
+  return permissions.includes(scope);
 }

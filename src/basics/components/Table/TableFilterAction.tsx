@@ -1,6 +1,6 @@
-import React, { ComponentType, ElementType, useMemo, useState } from 'react';
+import React, { ComponentType, ElementType, MouseEvent, useMemo, useState } from 'react';
 
-import { ExtendButtonBaseTypeMap } from '@material-ui/core';
+import { ExtendButtonBase, ExtendButtonBaseTypeMap } from '@material-ui/core';
 import { OverrideProps } from '@material-ui/core/OverridableComponent';
 
 import { Badge } from '@material-ui/core';
@@ -8,7 +8,6 @@ import { FilterList as FilterIcon } from '@material-ui/icons';
 
 import { Filter } from 'utils/filter';
 
-import { AnyDocument, Document } from '../../models/document';
 import { useTable } from '../../table.context';
 import TableAction, { TableActionClassKey, TableActionTypeMap } from './TableAction';
 
@@ -19,10 +18,10 @@ export interface TableFilterDialogProps {
 }
 
 export type TableFilterActionTypeMap<
-  T extends Document = AnyDocument,
-  P = {}, D extends ElementType = TableActionTypeMap<T>['defaultComponent']
+  P = {},
+  D extends ElementType = 'button'
 > = ExtendButtonBaseTypeMap<{
-  props: P & Omit<TableActionTypeMap<T, P, D>['props'], 'tooltip'> & {
+  props: P & Omit<TableActionTypeMap<any, P, D>['props'], 'tooltip'> & {
     tooltip?: string;
     dialog?: ComponentType<TableFilterDialogProps>;
   };
@@ -31,20 +30,20 @@ export type TableFilterActionTypeMap<
 }>;
 
 export type TableFilterActionProps<
-  T extends Document = AnyDocument,
-  D extends ElementType = TableActionTypeMap<T>['defaultComponent'], P = {}
-> = OverrideProps<TableFilterActionTypeMap<T, P, D>, D>;
+  D extends ElementType = TableFilterActionTypeMap['defaultComponent'],
+  P = {}
+> = OverrideProps<TableFilterActionTypeMap<P, D>, D>;
 
 // Utils
-const removeEmptyFields = <T extends Document> (filter: Filter<T>) => (key: keyof Filter<T>): boolean => {
-  const value = filter[key];
+const removeEmptyFields = (filter: Filter<any>) => (key: keyof Filter<any>): boolean => {
+  const value = filter[key as string | number];
   if (Array.isArray(value)) return value.length !== 0;
 
   return !!value;
 };
 
 // Component
-const TableFilterAction = <T extends Document = AnyDocument, D extends ElementType = TableActionTypeMap<T>['defaultComponent']> (props: { component?: D } & TableFilterActionProps<T, D>) => {
+const TableFilterAction: ExtendButtonBase<TableFilterActionTypeMap> = <D extends ElementType> (props: { component?: D } & TableFilterActionProps<D>) => {
   // Props
   const {
     tooltip = "Filtres",
@@ -55,14 +54,16 @@ const TableFilterAction = <T extends Document = AnyDocument, D extends ElementTy
   } = props;
 
   // Contexts
-  const { filtered, filter } = useTable<T>();
+  const { filtered, filter } = useTable();
 
   // State
   const [open, setOpen] = useState(false);
 
   // Memos
   const count = useMemo(
-    () => Object.tsKeys(filter).filter(removeEmptyFields(filter)).length,
+    () => Object.keys(filter)
+      .filter(removeEmptyFields(filter))
+      .length,
     [filter]
   );
 

@@ -1,10 +1,11 @@
 import React, { ElementType, MouseEvent } from 'react';
 
-import { ExtendButtonBaseTypeMap } from '@material-ui/core';
+import { ExtendButtonBase, ExtendButtonBaseTypeMap } from '@material-ui/core';
 import { OverrideProps } from '@material-ui/core/OverridableComponent';
 
 import { Document } from '../../models/document';
 import { useTable } from '../../table.context';
+
 import ToolbarAction, { ToolbarActionTypeMap, ToolbarActionClassKey } from '../ToolbarAction';
 
 // Types
@@ -13,7 +14,8 @@ type When = "always" | "some" | "nothing"; // selected
 export type TableActionClassKey = ToolbarActionClassKey;
 export type TableActionTypeMap<
   T extends Document,
-  P = {}, D extends ElementType = ToolbarActionTypeMap['defaultComponent']
+  P = {},
+  D extends ElementType = 'button'
 > = ExtendButtonBaseTypeMap<{
   props: P & ToolbarActionTypeMap<P, D>['props'] & {
     when?: When,
@@ -25,11 +27,12 @@ export type TableActionTypeMap<
 
 export type TableActionProps<
   T extends Document,
-  D extends ElementType = ToolbarActionTypeMap['defaultComponent'], P = {}
+  D extends ElementType = TableActionTypeMap<T>['defaultComponent'],
+  P = {}
 > = OverrideProps<TableActionTypeMap<T, P, D>, D>;
 
 // Component
-const TableAction = <T extends Document, D extends ElementType = ToolbarActionTypeMap['defaultComponent']> (props: { component?: D } & TableActionProps<T, D>) => {
+const TableAction: ExtendButtonBase<TableActionTypeMap<any>> = <T extends Document, D extends ElementType> (props: { component?: D } & TableActionProps<T, D>) => {
   // Props
   const {
     children, tooltip, when = "always",
@@ -52,11 +55,11 @@ const TableAction = <T extends Document, D extends ElementType = ToolbarActionTy
     }) : onClick;
 
   // Render
-  if (when === "some" && selectedCount === 0) return null;
-  if (when === "nothing" && selectedCount !== 0) return null;
+  if (when === "some" && selectedCount === 0)    return <></>;
+  if (when === "nothing" && selectedCount !== 0) return <></>;
 
   return (
-    <ToolbarAction tooltip={tooltip} {...action} onClick={handleClick}>
+    <ToolbarAction {...action} tooltip={tooltip} onClick={handleClick}>
       { children }
     </ToolbarAction>
   );

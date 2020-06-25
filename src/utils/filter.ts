@@ -27,7 +27,7 @@ function test<T>(value: T, filter?: FilterValue<T>): boolean {
 }
 
 export function toPredicate<T>(filter: Filter<T>): Predicate<T> {
-  return (obj) => Object.tsKeys(filter).every(field => test(obj[field], filter[field]));
+  return (obj) => Object.keys(filter).every(field => test(obj[field as keyof T], filter[field as keyof T]));
 }
 
 export function filter<T>(array: T[], filter: Filter<T>): T[] {

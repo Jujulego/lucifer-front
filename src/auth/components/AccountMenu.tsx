@@ -65,10 +65,10 @@ const AccountMenu = () => {
               ) }
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={user?.nickname} secondary={user?.email} />
+          <ListItemText primary={user?.name} secondary={user?.email} />
         </ListItem>
         <Divider />
-        <MenuItem component={Link} to={`/users/`} disabled={!user}>
+        <MenuItem component={Link} to={`/users/${user?.sub}`} disabled={!user}>
           <ListItemIcon><EditIcon /></ListItemIcon>
           <ListItemText primary="Profil" />
         </MenuItem>

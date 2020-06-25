@@ -101,7 +101,7 @@ const Table = <T extends Document> (props: TableProps<T>) => {
       }, {}));
     }
   }, [blacklist, filtered, selectedAll]);
-  
+
   // Render
   const styles = useStyles(props);
 

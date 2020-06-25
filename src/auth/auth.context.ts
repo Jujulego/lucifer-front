@@ -1,10 +1,15 @@
-import { createContext, useContext } from 'react';
-import { PopupLoginOptions, RedirectLoginOptions, LogoutOptions } from '@auth0/auth0-spa-js';
+import { createContext, useContext, useDebugValue } from 'react';
+import { PopupLoginOptions, RedirectLoginOptions, LogoutOptions, GetTokenSilentlyOptions } from '@auth0/auth0-spa-js';
 
-import { AuthState } from './auth.reducer';
+import { User } from './models/user';
 
 // Type
-export type AuthContextProps = AuthState & {
+export type AuthContextProps = {
+  isLogged: boolean;
+  popup: boolean;
+  user: User | null;
+
+  getToken: (options?: GetTokenSilentlyOptions) => Promise<string>;
   loginWithPopup: (options?: PopupLoginOptions) => Promise<void>;
   loginWithRedirect: (options?: RedirectLoginOptions) => Promise<void>;
   logout: (options?: LogoutOptions) => Promise<void>;
@@ -12,11 +17,11 @@ export type AuthContextProps = AuthState & {
 
 // Defaults
 const authDefaults: AuthContextProps = {
-  loading: false,
-  popup: false,
   isLogged: false,
-  token: null,
+  popup: false,
   user: null,
+
+  getToken: async () => '',
   loginWithPopup: async () => {},
   loginWithRedirect: async () => {},
   logout: async () => {},
@@ -27,5 +32,8 @@ export const AuthContext = createContext<AuthContextProps>(authDefaults);
 
 // Hook
 export function useAuth() {
-  return useContext(AuthContext);
+  const ctx = useContext(AuthContext);
+  useDebugValue(ctx, ctx => ctx.isLogged ? `logged as ${ctx.user?.name}` : 'not logged');
+
+  return ctx;
 }

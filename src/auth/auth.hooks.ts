@@ -41,12 +41,13 @@ export function usePermissions() {
   };
 }
 
-export function useNeedScope(scope: string, allow?: AllowCallback) {
+export function useNeedScope(scope: string, allow?: AllowCallback): boolean | null {
   // Auth
   const { user } = useAuth();
-  const { permissions = [] } = usePermissions();
+  const { permissions = [], loading } = usePermissions();
 
   // Allow
+  if (loading) return null;
   if (allow && allow(user)) return true;
   return permissions.includes(scope);
 }

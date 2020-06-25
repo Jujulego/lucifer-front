@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { Route, RouteProps } from 'react-router';
+import React, { ReactNode, useCallback } from 'react';
+import { Route, RouteProps, useHistory } from 'react-router';
 
 import { AuthUser } from '../models/user';
 import ScopeGate from './ScopeGate';
@@ -17,11 +17,23 @@ export type ScopedRouteProps = Omit<RouteProps, 'render' | 'component' | 'childr
 const ScopedRoute = (props: ScopedRouteProps) => {
   const { scope, allow, children, ...route } = props;
 
+  // Router
+  const history = useHistory();
+
+  // Callbacks
+  const handleForbidden = useCallback(() => {
+    history.replace('/');
+  }, [history]);
+
   // Render
   return (
     <Route {...route}>
       { ({ match }) => (
-        <ScopeGate scope={scope} allow={allow && (user => allow(user, match?.params))}>
+        <ScopeGate
+          scope={scope}
+          allow={allow && (user => allow(user, match?.params))}
+          onForbidden={handleForbidden}
+        >
           { children }
         </ScopeGate>
       ) }

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 
 import { AllowCallback, useNeedScope } from '../auth.hooks';
 
@@ -6,18 +6,29 @@ import { AllowCallback, useNeedScope } from '../auth.hooks';
 export interface ScopeGateProps {
   scope: string;
   allow?: AllowCallback;
+  onForbidden?: () => void;
   children: ReactNode;
 }
 
 // Components
 const ScopeGate = (props: ScopeGateProps) => {
-  const { scope, allow, children } = props;
+  const {
+    scope, allow,
+    onForbidden = () => {},
+    children
+  } = props;
 
   // Auth
   const allowed = useNeedScope(scope, allow);
 
+  // Effects
+  useEffect(() => {
+    if (allowed === false) onForbidden();
+  }, [allowed, onForbidden]);
+
   // Render
   if (!allowed) return null;
+
   return <>{ children }</>;
 };
 

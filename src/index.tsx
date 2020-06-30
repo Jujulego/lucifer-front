@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { CookiesProvider } from 'react-cookie';
-import { Provider } from 'react-redux';
 
 import { StylesProvider } from '@material-ui/core';
 
 import 'configs';
 import * as serviceWorker from 'serviceWorker';
-import { store } from 'app.store';
 
 import App from 'components/App';
 
@@ -15,9 +13,7 @@ import App from 'components/App';
 ReactDOM.render((
   <StylesProvider injectFirst>
     <CookiesProvider>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <App />
     </CookiesProvider>
   </StylesProvider>
 ), document.getElementById('root'));

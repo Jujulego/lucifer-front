@@ -17,11 +17,12 @@ import PeopleIcon from '@material-ui/icons/People';
 import StorageIcon from '@material-ui/icons/Storage';
 
 import AccountMenu from 'auth/components/AccountMenu';
+import ScopeGate from 'auth/components/ScopeGate';
 
 import ThemeButton from './ThemeButton';
 
 // Styles
-const useStyles = makeStyles(({ breakpoints, palette, spacing, zIndex }: Theme) => ({
+const useStyles = makeStyles(({ palette, spacing, zIndex }: Theme) => ({
   root: {
     display: 'flex'
   },
@@ -43,17 +44,15 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing, zIndex }: Theme) 
     zIndex: zIndex.drawer
   },
   content: {
+    height: '100vh',
     maxHeight: '100vh',
     flexGrow: 1,
 
-    // padding: spacing(3),
+    display: 'flex',
+    flexDirection: 'column',
     overflow: 'auto',
 
-    backgroundColor: palette.background.default,
-
-    [breakpoints.down('sm')]: {
-      // padding: spacing(1)
-    }
+    backgroundColor: palette.background.default
   }
 }));
 
@@ -128,10 +127,12 @@ const AppBar = ({ children }: AppBarProps) => {
             <ListItemIcon><StorageIcon /></ListItemIcon>
             <ListItemText primary="Daemons" />
           </ListItem>
-          <ListItem button component={Link} to="/users">
-            <ListItemIcon><PeopleIcon /></ListItemIcon>
-            <ListItemText primary="Utilisateurs" />
-          </ListItem>
+          <ScopeGate scope="read:users">
+            <ListItem button component={Link} to="/users">
+              <ListItemIcon><PeopleIcon /></ListItemIcon>
+              <ListItemText primary="Utilisateurs" />
+            </ListItem>
+          </ScopeGate>
         </List>
       </Drawer>
       <main className={ styles.content }>

@@ -1,12 +1,14 @@
 import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useDebugValue, useEffect, useState } from 'react';
 
-import useChanged from './useChanged';
+import useChanged from 'utils/hooks/useChanged';
+import { Updator } from 'utils/types';
+
+import { useCache } from './cache.context';
 
 // Types
-type Updator<R> = (data?: R) => R;
 export type APIState<R> = { data?: R, loading: boolean };
-export type APIPromise<R> = Promise<R | undefined> & { cancel: () => void };
+export type APIPromise<R> = Promise<R> & { cancel: () => void };
 
 export type APIGetRequestConfig = Omit<AxiosRequestConfig, 'cancelToken'> & { load?: boolean };
 export type APIGetRequestGenerator<P extends object, R> = (source: CancelTokenSource) => Promise<AxiosResponse<R>>;
@@ -17,7 +19,7 @@ export type APIGetReturn<R> = APIState<R> & {
 
 export type APIDeleteRequestGenerator<P extends object, R> = (source: CancelTokenSource, url?: string, params?: P) => Promise<AxiosResponse<R>>;
 export type APIDeleteReturn<P extends object, R> = APIState<R> & {
-  send: (arg1?: string | P, arg2?: P) => APIPromise<R>,
+  send: ((params?: P) => APIPromise<R>) & ((url: string, params?: P) => APIPromise<R>)
 }
 
 export type APIPostRequestConfig = Omit<AxiosRequestConfig, 'cancelToken'>;
@@ -27,10 +29,13 @@ export type APIPostReturn<D, P extends object, R> = APIState<R> & {
 }
 
 // Base hooks
-function useGetRequest<R, P extends object = object>(generator: APIGetRequestGenerator<P, R>, load: boolean = true): APIGetReturn<R> {
+function useGetRequest<R, P extends object = object>(generator: APIGetRequestGenerator<P, R>, cacheId: string, load: boolean = true): APIGetReturn<R> {
+  // Cache
+  const { data, setCache } = useCache<R>(cacheId);
+
   // State
   const [reload, setReload] = useState(load ? 1 : 0);
-  const [state, setState] = useState<APIState<R>>({ loading: true });
+  const [state, setState] = useState<APIState<R>>({ data, loading: true });
 
   // Effect
   useEffect(() => {
@@ -47,12 +52,22 @@ function useGetRequest<R, P extends object = object>(generator: APIGetRequestGen
       })
       .catch((error) => {
         if (axios.isCancel(error)) return;
+
+        setState(old => ({ ...old, loading: false }));
         throw error;
       });
 
     // Cancel
     return () => { source.cancel(); };
-  }, [generator, reload]);
+  }, [generator, reload, setCache]);
+
+  useEffect(() => {
+    if (state.data) setCache(state.data);
+  }, [state.data, setCache]);
+
+  useEffect(() => {
+    setState(old => ({ ...old, data }));
+  }, [cacheId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     ...state,
@@ -133,6 +148,7 @@ function usePostRequest<D, R = any, P extends object = object>(generator: APIPos
 
 // API Hooks
 export function useAPIGet<R, P extends object = object> (url: string, params?: P, config: APIGetRequestConfig = {}): APIGetReturn<R> {
+  useDebugValue(url);
   const { load, ...rconfig } = config;
 
   // Callbacks
@@ -141,10 +157,11 @@ export function useAPIGet<R, P extends object = object> (url: string, params?: P
     [url, useChanged(params), useChanged(rconfig)] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  return useGetRequest(generator, config.load);
+  return useGetRequest(generator, `api-get:${url}`, config.load);
 }
 
 export function useAPIHead<R, P extends object = object> (url: string, params?: P, config: APIGetRequestConfig = {}): APIGetReturn<R> {
+  useDebugValue(url);
   const { load, ...rconfig } = config;
 
   // Callbacks
@@ -153,10 +170,11 @@ export function useAPIHead<R, P extends object = object> (url: string, params?: 
     [url, useChanged(params), useChanged(rconfig)] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  return useGetRequest(generator, config?.load);
+  return useGetRequest(generator, `api-head:${url}`, config?.load);
 }
 
 export function useAPIOptions<R, P extends object = object> (url: string, params?: P, config: APIGetRequestConfig = {}): APIGetReturn<R> {
+  useDebugValue(url);
   const { load, ...rconfig } = config;
 
   // Callbacks
@@ -165,10 +183,12 @@ export function useAPIOptions<R, P extends object = object> (url: string, params
     [url, useChanged(params), useChanged(rconfig)] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  return useGetRequest(generator, config?.load);
+  return useGetRequest(generator, `api-options:${url}`, config?.load);
 }
 
 export function useAPIDelete<R = any, P extends object = object> (url: string, params?: P, config?: APIPostRequestConfig): APIDeleteReturn<P, R> {
+  useDebugValue(url);
+
   // Callbacks
   const generator = useCallback((source: CancelTokenSource, _url?: string, _params?: P) =>
       axios.delete<R>(_url || url, { ...config, params: { ...params, ..._params }, cancelToken: source.token }),
@@ -179,6 +199,8 @@ export function useAPIDelete<R = any, P extends object = object> (url: string, p
 }
 
 export function useAPIPost<D, R = any, P extends object = object> (url: string, params?: P, config?: APIPostRequestConfig): APIPostReturn<D, P, R> {
+  useDebugValue(url);
+
   // Callbacks
   const generator = useCallback((data: D, source: CancelTokenSource, _url?: string, _params?: P) =>
     axios.post<R>(_url || url, data, { ...config, params: { ...params, ..._params }, cancelToken: source.token }),
@@ -189,6 +211,8 @@ export function useAPIPost<D, R = any, P extends object = object> (url: string, 
 }
 
 export function useAPIPut<D, R = any, P extends object = object> (url: string, params?: P, config?: APIPostRequestConfig): APIPostReturn<D, P, R> {
+  useDebugValue(url);
+
   // Callbacks
   const generator = useCallback((data: D, source: CancelTokenSource, _url?: string, _params?: P) =>
     axios.put<R>(_url || url, data, { ...config, params: { ...params, ..._params }, cancelToken: source.token }),
@@ -199,6 +223,8 @@ export function useAPIPut<D, R = any, P extends object = object> (url: string, p
 }
 
 export function useAPIPatch<D, R = any, P extends object = object> (url: string, params?: P, config?: APIPostRequestConfig): APIPostReturn<D, P, R> {
+  useDebugValue(url);
+
   // Callbacks
   const generator = useCallback((data: D, source: CancelTokenSource, _url?: string, _params?: P) =>
     axios.patch<R>(_url || url, data, { ...config, params: { ...params, ..._params }, cancelToken: source.token }),

@@ -7,7 +7,7 @@ import createAuth0Client, {
   RedirectLoginOptions
 } from '@auth0/auth0-spa-js';
 
-import { User } from '../models/user';
+import { AuthUser } from '../models/user';
 import { AuthContext } from '../auth.context';
 
 // Types
@@ -30,27 +30,35 @@ const AuthGate = (props: AuthGateProps) => {
   const [loading, setLoading] = useState(true);
   const [isLogged, setLogged] = useState(false);
   const [popup,   setPopup]   = useState(false);
-  const [user,    setUser]    = useState<User | null>(null);
+  const [user,    setUser]    = useState<AuthUser | null>(null);
 
   // Effects
   useEffect(() => {
     (async () => {
-      // Create client
-      const client = await createAuth0Client(options);
-      setAuth0(client);
+      try {
+        // Create client
+        const client = await createAuth0Client(options);
+        setAuth0(client);
 
-      // Is in callback ?
-      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-        const { appState } = await client.handleRedirectCallback();
-        onRedirectCallback(appState);
+        // Is in callback ?
+        if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+          const { appState } = await client.handleRedirectCallback();
+          onRedirectCallback(appState);
+        }
+
+        // Load state
+        const logged = await client.isAuthenticated();
+        if (logged) {
+          const user = await client.getUser();
+
+          setUser({ ...user, id: user.sub });
+        }
+
+        setLogged(logged);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
       }
-
-      // Load state
-      const logged = await client.isAuthenticated();
-      if (logged) setUser(await client.getUser());
-
-      setLogged(logged);
-      setLoading(false);
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -86,8 +94,10 @@ const AuthGate = (props: AuthGateProps) => {
 
       // Update state
       if (await auth0.isAuthenticated()) {
+        const user = await auth0.getUser();
+
         setLogged(true);
-        setUser(await auth0.getUser());
+        setUser({ ...user, id: user.sub });
       } else {
         setLogged(false);
         setUser(null);

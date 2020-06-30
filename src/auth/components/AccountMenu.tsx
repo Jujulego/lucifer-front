@@ -68,7 +68,7 @@ const AccountMenu = () => {
           <ListItemText primary={user?.name} secondary={user?.email} />
         </ListItem>
         <Divider />
-        <MenuItem component={Link} to={`/users/${user?.sub}`} disabled={!user}>
+        <MenuItem component={Link} to={`/users/${user?.id}`} disabled={!user}>
           <ListItemIcon><EditIcon /></ListItemIcon>
           <ListItemText primary="Profil" />
         </MenuItem>

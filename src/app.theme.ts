@@ -13,6 +13,10 @@ function createTheme(dark: boolean = false) {
     props: {
       MuiCardHeader: {
         titleTypographyProps: { variant: "h6" }
+      },
+      MuiDialog: {
+        maxWidth: "xs",
+        fullWidth: true
       }
     }
   }, frFR);

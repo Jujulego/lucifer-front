@@ -1,10 +1,18 @@
+import { User } from 'users/models/user';
+
 // Interface
-export interface User {
-  nickname: string;
+export interface AuthUser extends User {
+  id: string;
+  email: string;
   name: string;
+  email_verified: boolean;
+  nickname: string;
   picture: string;
   updated_at: string;
-  email: string;
-  email_verified: boolean;
   sub: string;
+}
+
+// Utils
+export function isAuthUser(user: User): user is AuthUser {
+  return 'sub' in user;
 }

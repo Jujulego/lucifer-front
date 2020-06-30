@@ -1,5 +1,7 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router';
+import { Switch, useRouteMatch } from 'react-router';
+
+import ScopedRoute from 'auth/components/ScopedRoute';
 
 import UserPage from './UserPage';
 import UserTable from './UserTable';
@@ -12,8 +14,15 @@ const UserRouter = () => {
   // Render
   return (
     <Switch>
-      <Route path={[`${path}/:id/:page`, `${path}/:id`]} component={UserPage} />
-      <Route path={path} exact component={UserTable} />
+      <ScopedRoute
+        scope="read:users" allow={(user, { id }) => user?.id === id}
+        path={[`${path}/:id/:page`, `${path}/:id`]}
+      >
+        <UserPage />
+      </ScopedRoute>
+      <ScopedRoute scope="read:users" path={path} exact>
+        <UserTable />
+      </ScopedRoute>
     </Switch>
   );
 };

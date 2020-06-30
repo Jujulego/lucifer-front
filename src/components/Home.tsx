@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { Chip, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth } from 'auth/auth.context';
 import { useAuthToken, usePermissions } from 'auth/auth.hooks';
 
 import { CopyButton, LabelledText } from 'basics/components';
+import PermissionChip from 'users/components/PermissionChip';
 
 // Styles
 const useStyles = makeStyles(({ spacing }) => ({
@@ -46,7 +47,7 @@ const Home = () => {
       </LabelledText>
       <LabelledText label="Permissions">
         { permissions.map(perm => (
-          <Chip key={perm} className={styles.chip} label={perm} />
+          <PermissionChip key={perm} className={styles.chip} permission={perm} />
         )) }
       </LabelledText>
     </div>

@@ -17,6 +17,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import StorageIcon from '@material-ui/icons/Storage';
 
 import AccountMenu from 'auth/components/AccountMenu';
+import ScopeGate from 'auth/components/ScopeGate';
 
 import ThemeButton from './ThemeButton';
 
@@ -126,10 +127,12 @@ const AppBar = ({ children }: AppBarProps) => {
             <ListItemIcon><StorageIcon /></ListItemIcon>
             <ListItemText primary="Daemons" />
           </ListItem>
-          <ListItem button component={Link} to="/users">
-            <ListItemIcon><PeopleIcon /></ListItemIcon>
-            <ListItemText primary="Utilisateurs" />
-          </ListItem>
+          <ScopeGate scope="read:users">
+            <ListItem button component={Link} to="/users">
+              <ListItemIcon><PeopleIcon /></ListItemIcon>
+              <ListItemText primary="Utilisateurs" />
+            </ListItem>
+          </ScopeGate>
         </List>
       </Drawer>
       <main className={ styles.content }>

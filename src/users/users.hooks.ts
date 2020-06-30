@@ -1,8 +1,8 @@
+import { useCallback } from 'react';
+
 import useAPI from 'basics/api.hooks';
 
 import { UpdateUser, User } from './models/user';
-import { useCallback } from 'react';
-export * from './models/user';
 
 // Namespace
 export const useUsersAPI = {

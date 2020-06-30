@@ -47,7 +47,7 @@ const ConfigTab = (props: DaemonConfigTabProps) => {
 
   return (
     <div className={styles.root}>
-      <Backdrop className={styles.backdrop} open={loading}>
+      <Backdrop className={styles.backdrop} open={show && loading}>
         <CircularProgress color="inherit" />
       </Backdrop>
       { (config?.type === 'docker') && (

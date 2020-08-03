@@ -1,9 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 
 import ChipSelect from '../../components/Fields/ChipSelect';
-import wrapper from '@auth0/auth0-spa-js/dist/typings/index.cjs';
 
 // Setup
 let mount: ReturnType<typeof createMount>;
